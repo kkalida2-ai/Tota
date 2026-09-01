@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الإحصائيات — نظام الحضور</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>نظام تسجيل الحضور والغياب</h1>
+    <nav>
+      <a href="index.html">الطلاب</a>
+      <a href="attendance.html">تسجيل الحضور</a>
+      <a href="history.html">السجل</a>
+      <a href="stats.html">الإحصائيات</a>
+    </nav>
+  </header>
+  <main>
+    <section class="card">
+      <h2>ملخص عام</h2>
+      <div class="stats" id="overview"></div>
+      <div class="row">
+        <div>
+          <label for="q">بحث باسم الطالب</label>
+          <input id="q" type="text" placeholder="اكتب جزءاً من الاسم" autocomplete="off">
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>نسبة الحضور لكل طالب</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>الطالب</th>
+              <th>أيام الحضور</th>
+              <th>أيام الغياب</th>
+              <th>النسبة</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>إدارة البيانات</h2>
+      <p class="muted">تُحفظ جميع البيانات في متصفحك فقط (localStorage).</p>
+      <button class="danger" id="clear" type="button">حذف كل البيانات</button>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const tbody = document.getElementById('tbody');
+    const overview = document.getElementById('overview');
+    const q = document.getElementById('q');
+
+    function render() {
+      const students = DB.students();
+      const days = Object.keys(DB.records()).length;
+
+      let totalPresent = 0, totalMarks = 0;
+      students.forEach(s => {
+        const st = statsFor(s.id);
+        totalPresent += st.present;
+        totalMarks += st.total;
+      });
+      const overall = totalMarks ? Math.round((totalPresent / totalMarks) * 100) : 0;
+
+      overview.innerHTML =
+        '<div class="stat"><b>' + students.length + '</b><small>طالب</small></div>' +
+        '<div class="stat"><b>' + days + '</b><small>يوم مسجل</small></div>' +
+        '<div class="stat"><b>' + overall + '%</b><small>نسبة الحضور العامة</small></div>';
+
+      const query = q.value.trim();
+      const rows = students.filter(s => !query || s.name.includes(query));
+
+      if (!rows.length) {
+        tbody.innerHTML = '<tr><td colspan="4" class="empty">لا توجد نتائج.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = '';
+      rows.forEach(s => {
+        const st = statsFor(s.id);
+        const tr = document.createElement('tr');
+
+        const nameTd = document.createElement('td');
+        nameTd.className = 'name';
+        nameTd.textContent = s.name;
+
+        const pTd = document.createElement('td');
+        pTd.textContent = st.present;
+
+        const aTd = document.createElement('td');
+        aTd.textContent = st.absent;
+
+        const pctTd = document.createElement('td');
+        const wrap = document.createElement('div');
+        wrap.style.display = 'flex';
+        wrap.style.alignItems = 'center';
+        wrap.style.gap = '8px';
+        const bar = document.createElement('div');
+        bar.className = 'bar';
+        bar.style.flex = '1';
+        const fill = document.createElement('span');
+        fill.style.width = st.percent + '%';
+        bar.appendChild(fill);
+        const label = document.createElement('span');
+        label.textContent = st.total ? st.percent + '%' : '—';
+        wrap.append(bar, label);
+        pctTd.appendChild(wrap);
+
+        tr.append(nameTd, pTd, aTd, pctTd);
+        tbody.appendChild(tr);
+      });
+    }
+
+    q.addEventListener('input', render);
+    document.getElementById('clear').onclick = () => {
+      if (confirm('سيتم حذف جميع الطلاب وسجلات الحضور نهائياً. هل أنت متأكد؟')) {
+        localStorage.removeItem(DB.KEY_STUDENTS);
+        localStorage.removeItem(DB.KEY_RECORDS);
+        render();
+        toast('تم حذف جميع البيانات');
+      }
+    };
+    render();
+  </script>
+</body>
+</html>

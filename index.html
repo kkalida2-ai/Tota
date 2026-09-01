@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>الطلاب — نظام الحضور</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+    <h1>نظام تسجيل الحضور والغياب</h1>
+    <nav>
+      <a href="index.html">الطلاب</a>
+      <a href="attendance.html">تسجيل الحضور</a>
+      <a href="history.html">السجل</a>
+      <a href="stats.html">الإحصائيات</a>
+    </nav>
+  </header>
+  <main>
+    <section class="card">
+      <h2>إضافة طالب جديد</h2>
+      <form id="add-form" class="row">
+        <div style="flex:2 1 220px">
+          <label for="name">اسم الطالب</label>
+          <input id="name" type="text" placeholder="مثال: أحمد محمد" autocomplete="off">
+        </div>
+        <div style="flex:0 0 auto;align-self:flex-end">
+          <button type="submit">إضافة</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>قائمة الطلاب (<span id="count">0</span>)</h2>
+      <ul id="students" class="list"></ul>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+  <script>
+    const listEl = document.getElementById('students');
+    const countEl = document.getElementById('count');
+
+    function render() {
+      const students = DB.students();
+      countEl.textContent = students.length;
+      if (!students.length) {
+        listEl.innerHTML = '<li class="empty">لا يوجد طلاب بعد. أضف أول طالب من الأعلى.</li>';
+        return;
+      }
+      listEl.innerHTML = '';
+      students.forEach(s => {
+        const li = document.createElement('li');
+        const name = document.createElement('span');
+        name.className = 'name';
+        name.textContent = s.name;
+        const btn = document.createElement('button');
+        btn.className = 'danger small';
+        btn.textContent = 'حذف';
+        btn.onclick = () => {
+          if (confirm('حذف الطالب "' + s.name + '" وكل سجلات حضوره؟')) {
+            DB.removeStudent(s.id);
+            render();
+            toast('تم حذف الطالب');
+          }
+        };
+        li.append(name, btn);
+        listEl.appendChild(li);
+      });
+    }
+
+    document.getElementById('add-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const input = document.getElementById('name');
+      const res = DB.addStudent(input.value);
+      toast(res.msg);
+      if (res.ok) { input.value = ''; render(); }
+      input.focus();
+    });
+
+    render();
+  </script>
+</body>
+</html>
