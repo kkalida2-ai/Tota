@@ -1,84 +1,743 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>الطلاب — نظام الحضور</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="تطبيق عربي لتسجيل حضور وغياب الطلاب مع فصول متعددة وسجل وإحصائيات.">
+<meta name="theme-color" content="#0a4a3b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="دفتر الحضور">
+<title>دفتر الحضور</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#f7f6f2;
+  --ground-2:#efeee8;
+  --surface:#ffffff;
+  --ink:#151d1a;
+  --ink-2:#5a6764;
+  --ink-3:#8d9995;
+  --line:#e2e2da;
+  --line-2:#d3d4ca;
+  --green:#0d5c4a;
+  --green-2:#0a4a3b;
+  --green-soft:#e0efe9;
+  --hero-a:#0a4a3b;
+  --hero-b:#0d5c4a;
+  --hero-accent:#d8ac6b;
+  --brass:#a9803f;
+  --brass-soft:#f3e9d8;
+  --present:#2f7d55;
+  --present-soft:#e0f0e6;
+  --absent:#b0413a;
+  --absent-soft:#f8e4e2;
+  --shadow-sm:0 1px 2px rgba(21,29,26,.06);
+  --shadow:0 1px 3px rgba(21,29,26,.05),0 10px 30px -12px rgba(21,29,26,.18);
+  --f-d:"Reem Kufi","IBM Plex Sans Arabic",Tahoma,sans-serif;
+  --f-b:"IBM Plex Sans Arabic",Tahoma,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#0e1513;--ground-2:#141d1a;--surface:#18211e;
+  --ink:#eef2ef;--ink-2:#9fada8;--ink-3:#78857f;
+  --line:#26302d;--line-2:#33403c;
+  --green:#3fae91;--green-2:#5fc7ac;--green-soft:#12302a;--hero-a:#0a2a23;--hero-b:#0f3a31;--hero-accent:#d8ac6b;
+  --brass:#d8ac6b;--brass-soft:#2e2618;
+  --present:#5bbd84;--present-soft:#142c1f;
+  --absent:#e78a83;--absent-soft:#2f1b19;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.45);
+  --shadow:0 1px 3px rgba(0,0,0,.5),0 12px 32px -14px rgba(0,0,0,.75);
+}}
+:root[data-theme="dark"]{
+  --ground:#0e1513;--ground-2:#141d1a;--surface:#18211e;
+  --ink:#eef2ef;--ink-2:#9fada8;--ink-3:#78857f;
+  --line:#26302d;--line-2:#33403c;
+  --green:#3fae91;--green-2:#5fc7ac;--green-soft:#12302a;--hero-a:#0a2a23;--hero-b:#0f3a31;--hero-accent:#d8ac6b;
+  --brass:#d8ac6b;--brass-soft:#2e2618;
+  --present:#5bbd84;--present-soft:#142c1f;
+  --absent:#e78a83;--absent-soft:#2f1b19;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.45);
+  --shadow:0 1px 3px rgba(0,0,0,.5),0 12px 32px -14px rgba(0,0,0,.75);
+}
+
+*{box-sizing:border-box}
+html{direction:rtl}
+body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--f-b);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-d);font-weight:600;margin:0;text-wrap:balance;letter-spacing:.01em}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+
+/* ---------- الترويسة ---------- */
+.hero{
+  background:linear-gradient(160deg,var(--hero-a),var(--hero-b));
+  color:#fff;padding:20px 0 0;position:relative;overflow:hidden;
+}
+.hero::after{
+  content:"";position:absolute;inset-block:0;inset-inline-start:-60px;width:220px;
+  background:radial-gradient(circle at 30% 40%,rgba(255,255,255,.13),transparent 62%);pointer-events:none;
+}
+.hero-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.hero h1{font-size:1.45rem;color:#fff}
+.hero .kicker{
+  font-size:.72rem;letter-spacing:.22em;color:var(--hero-accent);
+  font-weight:600;margin-bottom:3px;
+}
+.class-pick{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:1}
+.class-pick select{
+  background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.28);
+  border-radius:10px;padding:8px 12px;font-family:var(--f-b);font-size:.92rem;font-weight:500;
+  min-width:150px;
+}
+.class-pick select option{color:#151d1a;background:#fff}
+.icon-btn{
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);color:#fff;
+  border-radius:10px;width:38px;height:38px;font-size:1.15rem;line-height:1;
+  display:grid;place-items:center;cursor:pointer;padding:0;
+}
+.icon-btn:hover{background:rgba(255,255,255,.24)}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin-top:16px;position:relative;z-index:1}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+  font-family:var(--f-b);font-size:.92rem;font-weight:500;color:rgba(255,255,255,.68);
+  padding:9px 14px 12px;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;
+}
+.tab:hover{color:#fff}
+.tab[aria-selected="true"]{color:#fff;font-weight:600;border-bottom-color:var(--hero-accent)}
+.tab:focus-visible{outline:2px solid #fff;outline-offset:-3px;border-radius:6px}
+
+main{padding:20px 0 70px;display:block}
+.panel{display:flex;flex-direction:column;gap:16px}
+.panel[hidden]{display:none}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+.card-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:14px}
+.card h2{font-size:1.02rem}
+.card-head .count{color:var(--ink-3);font-size:.82rem;font-variant-numeric:tabular-nums}
+.hint{color:var(--ink-3);font-size:.84rem;margin:0 0 12px}
+
+label{display:block;font-size:.75rem;font-weight:600;letter-spacing:.05em;color:var(--ink-3);margin-bottom:6px}
+input,select,textarea{
+  width:100%;padding:11px 13px;font-family:var(--f-b);font-size:1rem;color:var(--ink);
+  background:var(--ground-2);border:1px solid var(--line-2);border-radius:11px;
+}
+textarea{resize:vertical;min-height:110px;line-height:1.8}
+input::placeholder,textarea::placeholder{color:var(--ink-3)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--green);outline-offset:-1px;border-color:var(--green);background:var(--surface)}
+.field-row{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end}
+.field-row>.f{flex:1 1 170px;min-width:0}
+
+button{font-family:var(--f-b);font-size:.94rem;font-weight:600;padding:11px 18px;border:1px solid transparent;border-radius:11px;background:var(--green);color:#fff;cursor:pointer;transition:filter .15s}
+button:hover{filter:brightness(1.1)}
+button:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+button.quiet{background:var(--ground-2);color:var(--ink-2);border-color:var(--line-2)}
+button.quiet:hover{color:var(--ink)}
+button.link{background:none;color:var(--absent);padding:6px 10px;font-size:.85rem;font-weight:500}
+button.link:hover{background:var(--absent-soft)}
+button.brass{background:var(--brass-soft);color:var(--brass);border-color:transparent}
+
+.list{list-style:none;margin:0;padding:0}
+.list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 2px;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:0}
+.name{font-weight:500}
+.idx{color:var(--ink-3);font-size:.8rem;font-variant-numeric:tabular-nums;margin-inline-end:9px}
+.empty{color:var(--ink-3);text-align:center;padding:28px 8px;font-size:.92rem}
+
+.seg{display:flex;border:1px solid var(--line-2);border-radius:10px;overflow:hidden;flex:0 0 auto}
+.seg button{background:var(--surface);color:var(--ink-3);border:0;border-radius:0;padding:8px 16px;font-size:.88rem;font-weight:500}
+.seg button+button{border-right:1px solid var(--line-2)}
+.seg button[aria-pressed="true"].p{background:var(--present);color:#fff}
+.seg button[aria-pressed="true"].a{background:var(--absent);color:#fff}
+
+.pill{padding:4px 12px;border-radius:999px;font-size:.78rem;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.pill.present{background:var(--present-soft);color:var(--present)}
+.pill.absent{background:var(--absent-soft);color:var(--absent)}
+.pill .dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+
+.note{color:var(--ink-2);font-size:.88rem;margin:0}
+.note b{font-variant-numeric:tabular-nums;color:var(--ink)}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.tile{background:var(--ground-2);border-radius:13px;padding:14px 10px;text-align:center}
+.tile b{display:block;font-family:var(--f-d);font-size:1.55rem;line-height:1.15;color:var(--green);font-variant-numeric:tabular-nums}
+.tile small{color:var(--ink-3);font-size:.75rem}
+
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:right;padding:11px 8px;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:.73rem;letter-spacing:.05em;color:var(--ink-3);font-weight:600}
+td.num{font-variant-numeric:tabular-nums}
+tr:last-child td{border-bottom:0}
+.meter{display:flex;align-items:center;gap:10px;min-width:150px}
+.meter .track{flex:1;height:7px;border-radius:999px;background:var(--ground-2);overflow:hidden}
+.meter .fill{display:block;height:100%;border-radius:999px;background:var(--green);transition:width .5s ease}
+.meter .fill.warn{background:var(--brass)}
+.meter .fill.low{background:var(--absent)}
+.meter .val{font-variant-numeric:tabular-nums;font-weight:600;font-size:.85rem;min-width:40px}
+
+.day-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:10px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.day-head h3{font-size:.98rem}
+.day-head .meta{font-size:.8rem;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* ---------- نافذة داخلية (بديل نوافذ المتصفح المحجوبة) ---------- */
+.scrim{
+  position:fixed;inset:0;background:rgba(8,14,12,.55);z-index:70;
+  display:grid;place-items:center;padding:20px;
+  opacity:0;pointer-events:none;transition:opacity .18s;
+}
+.scrim.open{opacity:1;pointer-events:auto}
+.modal{
+  background:var(--surface);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 24px 60px -20px rgba(0,0,0,.5);
+  width:100%;max-width:390px;padding:20px;
+  transform:translateY(8px) scale(.98);transition:transform .18s;
+}
+.scrim.open .modal{transform:none}
+.modal h3{font-size:1.05rem;margin-bottom:6px}
+.modal p{color:var(--ink-2);font-size:.88rem;margin:0 0 14px}
+.modal .acts{display:flex;gap:9px;margin-top:16px}
+.modal .acts button{flex:1}
+button.danger{background:var(--absent);color:#fff}
+.row-acts{display:flex;gap:6px;flex:0 0 auto}
+button.tiny{padding:7px 12px;font-size:.82rem;font-weight:500;background:var(--ground-2);color:var(--ink-2);border-color:var(--line-2)}
+button.tiny:hover{color:var(--ink)}
+button.tiny.del{color:var(--absent)}
+button.tiny.del:hover{background:var(--absent-soft)}
+
+.toast{position:fixed;inset-inline:16px;bottom:18px;margin:0 auto;max-width:360px;background:var(--ink);color:var(--ground);padding:12px 16px;border-radius:12px;text-align:center;font-size:.9rem;opacity:0;transform:translateY(6px);transition:opacity .2s,transform .2s;pointer-events:none;z-index:60}
+.toast.show{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:430px){
+  .tiles{grid-template-columns:1fr}
+  .tile{display:flex;align-items:baseline;justify-content:space-between;text-align:right;padding:11px 15px}
+  .tile b{font-size:1.3rem}
+  .hero h1{font-size:1.25rem}
+}
+</style>
+
 </head>
 <body>
-<header>
-    <h1>نظام تسجيل الحضور والغياب</h1>
-    <nav>
-      <a href="index.html">الطلاب</a>
-      <a href="attendance.html">تسجيل الحضور</a>
-      <a href="history.html">السجل</a>
-      <a href="stats.html">الإحصائيات</a>
-    </nav>
-  </header>
-  <main>
-    <section class="card">
-      <h2>إضافة طالب جديد</h2>
-      <form id="add-form" class="row">
-        <div style="flex:2 1 220px">
-          <label for="name">اسم الطالب</label>
-          <input id="name" type="text" placeholder="مثال: أحمد محمد" autocomplete="off">
-        </div>
-        <div style="flex:0 0 auto;align-self:flex-end">
-          <button type="submit">إضافة</button>
-        </div>
+
+<div class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <div>
+        <div class="kicker">حضور وغياب</div>
+        <h1>دفتر الحضور</h1>
+      </div>
+      <div class="class-pick">
+        <select id="class-select" aria-label="اختيار الفصل"></select>
+        <button class="icon-btn" id="class-add" type="button" title="إضافة فصل" aria-label="إضافة فصل">+</button>
+        <button class="icon-btn" id="class-rename" type="button" title="تسمية الفصل" aria-label="تسمية الفصل">✎</button>
+        <button class="icon-btn" id="class-del" type="button" title="حذف الفصل" aria-label="حذف الفصل">🗑</button>
+      </div>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-panel="daily" aria-selected="true">تسجيل اليوم</button>
+      <button class="tab" role="tab" data-panel="students" aria-selected="false">الطلاب</button>
+      <button class="tab" role="tab" data-panel="history" aria-selected="false">السجل</button>
+      <button class="tab" role="tab" data-panel="stats" aria-selected="false">الإحصائيات</button>
+      <button class="tab" role="tab" data-panel="backup" aria-selected="false">النسخة الاحتياطية</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <!-- تسجيل اليوم -->
+  <section class="panel" id="p-daily">
+    <div class="card">
+      <div class="card-head"><h2>تسجيل الحضور</h2></div>
+      <div class="field-row">
+        <div class="f" style="flex:1 1 160px"><label for="day">التاريخ</label><input id="day" type="date"></div>
+        <button class="quiet" type="button" id="all-present">تعليم الكل حاضر</button>
+        <button class="quiet" type="button" id="clear-day">مسح اليوم</button>
+      </div>
+      <p class="note" id="day-note" style="margin-top:14px"></p>
+    </div>
+    <div class="card"><ul class="list" id="daily-list"></ul></div>
+  </section>
+
+  <!-- الطلاب -->
+  <section class="panel" id="p-students" hidden>
+    <div class="card">
+      <div class="card-head"><h2>إضافة أسماء دفعة واحدة</h2></div>
+      <p class="hint">الصق قائمة الأسماء — كل اسم في سطر. تكتبها مرة وحدة وتبقى محفوظة.</p>
+      <label for="bulk">الأسماء</label>
+      <textarea id="bulk" placeholder="أحمد محمد&#10;سارة علي&#10;خالد فهد"></textarea>
+      <div class="field-row" style="margin-top:12px">
+        <button type="button" id="bulk-add">إضافة الأسماء</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>إضافة اسم واحد</h2></div>
+      <form id="add-form" class="field-row">
+        <div class="f" style="flex:2 1 220px"><label for="new-name">اسم الطالب</label><input id="new-name" type="text" placeholder="مثال: أحمد محمد" autocomplete="off"></div>
+        <button type="submit">إضافة</button>
       </form>
-    </section>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>قائمة الفصل</h2><span class="count" id="students-count"></span></div>
+      <ul class="list" id="students-list"></ul>
+    </div>
+  </section>
 
-    <section class="card">
-      <h2>قائمة الطلاب (<span id="count">0</span>)</h2>
-      <ul id="students" class="list"></ul>
-    </section>
-  </main>
+  <!-- السجل -->
+  <section class="panel" id="p-history" hidden>
+    <div class="card">
+      <div class="card-head"><h2>تصفية السجل</h2></div>
+      <div class="field-row">
+        <div class="f"><label for="f-date">التاريخ</label><input id="f-date" type="date"></div>
+        <div class="f"><label for="f-name">اسم الطالب</label><input id="f-name" type="text" placeholder="جزء من الاسم" autocomplete="off"></div>
+        <div class="f"><label for="f-status">الحالة</label>
+          <select id="f-status"><option value="">الكل</option><option value="present">حاضر</option><option value="absent">غائب</option></select></div>
+        <button class="quiet" type="button" id="f-reset">إعادة تعيين</button>
+      </div>
+    </div>
+    <div id="history-out" style="display:flex;flex-direction:column;gap:16px"></div>
+  </section>
 
-  <script src="app.js"></script>
-  <script>
-    const listEl = document.getElementById('students');
-    const countEl = document.getElementById('count');
+  <!-- الإحصائيات -->
+  <section class="panel" id="p-stats" hidden>
+    <div class="card">
+      <div class="card-head"><h2>ملخص الفصل</h2></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="f"><label for="s-q">بحث باسم الطالب</label><input id="s-q" type="text" placeholder="جزء من الاسم" autocomplete="off"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>نسبة الحضور لكل طالب</h2></div>
+      <div class="table-wrap">
+        <table><thead><tr><th>الطالب</th><th>حضور</th><th>غياب</th><th>النسبة</th></tr></thead>
+        <tbody id="stats-body"></tbody></table>
+      </div>
+    </div>
+  </section>
 
-    function render() {
-      const students = DB.students();
-      countEl.textContent = students.length;
-      if (!students.length) {
-        listEl.innerHTML = '<li class="empty">لا يوجد طلاب بعد. أضف أول طالب من الأعلى.</li>';
-        return;
-      }
-      listEl.innerHTML = '';
-      students.forEach(s => {
-        const li = document.createElement('li');
-        const name = document.createElement('span');
-        name.className = 'name';
-        name.textContent = s.name;
-        const btn = document.createElement('button');
-        btn.className = 'danger small';
-        btn.textContent = 'حذف';
-        btn.onclick = () => {
-          if (confirm('حذف الطالب "' + s.name + '" وكل سجلات حضوره؟')) {
-            DB.removeStudent(s.id);
-            render();
-            toast('تم حذف الطالب');
-          }
-        };
-        li.append(name, btn);
-        listEl.appendChild(li);
+  <!-- النسخة الاحتياطية -->
+  <section class="panel" id="p-backup" hidden>
+    <div class="card">
+      <div class="card-head"><h2>نقل بياناتك لجهاز آخر</h2></div>
+      <p class="hint">البيانات محفوظة في هذا المتصفح فقط. انسخ النص التالي واحفظه في ملاحظاتك، ثم الصقه في نفس الصفحة على الجهاز الثاني.</p>
+      <label for="backup-out">بياناتك</label>
+      <textarea id="backup-out" readonly></textarea>
+      <div class="field-row" style="margin-top:12px"><button class="brass" type="button" id="copy-backup">نسخ البيانات</button></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>استعادة نسخة</h2></div>
+      <p class="hint">الصق النص المنسوخ هنا. سيستبدل كل البيانات الحالية.</p>
+      <label for="backup-in">النص المنسوخ</label>
+      <textarea id="backup-in" placeholder="الصق هنا…"></textarea>
+      <div class="field-row" style="margin-top:12px"><button type="button" id="restore">استعادة</button></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>حذف</h2></div>
+      <p class="note">لا يمكن التراجع بعد الحذف. خذ نسخة احتياطية أولاً.</p>
+      <p style="margin:12px 0 0"><button class="link" type="button" id="wipe">حذف كل الفصول والسجلات</button></p>
+    </div>
+  </section>
+</main>
+
+<div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal">
+    <h3 id="modal-title"></h3>
+    <p id="modal-msg"></p>
+    <div id="modal-field" hidden>
+      <label for="modal-input" id="modal-label">الاسم</label>
+      <input id="modal-input" type="text" autocomplete="off">
+    </div>
+    <div class="acts">
+      <button class="quiet" type="button" id="modal-cancel">إلغاء</button>
+      <button type="button" id="modal-ok">حفظ</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ================= التخزين ================= */
+var KEY='attendance_v2', OLD_ST='att_students', OLD_RC='att_records';
+
+function blank(){
+  return {classes:[{id:'c1',name:'الفصل الأول',students:[]}],records:{c1:{}},current:'c1'};
+}
+function load(){
+  var d;
+  try{ d=JSON.parse(localStorage.getItem(KEY)||'null') }catch(e){ d=null }
+  if(!d||!d.classes||!d.classes.length){
+    d=blank();
+    /* ترحيل بيانات النسخة السابقة إن وُجدت */
+    try{
+      var os=JSON.parse(localStorage.getItem(OLD_ST)||'[]');
+      var or=JSON.parse(localStorage.getItem(OLD_RC)||'{}');
+      if(os.length){ d.classes[0].students=os; d.records.c1=or||{} }
+    }catch(e){}
+  }
+  if(!d.records)d.records={};
+  d.classes.forEach(function(c){ if(!d.records[c.id])d.records[c.id]={} });
+  if(!d.classes.some(function(c){return c.id===d.current}))d.current=d.classes[0].id;
+  return d;
+}
+var DATA=load();
+function save(){
+  try{ localStorage.setItem(KEY,JSON.stringify(DATA)) }
+  catch(e){ toast('تعذّر الحفظ في هذا المتصفح') }
+}
+function cls(){ return DATA.classes.filter(function(c){return c.id===DATA.current})[0] }
+function rec(){ return DATA.records[DATA.current] }
+function uid(p){ return p+Date.now().toString(36)+Math.floor(Math.random()*1e4).toString(36) }
+
+function todayISO(){var d=new Date(),p=function(n){return String(n).padStart(2,'0')};
+  return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())}
+function fmt(iso){var a=iso.split('-');return a[2]+'/'+a[1]+'/'+a[0]}
+function nameOf(id){var s=cls().students.filter(function(x){return x.id===id})[0];return s?s.name:'طالب محذوف'}
+function setStatus(date,id,st){var r=rec();if(!r[date])r[date]={};r[date][id]=st;save()}
+function statsFor(id){var r=rec(),p=0,a=0;
+  Object.keys(r).forEach(function(d){var s=r[d][id];if(s==='present')p++;else if(s==='absent')a++});
+  var t=p+a;return{present:p,absent:a,total:t,percent:t?Math.round(p/t*100):0}}
+
+var tt;
+function toast(m){var e=document.getElementById('toast');e.textContent=m;e.classList.add('show');
+  clearTimeout(tt);tt=setTimeout(function(){e.classList.remove('show')},2400)}
+
+
+/* ========== نافذة داخلية: prompt/confirm محجوبة داخل الإطار ========== */
+var scrim=document.getElementById('scrim'),mTitle=document.getElementById('modal-title'),
+    mMsg=document.getElementById('modal-msg'),mField=document.getElementById('modal-field'),
+    mInput=document.getElementById('modal-input'),mLabel=document.getElementById('modal-label'),
+    mOk=document.getElementById('modal-ok'),mCancel=document.getElementById('modal-cancel'),
+    mResolve=null;
+
+function closeModal(v){
+  if(!mResolve)return;
+  var r=mResolve;mResolve=null;
+  scrim.classList.remove('open');
+  r(v);
+}
+function openModal(o){
+  return new Promise(function(res){
+    mResolve=res;
+    mTitle.textContent=o.title||'';
+    mMsg.textContent=o.msg||'';
+    mMsg.hidden=!o.msg;
+    mField.hidden=!o.input;
+    mOk.textContent=o.ok||'حفظ';
+    mOk.className=o.danger?'danger':'';
+    mCancel.textContent=o.cancel||'إلغاء';
+    if(o.input){ mLabel.textContent=o.label||'الاسم'; mInput.value=o.value||'' }
+    scrim.classList.add('open');
+    setTimeout(function(){ (o.input?mInput:mOk).focus(); if(o.input)mInput.select() },60);
+  });
+}
+function askText(o){ o.input=true; return openModal(o) }
+function askYes(o){ return openModal(o).then(function(v){ return v===true }) }
+
+mOk.onclick=function(){ closeModal(mField.hidden?true:mInput.value) };
+mCancel.onclick=function(){ closeModal(null) };
+scrim.onclick=function(e){ if(e.target===scrim)closeModal(null) };
+mInput.onkeydown=function(e){ if(e.key==='Enter'){e.preventDefault();mOk.click()} };
+document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mResolve)closeModal(null) });
+
+/* ================= الفصول ================= */
+var classSelect=document.getElementById('class-select');
+function renderClasses(){
+  classSelect.textContent='';
+  DATA.classes.forEach(function(c){
+    var o=document.createElement('option');o.value=c.id;
+    o.textContent=c.name+' ('+c.students.length+')';
+    if(c.id===DATA.current)o.selected=true;
+    classSelect.appendChild(o);
+  });
+}
+classSelect.onchange=function(){DATA.current=classSelect.value;save();renderAll()};
+document.getElementById('class-add').onclick=function(){
+  askText({title:'فصل جديد',label:'اسم الفصل',value:'الفصل '+(DATA.classes.length+1),ok:'إنشاء'})
+  .then(function(n){
+    if(n===null)return;
+    n=n.trim();if(!n){toast('اكتب اسم الفصل');return}
+    var id=uid('c');
+    DATA.classes.push({id:id,name:n,students:[]});
+    DATA.records[id]={};DATA.current=id;save();renderAll();toast('تم إنشاء «'+n+'»');
+  });
+};
+document.getElementById('class-rename').onclick=function(){
+  var c=cls();
+  askText({title:'تسمية الفصل',label:'الاسم',value:c.name,ok:'حفظ'}).then(function(n){
+    if(n===null)return;
+    n=n.trim();if(!n){toast('الاسم ما يصير فاضي');return}
+    c.name=n;save();renderAll();toast('تم تغيير الاسم');
+  });
+};
+document.getElementById('class-del').onclick=function(){
+  var c=cls();
+  if(DATA.classes.length===1){toast('لا يمكن حذف الفصل الوحيد');return}
+  askYes({title:'حذف «'+c.name+'»؟',msg:'سيُحذف الفصل وكل طلابه وسجلات حضوره. لا يمكن التراجع.',
+          ok:'حذف الفصل',danger:true}).then(function(y){
+    if(!y)return;
+    DATA.classes=DATA.classes.filter(function(x){return x.id!==c.id});
+    delete DATA.records[c.id];DATA.current=DATA.classes[0].id;
+    save();renderAll();toast('تم حذف الفصل');
+  });
+};
+
+/* ================= التبويبات ================= */
+var tabs=[].slice.call(document.querySelectorAll('.tab'));
+tabs.forEach(function(t){t.onclick=function(){
+  tabs.forEach(function(o){var on=o===t;
+    o.setAttribute('aria-selected',on?'true':'false');
+    document.getElementById('p-'+o.dataset.panel).hidden=!on});
+  renderAll();window.scrollTo({top:0,behavior:'smooth'});
+}});
+
+/* ================= الطلاب ================= */
+var listEl=document.getElementById('students-list');
+function addNames(text){
+  var names=text.split(/\r?\n|,|،/).map(function(s){return s.trim().replace(/\s+/g,' ')})
+    .filter(function(s){return s.length});
+  var list=cls().students,added=0,dup=0;
+  names.forEach(function(n){
+    if(list.some(function(s){return s.name===n})){dup++;return}
+    list.push({id:uid('s'),name:n});added++;
+  });
+  save();renderAll();
+  if(!added&&!dup)toast('ما فيه أسماء');
+  else toast('أُضيف '+added+' اسم'+(dup?' · تكرار: '+dup:''));
+  return added;
+}
+document.getElementById('bulk-add').onclick=function(){
+  var t=document.getElementById('bulk');
+  if(!t.value.trim()){toast('الصق الأسماء أولاً');t.focus();return}
+  if(addNames(t.value))t.value='';
+};
+document.getElementById('add-form').onsubmit=function(e){
+  e.preventDefault();
+  var i=document.getElementById('new-name');
+  if(!i.value.trim()){toast('اكتب اسم الطالب');i.focus();return}
+  if(addNames(i.value))i.value='';
+  i.focus();
+};
+function renderStudents(){
+  var list=cls().students;
+  document.getElementById('students-count').textContent=list.length?list.length+' طالب':'';
+  listEl.textContent='';
+  if(!list.length){
+    var li=document.createElement('li');li.className='empty';
+    li.textContent='فصل «'+cls().name+'» فاضي — الصق قائمة الأسماء من الأعلى.';
+    listEl.appendChild(li);return;
+  }
+  list.forEach(function(s,i){
+    var li=document.createElement('li');
+    var left=document.createElement('span');
+    var idx=document.createElement('span');idx.className='idx';idx.textContent=i+1;
+    var n=document.createElement('span');n.className='name';n.textContent=s.name;
+    left.appendChild(idx);left.appendChild(n);
+    var acts=document.createElement('div');acts.className='row-acts';
+
+    var ed=document.createElement('button');ed.type='button';ed.className='tiny';ed.textContent='تعديل';
+    ed.onclick=function(){
+      askText({title:'تعديل الاسم',label:'اسم الطالب',value:s.name,ok:'حفظ'}).then(function(n){
+        if(n===null)return;
+        n=n.trim().replace(/\s+/g,' ');
+        if(!n){toast('الاسم ما يصير فاضي');return}
+        if(cls().students.some(function(x){return x.id!==s.id&&x.name===n})){toast('الاسم مكرر');return}
+        s.name=n;save();renderAll();toast('تم تعديل الاسم');
       });
-    }
+    };
 
-    document.getElementById('add-form').addEventListener('submit', e => {
-      e.preventDefault();
-      const input = document.getElementById('name');
-      const res = DB.addStudent(input.value);
-      toast(res.msg);
-      if (res.ok) { input.value = ''; render(); }
-      input.focus();
+    var b=document.createElement('button');b.type='button';b.className='tiny del';b.textContent='حذف';
+    b.onclick=function(){
+      askYes({title:'حذف «'+s.name+'»؟',msg:'سيُحذف الطالب وكل سجلات حضوره.',ok:'حذف',danger:true})
+      .then(function(y){
+        if(!y)return;
+        cls().students=cls().students.filter(function(x){return x.id!==s.id});
+        var r=rec();Object.keys(r).forEach(function(d){delete r[d][s.id];
+          if(!Object.keys(r[d]).length)delete r[d]});
+        save();renderAll();toast('تم حذف الطالب');
+      });
+    };
+    acts.appendChild(ed);acts.appendChild(b);
+    li.appendChild(left);li.appendChild(acts);listEl.appendChild(li);
+  });
+}
+
+/* ================= تسجيل اليوم ================= */
+var dayEl=document.getElementById('day'),dailyEl=document.getElementById('daily-list'),
+    dayNote=document.getElementById('day-note');
+dayEl.value=todayISO();
+function renderDaily(){
+  var date=dayEl.value||todayISO(),list=cls().students,day=rec()[date]||{};
+  dailyEl.textContent='';
+  if(!list.length){
+    var li=document.createElement('li');li.className='empty';
+    li.textContent='أضف طلاب هذا الفصل من تبويب «الطلاب».';
+    dailyEl.appendChild(li);dayNote.textContent='';return;
+  }
+  list.forEach(function(s,i){
+    var li=document.createElement('li');
+    var left=document.createElement('span');
+    var idx=document.createElement('span');idx.className='idx';idx.textContent=i+1;
+    var n=document.createElement('span');n.className='name';n.textContent=s.name;
+    left.appendChild(idx);left.appendChild(n);
+    var seg=document.createElement('div');seg.className='seg';
+    [['present','حاضر','p'],['absent','غائب','a']].forEach(function(o){
+      var b=document.createElement('button');b.type='button';b.className=o[2];b.textContent=o[1];
+      b.setAttribute('aria-pressed',day[s.id]===o[0]?'true':'false');
+      b.onclick=function(){setStatus(date,s.id,o[0]);renderAll()};
+      seg.appendChild(b);
     });
+    li.appendChild(left);li.appendChild(seg);dailyEl.appendChild(li);
+  });
+  var marked=list.filter(function(s){return day[s.id]}).length;
+  var present=list.filter(function(s){return day[s.id]==='present'}).length;
+  dayNote.innerHTML='سُجّل <b>'+marked+'</b> من <b>'+list.length+'</b> — حاضر <b>'+present+
+    '</b> · غائب <b>'+(marked-present)+'</b>';
+}
+dayEl.onchange=renderAll;
+document.getElementById('all-present').onclick=function(){
+  var date=dayEl.value||todayISO(),list=cls().students;
+  if(!list.length){toast('لا يوجد طلاب في هذا الفصل');return}
+  list.forEach(function(s){setStatus(date,s.id,'present')});
+  renderAll();toast('تم تعليم الجميع حاضرين');
+};
+document.getElementById('clear-day').onclick=function(){
+  var date=dayEl.value||todayISO(),r=rec();
+  if(!r[date]){toast('لا يوجد تسجيل لهذا اليوم');return}
+  askYes({title:'مسح تسجيل '+fmt(date)+'؟',msg:'في فصل «'+cls().name+'». يمكنك تسجيله من جديد بعدها.',
+          ok:'مسح',danger:true}).then(function(y){
+    if(!y)return;
+    delete r[date];save();renderAll();toast('تم مسح تسجيل اليوم');
+  });
+};
 
-    render();
-  </script>
+/* ================= السجل ================= */
+var fDate=document.getElementById('f-date'),fName=document.getElementById('f-name'),
+    fStatus=document.getElementById('f-status'),histOut=document.getElementById('history-out');
+function renderHistory(){
+  var r=rec(),q=fName.value.trim(),shown=0;
+  var dates=Object.keys(r).sort().reverse();
+  if(fDate.value)dates=dates.filter(function(d){return d===fDate.value});
+  histOut.textContent='';
+  dates.forEach(function(date){
+    var rows=Object.keys(r[date]).map(function(id){return{name:nameOf(id),status:r[date][id]}});
+    if(q)rows=rows.filter(function(e){return e.name.indexOf(q)>-1});
+    if(fStatus.value)rows=rows.filter(function(e){return e.status===fStatus.value});
+    if(!rows.length)return;
+    rows.sort(function(a,b){return a.name.localeCompare(b.name,'ar')});
+    shown+=rows.length;
+    var present=rows.filter(function(e){return e.status==='present'}).length;
+    var card=document.createElement('div');card.className='card';
+    var head=document.createElement('div');head.className='day-head';
+    var h=document.createElement('h3');h.textContent=fmt(date);
+    var meta=document.createElement('span');meta.className='meta';
+    meta.textContent='حاضر '+present+' · غائب '+(rows.length-present);
+    head.appendChild(h);head.appendChild(meta);
+    var ul=document.createElement('ul');ul.className='list';
+    rows.forEach(function(e){
+      var li=document.createElement('li');
+      var n=document.createElement('span');n.className='name';n.textContent=e.name;
+      var pill=document.createElement('span');pill.className='pill '+e.status;
+      var dot=document.createElement('span');dot.className='dot';
+      pill.appendChild(dot);pill.appendChild(document.createTextNode(e.status==='present'?'حاضر':'غائب'));
+      li.appendChild(n);li.appendChild(pill);ul.appendChild(li);
+    });
+    card.appendChild(head);card.appendChild(ul);histOut.appendChild(card);
+  });
+  if(!shown){
+    var c=document.createElement('div');c.className='card';
+    var p=document.createElement('p');p.className='empty';
+    p.textContent=Object.keys(r).length?'لا توجد سجلات مطابقة للتصفية.':'لا توجد سجلات في هذا الفصل بعد.';
+    c.appendChild(p);histOut.appendChild(c);
+  }
+}
+[fDate,fName,fStatus].forEach(function(el){el.addEventListener('input',renderHistory)});
+document.getElementById('f-reset').onclick=function(){fDate.value='';fName.value='';fStatus.value='';renderHistory()};
+
+/* ================= الإحصائيات ================= */
+var sQ=document.getElementById('s-q'),tiles=document.getElementById('tiles'),
+    sBody=document.getElementById('stats-body');
+function renderStats(){
+  var list=cls().students,days=Object.keys(rec()).length,tp=0,tt2=0;
+  list.forEach(function(s){var st=statsFor(s.id);tp+=st.present;tt2+=st.total});
+  var overall=tt2?Math.round(tp/tt2*100):0;
+  tiles.textContent='';
+  [[list.length,'طالب'],[days,'يوم مسجل'],[overall+'%','نسبة الحضور']].forEach(function(t){
+    var d=document.createElement('div');d.className='tile';
+    var b=document.createElement('b');b.textContent=t[0];
+    var s=document.createElement('small');s.textContent=t[1];
+    d.appendChild(b);d.appendChild(s);tiles.appendChild(d);
+  });
+  var q=sQ.value.trim();
+  var rows=list.filter(function(s){return !q||s.name.indexOf(q)>-1});
+  sBody.textContent='';
+  if(!rows.length){
+    var tr=document.createElement('tr'),td=document.createElement('td');
+    td.colSpan=4;td.className='empty';
+    td.textContent=list.length?'لا توجد نتائج للبحث.':'أضف الطلاب لعرض الإحصائيات.';
+    tr.appendChild(td);sBody.appendChild(tr);return;
+  }
+  rows.forEach(function(s){
+    var st=statsFor(s.id),tr=document.createElement('tr');
+    var c1=document.createElement('td');c1.className='name';c1.textContent=s.name;
+    var c2=document.createElement('td');c2.className='num';c2.textContent=st.present;
+    var c3=document.createElement('td');c3.className='num';c3.textContent=st.absent;
+    var c4=document.createElement('td');
+    var m=document.createElement('div');m.className='meter';
+    var track=document.createElement('div');track.className='track';
+    var fill=document.createElement('span');
+    fill.className='fill'+(st.total?(st.percent<60?' low':(st.percent<80?' warn':'')):'');
+    fill.style.width=(st.total?st.percent:0)+'%';
+    track.appendChild(fill);
+    var val=document.createElement('span');val.className='val';val.textContent=st.total?st.percent+'%':'—';
+    m.appendChild(track);m.appendChild(val);c4.appendChild(m);
+    [c1,c2,c3,c4].forEach(function(c){tr.appendChild(c)});
+    sBody.appendChild(tr);
+  });
+}
+sQ.addEventListener('input',renderStats);
+
+/* ================= النسخة الاحتياطية ================= */
+var backupOut=document.getElementById('backup-out');
+function renderBackup(){ backupOut.value=JSON.stringify(DATA) }
+document.getElementById('copy-backup').onclick=function(){
+  backupOut.select();backupOut.setSelectionRange(0,999999);
+  var ok=false;
+  try{ ok=document.execCommand('copy') }catch(e){}
+  if(navigator.clipboard&&!ok){
+    navigator.clipboard.writeText(backupOut.value).then(function(){toast('تم نسخ البيانات')},
+      function(){toast('انسخ النص يدوياً')});
+    return;
+  }
+  toast(ok?'تم نسخ البيانات':'انسخ النص يدوياً');
+};
+document.getElementById('restore').onclick=function(){
+  var t=document.getElementById('backup-in');
+  var raw=t.value.trim();
+  if(!raw){toast('الصق النص أولاً');t.focus();return}
+  var d;
+  try{ d=JSON.parse(raw) }catch(e){ toast('النص غير صالح');return }
+  if(!d||!d.classes||!d.classes.length){toast('النص غير صالح');return}
+  askYes({title:'استعادة النسخة؟',msg:'سيتم استبدال كل البيانات الحالية بهذه النسخة.',
+          ok:'استعادة',danger:true}).then(function(y){
+    if(!y)return;
+    DATA=d;
+    if(!DATA.records)DATA.records={};
+    DATA.classes.forEach(function(c){if(!DATA.records[c.id])DATA.records[c.id]={}});
+    if(!DATA.classes.some(function(c){return c.id===DATA.current}))DATA.current=DATA.classes[0].id;
+    save();t.value='';renderAll();toast('تمت الاستعادة');
+  });
+};
+document.getElementById('wipe').onclick=function(){
+  askYes({title:'حذف كل البيانات؟',msg:'سيُحذف كل الفصول والطلاب والسجلات نهائياً. لا يمكن التراجع.',
+          ok:'حذف الكل',danger:true}).then(function(y){
+    if(!y)return;
+    DATA=blank();
+    try{ localStorage.removeItem(OLD_ST);localStorage.removeItem(OLD_RC) }catch(e){}
+    save();renderAll();toast('تم حذف كل البيانات');
+  });
+};
+
+function renderAll(){renderClasses();renderStudents();renderDaily();renderHistory();renderStats();renderBackup()}
+renderAll();
+</script>
+
 </body>
 </html>
