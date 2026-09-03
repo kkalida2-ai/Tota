@@ -1,259 +1,427 @@
-<title>لوحة تداول الوطني</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<title>مرصد بورصة الكويت</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zain:wght@400;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
-  --ground:#EEF1F3; --panel:#FFFFFF; --panel-2:#F6F8F9;
-  --ink:#111A20; --ink-2:#4A5A63; --line:#D5DDE1;
-  --accent:#0F5E73; --accent-soft:#DCEAEE;
-  --up:#1B6B4A; --down:#A83530; --hold:#8A6A18;
-  --shadow:0 1px 2px rgba(17,26,32,.06);
+  --ground:#E7EAE9; --panel:#FAFBFB; --sunk:#F0F2F2; --panel-hi:#FFFFFF;
+  --ink:#0C1A1F; --ink-2:#556A70; --ink-3:#8298A0;
+  --line:#CFD8D8; --line-soft:#E2E8E8;
+  --accent:#14495E; --accent-ink:#FAFBFB; --accent-wash:#DEE9ED;
+  --up:#0F6E4A; --down:#A93226; --flat:#7A6A2A;
+  --up-wash:#DFEDE6; --down-wash:#F5E1DE;
+  --shadow:0 1px 1px rgba(12,26,31,.05), 0 6px 18px -12px rgba(12,26,31,.28);
+  --sel:#C9DDE4;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --ground:#0C1418; --panel:#131E24; --panel-2:#182530;
-    --ink:#E8EEF0; --ink-2:#9CAFB8; --line:#25353E;
-    --accent:#5CC2D8; --accent-soft:#12303A;
-    --up:#4FCB8E; --down:#F0817A; --hold:#DCB35A;
-    --shadow:0 1px 2px rgba(0,0,0,.4);
+    --ground:#08110F; --panel:#0E1A1C; --sunk:#131F22; --panel-hi:#182629;
+    --ink:#E6EDEC; --ink-2:#9AB0B3; --ink-3:#6C8286;
+    --line:#223336; --line-soft:#1A2A2D;
+    --accent:#69BBD6; --accent-ink:#08110F; --accent-wash:#0F2C36;
+    --up:#4FC48C; --down:#EE8177; --flat:#D2B45F;
+    --up-wash:#0F2A22; --down-wash:#2C1512;
+    --shadow:0 1px 1px rgba(0,0,0,.5), 0 8px 22px -14px rgba(0,0,0,.8);
+    --sel:#17414F;
   }
 }
 :root[data-theme="dark"]{
-  --ground:#0C1418; --panel:#131E24; --panel-2:#182530;
-  --ink:#E8EEF0; --ink-2:#9CAFB8; --line:#25353E;
-  --accent:#5CC2D8; --accent-soft:#12303A;
-  --up:#4FCB8E; --down:#F0817A; --hold:#DCB35A;
-  --shadow:0 1px 2px rgba(0,0,0,.4);
+  --ground:#08110F; --panel:#0E1A1C; --sunk:#131F22; --panel-hi:#182629;
+  --ink:#E6EDEC; --ink-2:#9AB0B3; --ink-3:#6C8286;
+  --line:#223336; --line-soft:#1A2A2D;
+  --accent:#69BBD6; --accent-ink:#08110F; --accent-wash:#0F2C36;
+  --up:#4FC48C; --down:#EE8177; --flat:#D2B45F;
+  --up-wash:#0F2A22; --down-wash:#2C1512;
+  --shadow:0 1px 1px rgba(0,0,0,.5), 0 8px 22px -14px rgba(0,0,0,.8);
+  --sel:#17414F;
 }
 *{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
 body{
-  direction:rtl; background:var(--ground); color:var(--ink); margin:0;
+  direction:rtl; margin:0; background:var(--ground); color:var(--ink);
   font-family:"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;
-  font-size:15px; line-height:1.65;
+  font-size:15px; line-height:1.7; letter-spacing:0;
 }
-.wrap{max-width:1080px; margin:0 auto; padding:28px 20px 64px; display:flex; flex-direction:column; gap:28px}
-h1,h2,h3{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",sans-serif; margin:0; text-wrap:balance; line-height:1.35}
-h1{font-size:28px; font-weight:700; letter-spacing:-.01em}
-h2{font-size:19px; font-weight:700}
-h3{font-size:15px; font-weight:700}
-.eyebrow{font-size:12px; letter-spacing:.14em; color:var(--ink-2); text-transform:uppercase}
-p{margin:0; color:var(--ink-2)}
-.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; direction:ltr; unicode-bidi:isolate}
+::selection{background:var(--sel); color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:3px}
+*::-webkit-scrollbar{height:10px; width:10px}
+*::-webkit-scrollbar-track{background:var(--sunk)}
+*::-webkit-scrollbar-thumb{background:var(--line); border-radius:6px; border:2px solid var(--sunk)}
+*{scrollbar-color:var(--line) var(--sunk); scrollbar-width:thin}
 
-/* رأس الصفحة */
-header{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between;
-  border-bottom:2px solid var(--ink); padding-bottom:16px}
-header .meta{display:flex; gap:18px; align-items:center; flex-wrap:wrap}
-.stamp{font-size:12px; color:var(--ink-2)}
-button{font:inherit; cursor:pointer}
-.btn{background:var(--accent); color:var(--panel); border:0; border-radius:6px; padding:9px 16px; font-weight:600; font-size:14px}
-.btn:hover{filter:brightness(1.08)}
-.btn.ghost{background:transparent; color:var(--accent); border:1px solid var(--line)}
-:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.wrap{max-width:1140px; margin:0 auto; padding:32px 20px 72px; display:flex; flex-direction:column; gap:26px}
+h1,h2,h3{margin:0; font-family:"Zain","Noto Kufi Arabic","IBM Plex Sans Arabic",sans-serif;
+  font-weight:800; letter-spacing:-.015em; text-wrap:balance; line-height:1.25}
+h1{font-size:clamp(30px,5.2vw,44px)}
+h2{font-size:23px}
+h3{font-size:16px; font-weight:700}
+p{margin:0}
+.lede{color:var(--ink-2); font-size:15px; max-width:62ch}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums;
+  direction:ltr; unicode-bidi:isolate}
+.label{font-size:11.5px; font-weight:600; color:var(--ink-3); letter-spacing:.05em}
 
-/* التوصية الرئيسية */
-.verdict{background:var(--panel); border:1px solid var(--line); border-inline-start:4px solid var(--accent);
-  border-radius:8px; padding:22px 24px; box-shadow:var(--shadow); display:grid; gap:18px;
-  grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
-@media(max-width:720px){.verdict{grid-template-columns:1fr}}
-.verdict .pick{font-family:"Noto Kufi Arabic",sans-serif; font-size:26px; font-weight:700; margin-top:4px}
-.verdict .why{margin-top:10px; font-size:14px}
-.side-stats{display:flex; flex-direction:column; gap:10px; align-self:center}
-.stat{display:flex; justify-content:space-between; gap:12px; align-items:baseline;
-  border-bottom:1px dashed var(--line); padding-bottom:6px; font-size:13px}
-.stat b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px}
+/* ── الشريط العلوي ── */
+.masthead{display:flex; justify-content:space-between; align-items:flex-end; gap:20px; flex-wrap:wrap;
+  padding-bottom:14px; border-bottom:1.5px solid var(--ink)}
+.ticker-strip{display:flex; align-items:center; gap:10px; font-size:12.5px; color:var(--ink-2)}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--flat); flex:none}
+.dot.open{background:var(--up)}
+.tools{display:flex; gap:8px; flex-wrap:wrap}
+button{font:inherit; cursor:pointer; border-radius:7px; transition:background .16s ease, color .16s ease, border-color .16s ease}
+.btn{background:var(--accent); color:var(--accent-ink); border:1px solid var(--accent); padding:8px 15px;
+  font-weight:600; font-size:13.5px}
+.btn:hover{filter:brightness(1.12)}
+.btn.quiet{background:transparent; color:var(--ink-2); border-color:var(--line)}
+.btn.quiet:hover{background:var(--panel-hi); color:var(--ink); border-color:var(--ink-3)}
 
-/* الجدول */
-.panel{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow)}
-.panel-head{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
-  padding:16px 20px; border-bottom:1px solid var(--line)}
+/* ── الحكم ── */
+.verdict{display:grid; grid-template-columns:minmax(0,1.5fr) minmax(260px,.85fr); gap:28px; align-items:end;
+  background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:26px 28px; box-shadow:var(--shadow)}
+@media(max-width:760px){.verdict{grid-template-columns:1fr; gap:20px; padding:22px}}
+.verdict h1 span{color:var(--ink-3)}
+.verdict .rationale{color:var(--ink-2); font-size:14.5px; margin-top:10px; max-width:52ch}
+.ledger{display:flex; flex-direction:column; gap:0}
+.ledger div{display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+  padding:7px 0; border-bottom:1px solid var(--line-soft); font-size:13px; color:var(--ink-2)}
+.ledger div:last-child{border-bottom:0}
+.ledger b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px;
+  font-weight:600; color:var(--ink)}
+
+/* ── أدوات الجدول ── */
+.board{background:var(--panel); border:1px solid var(--line); border-radius:14px; overflow:hidden; box-shadow:var(--shadow)}
+.board-head{display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;
+  padding:18px 22px; border-bottom:1px solid var(--line)}
+.filters{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+input[type=search], select{font:inherit; font-size:13.5px; color:var(--ink); background:var(--sunk);
+  border:1px solid var(--line); border-radius:7px; padding:7px 11px}
+input[type=search]{width:170px}
+.seg{display:flex; border:1px solid var(--line); border-radius:7px; overflow:hidden}
+.seg button{border:0; border-radius:0; background:transparent; color:var(--ink-2); padding:7px 13px; font-size:13px}
+.seg button[aria-pressed="true"]{background:var(--accent-wash); color:var(--ink); font-weight:600}
+.seg button + button{border-inline-start:1px solid var(--line)}
+
 .scroll{overflow-x:auto}
-table{border-collapse:collapse; width:100%; min-width:660px; font-size:14px}
-th,td{text-align:right; padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap}
-th{font-size:11.5px; letter-spacing:.08em; color:var(--ink-2); font-weight:600; background:var(--panel-2)}
-tbody tr:hover{background:var(--panel-2)}
-td.name{white-space:normal; min-width:150px}
-td.name small{display:block; color:var(--ink-2); font-size:11.5px}
-.up{color:var(--up)} .down{color:var(--down)}
-.pill{display:inline-block; padding:2px 9px; border-radius:99px; font-size:11.5px; font-weight:600;
-  border:1px solid currentColor}
-.pill.buy{color:var(--up)} .pill.watch{color:var(--hold)} .pill.avoid{color:var(--down)}
-.bar{height:6px; background:var(--panel-2); border-radius:3px; overflow:hidden; min-width:70px}
-.bar i{display:block; height:100%; background:var(--accent)}
-input[type=number]{width:78px; font-family:"IBM Plex Mono",monospace; font-size:13px; text-align:left; direction:ltr;
-  background:var(--panel-2); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:4px 6px}
-input[type=number]:focus{border-color:var(--accent)}
-.rank{color:var(--ink-2); font-family:"IBM Plex Mono",monospace}
+table{border-collapse:collapse; width:100%; min-width:820px; font-size:14px}
+thead th{position:sticky; top:0; background:var(--sunk); z-index:2; font-size:11.5px; font-weight:600;
+  color:var(--ink-3); letter-spacing:.05em; text-align:right; padding:10px 14px;
+  border-bottom:1px solid var(--line); white-space:nowrap}
+thead th.sortable{cursor:pointer}
+thead th.sortable:hover{color:var(--ink)}
+thead th[aria-sort]:not([aria-sort="none"]){color:var(--ink)}
+tbody td{padding:11px 14px; border-bottom:1px solid var(--line-soft); white-space:nowrap; vertical-align:middle}
+tbody tr:hover{background:var(--panel-hi)}
+tbody tr.lead td{background:var(--accent-wash)}
+tbody tr.lead td:first-child{box-shadow:inset 3px 0 0 var(--accent)}
+td.rk{color:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:13px; width:1%}
+td.co{white-space:normal; min-width:190px; line-height:1.45}
+td.co b{font-weight:600}
+td.co small{display:block; color:var(--ink-3); font-size:11.5px; letter-spacing:.02em}
+.tier{display:inline-block; font-size:10.5px; font-weight:600; padding:1px 7px; border-radius:4px;
+  border:1px solid var(--line); color:var(--ink-2); margin-inline-start:6px; vertical-align:1px}
+.tier.p{border-color:var(--accent); color:var(--accent)}
+.chg{display:inline-flex; align-items:center; gap:5px; font-family:"IBM Plex Mono",monospace;
+  font-variant-numeric:tabular-nums; font-weight:600; padding:2px 8px; border-radius:5px}
+.chg.u{color:var(--up); background:var(--up-wash)} .chg.d{color:var(--down); background:var(--down-wash)}
+.chg svg{width:9px; height:9px; flex:none}
+.gauge{display:flex; align-items:center; gap:9px; min-width:112px}
+.gauge span{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-weight:600; width:2.2ch}
+.gauge i{display:block; height:5px; border-radius:3px; background:var(--accent); min-width:2px}
+.gauge em{display:block; flex:1; height:5px; border-radius:3px; background:var(--line-soft); overflow:hidden}
+.verd{font-size:12.5px; font-weight:600}
+.verd.b{color:var(--up)} .verd.w{color:var(--flat)} .verd.a{color:var(--ink-3)}
+.empty{padding:44px 22px; text-align:center; color:var(--ink-3); font-size:14px}
+tfoot td{padding:14px 22px; color:var(--ink-3); font-size:12.5px; border-top:1px solid var(--line)}
 
-/* الخطوات */
-.steps{counter-reset:s; display:grid; gap:2px}
-.step{display:grid; grid-template-columns:auto 1fr; gap:14px; padding:14px 20px; border-bottom:1px solid var(--line)}
-.step:last-child{border-bottom:0}
-.step::before{counter-increment:s; content:counter(s); font-family:"IBM Plex Mono",monospace; font-weight:600;
-  color:var(--accent); font-size:13px; padding-top:2px}
-.step p{font-size:13.5px; margin-top:2px}
-.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; align-items:start}
-ul.tight{margin:0; padding-inline-start:18px; color:var(--ink-2); font-size:13.5px; display:grid; gap:6px}
-.note{font-size:12.5px; color:var(--ink-2); background:var(--accent-soft); border-radius:6px; padding:12px 16px}
-footer{font-size:12px; color:var(--ink-2); border-top:1px solid var(--line); padding-top:16px}
-a{color:var(--accent)}
+/* ── التحديث + المعرفة ── */
+.cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:26px; align-items:start}
+.block{display:flex; flex-direction:column; gap:14px}
+.block h2{padding-bottom:10px; border-bottom:1px solid var(--line)}
+textarea{width:100%; min-height:132px; resize:vertical; font-family:"IBM Plex Mono",monospace; font-size:13px;
+  direction:ltr; text-align:left; color:var(--ink); background:var(--panel); border:1px solid var(--line);
+  border-radius:9px; padding:12px}
+textarea::placeholder{color:var(--ink-3)}
+.hint{font-size:12.5px; color:var(--ink-2)}
+.status{font-size:12.5px; font-weight:600; min-height:20px}
+.status.ok{color:var(--up)} .status.err{color:var(--down)}
+ol.flow{list-style:none; counter-reset:f; margin:0; padding:0; display:flex; flex-direction:column}
+ol.flow li{counter-increment:f; display:grid; grid-template-columns:auto 1fr; gap:14px;
+  padding:13px 0; border-bottom:1px solid var(--line-soft)}
+ol.flow li:last-child{border-bottom:0}
+ol.flow li::before{content:counter(f); font-family:"IBM Plex Mono",monospace; font-size:12px; font-weight:600;
+  color:var(--accent); padding-top:4px}
+ol.flow p{color:var(--ink-2); font-size:13.5px; margin-top:2px}
+ul.rules{margin:0; padding-inline-start:0; list-style:none; display:flex; flex-direction:column; gap:11px;
+  color:var(--ink-2); font-size:13.5px}
+ul.rules li{display:grid; grid-template-columns:auto 1fr; gap:11px}
+ul.rules li::before{content:""; width:5px; height:5px; margin-top:9px; border-radius:50%; background:var(--accent)}
+.disclosure{background:var(--sunk); border:1px solid var(--line); border-radius:11px; padding:16px 20px;
+  font-size:13px; color:var(--ink-2)}
+.disclosure b{color:var(--ink)}
+footer{border-top:1px solid var(--line); padding-top:18px; font-size:12.5px; color:var(--ink-3); line-height:1.8}
+footer a{color:var(--ink-2)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
 </style>
 
 <div class="wrap">
-<header>
+
+<div class="masthead">
   <div>
-    <div class="eyebrow">بورصة الكويت · السوق الأول</div>
-    <h1>لوحة تداول الوطني</h1>
-    <p style="font-size:13.5px;margin-top:6px">متابعة يومية لحسابك في «الوطني للتداول» — أدخل الأسعار، واللوحة ترتّب لك الأنسب والأعلى.</p>
+    <h1>مرصد بورصة الكويت</h1>
+    <p class="lede" style="margin-top:8px">٣٤ شركة يمكن تداولها من حسابك في «الوطني للتداول»، مرتّبة كل مرة تفتح الصفحة حسب التوزيعات والتقييم والزخم.</p>
   </div>
-  <div class="meta">
-    <span class="stamp" id="stamp">—</span>
-    <button class="btn ghost" id="reset">إرجاع البيانات النموذجية</button>
+  <div class="ticker-strip">
+    <span class="dot" id="mktDot"></span><span id="mktState">—</span>
+    <span style="color:var(--line)">|</span>
+    <span class="mono" id="stamp">—</span>
   </div>
-</header>
+</div>
 
 <section class="verdict">
   <div>
-    <div class="eyebrow">أنسب سهم اليوم حسب معاييرك</div>
-    <div class="pick" id="pickName">—</div>
-    <p class="why" id="pickWhy">—</p>
-    <p class="why" style="margin-top:12px"><span class="eyebrow">الأعلى ارتفاعاً اليوم:</span> <span id="topMover" class="num">—</span></p>
+    <p class="label">أعلى درجة في القائمة اليوم</p>
+    <h1 id="pickName" style="font-size:clamp(26px,4vw,36px); margin-top:6px">—</h1>
+    <p class="rationale" id="pickWhy">—</p>
+    <p class="rationale" style="margin-top:14px" id="pickAlt">—</p>
   </div>
-  <div class="side-stats">
-    <div class="stat"><span>سعر السهم</span><b class="num" id="pickPrice">—</b></div>
-    <div class="stat"><span>التغير اليومي</span><b class="num" id="pickChg">—</b></div>
-    <div class="stat"><span>عائد التوزيعات</span><b class="num" id="pickYield">—</b></div>
-    <div class="stat"><span>مكرر الربحية</span><b class="num" id="pickPe">—</b></div>
-    <div class="stat"><span>درجة الجاذبية</span><b class="num" id="pickScore">—</b></div>
+  <div class="ledger">
+    <div><span>السعر</span><b class="mono" id="pickPrice">—</b></div>
+    <div><span>التغير اليومي</span><b class="mono" id="pickChg">—</b></div>
+    <div><span>عائد التوزيعات</span><b class="mono" id="pickYield">—</b></div>
+    <div><span>مكرر الربحية</span><b class="mono" id="pickPe">—</b></div>
+    <div><span>الدرجة</span><b class="mono" id="pickScore">—</b></div>
   </div>
 </section>
 
-<section class="panel">
-  <div class="panel-head">
-    <div>
-      <h2>قائمة المتابعة</h2>
-      <p style="font-size:13px">عدّل السعر والتغير ونسبة التوزيعات ومكرر الربحية — الترتيب يتحدث فوراً ويُحفظ في متصفحك.</p>
+<section class="board">
+  <div class="board-head">
+    <h2>الترتيب الكامل</h2>
+    <div class="filters">
+      <input type="search" id="q" placeholder="ابحث باسم الشركة أو الرمز" aria-label="بحث">
+      <select id="sector" aria-label="القطاع"><option value="">كل القطاعات</option></select>
+      <div class="seg" role="group" aria-label="السوق">
+        <button data-tier="" aria-pressed="true">الكل</button>
+        <button data-tier="أول" aria-pressed="false">السوق الأول</button>
+        <button data-tier="رئيسي" aria-pressed="false">الرئيسي</button>
+      </div>
     </div>
-    <button class="btn" id="save">حفظ التحديث</button>
   </div>
   <div class="scroll">
     <table>
       <thead><tr>
-        <th>#</th><th>السهم</th><th>السعر (فلس)</th><th>التغير %</th>
-        <th>التوزيعات %</th><th>مكرر الربحية</th><th>الدرجة</th><th>القراءة</th>
+        <th>#</th>
+        <th class="sortable" data-k="n" aria-sort="none">الشركة</th>
+        <th class="sortable mono" data-k="p" aria-sort="none">السعر (فلس)</th>
+        <th class="sortable" data-k="ch" aria-sort="none">التغير</th>
+        <th class="sortable" data-k="y" aria-sort="none">التوزيعات</th>
+        <th class="sortable" data-k="pe" aria-sort="none">مكرر الربحية</th>
+        <th class="sortable" data-k="sc" aria-sort="descending">الدرجة</th>
+        <th>القراءة</th>
       </tr></thead>
       <tbody id="rows"></tbody>
+      <tfoot><tr><td colspan="8" id="tfoot">—</td></tr></tfoot>
     </table>
-  </div>
-  <div style="padding:14px 20px" class="note">
-    <b>كيف تُحسب الدرجة؟</b> ٤٠٪ لعائد التوزيعات + ٣٠٪ لرخص التقييم (مكرر ربحية أقل = أفضل) + ٣٠٪ لزخم السعر اليومي.
-    هذه معادلة ترتيب لمساعدتك على المقارنة، وليست توصية استثمارية.
   </div>
 </section>
 
-<div class="two">
-  <section class="panel">
-    <div class="panel-head"><h2>فتح حساب تداول عبر الوطني</h2></div>
-    <div class="steps">
-      <div class="step"><div><h3>حساب جاري في بنك الكويت الوطني</h3><p>هو مصدر تمويل حساب التداول والوجهة التي ترجع لها الأرباح والتوزيعات.</p></div></div>
-      <div class="step"><div><h3>رقم مستثمر لدى المقاصة</h3><p>ضروري لأي تداول في بورصة الكويت، ويُستخرج عبر الوسيط أو الشركة الكويتية للمقاصة.</p></div></div>
-      <div class="step"><div><h3>طلب «الوطني للتداول»</h3><p>عبر تطبيق الوطني رقمياً بالكامل، أو بالنموذج في أي فرع. للأسواق الإقليمية المدة المتوقعة نحو ١٠ أيام عمل.</p></div></div>
-      <div class="step"><div><h3>اختيار نوع المحفظة</h3><p>محفظة عادية أو متوافقة مع الشريعة — الاختيار يحدد الأسهم المتاحة أمامك.</p></div></div>
-      <div class="step"><div><h3>تحويل رأس المال</h3><p>تحويل داخلي من حسابك في الوطني إلى حساب التداول، ثم أول أمر شراء.</p></div></div>
+<div class="cols">
+  <section class="block">
+    <h2>تحديث الأسعار</h2>
+    <p class="hint">الصفحة لا تسحب أسعاراً حية — لا يوجد مصدر بيانات مربوط بها. الصق إغلاقات اليوم من منصة «الوطني للتداول» أو موقع بورصة الكويت بهذا الشكل: <span class="mono">الرمز&nbsp;السعر&nbsp;التغير٪</span>، سطر لكل شركة.</p>
+    <textarea id="paste" spellcheck="false" placeholder="NBK 1010 0.8&#10;ZAIN 512 -0.4&#10;KFH 745 1.4"></textarea>
+    <div class="tools">
+      <button class="btn" id="apply">تطبيق التحديث</button>
+      <button class="btn quiet" id="reset">إرجاع البيانات النموذجية</button>
+    </div>
+    <p class="status" id="status"></p>
+    <div class="disclosure">
+      <b>الأرقام المعروضة نموذجية للتجربة.</b> الأسعار والتوزيعات ومكررات الربحية قيم توضيحية لتشغيل الترتيب، وليست بيانات سوق فعلية. حدّثها قبل أي قرار — الشراء على رقم قديم أسوأ من عدم الشراء.
     </div>
   </section>
 
-  <section class="panel">
-    <div class="panel-head"><h2>روتين الدخول اليومي</h2></div>
-    <div style="padding:16px 20px; display:grid; gap:14px">
-      <ul class="tight">
-        <li>حدّث أسعار الإغلاق في الجدول (بورصة الكويت تُغلق ١٢:٣٠ ظهراً بتوقيت الكويت).</li>
-        <li>اقرأ أول صفّين في الترتيب: الأعلى درجة هو الأنسب حسب معاييرك، لا الأكثر ارتفاعاً.</li>
-        <li>تجاهل قفزة يوم واحد بلا خبر — الزخم وزنه ٣٠٪ فقط لهذا السبب.</li>
-        <li>راجع مواعيد التوزيعات؛ السهم ينزل بمقدار التوزيع في يوم الاستحقاق وهذا ليس خسارة.</li>
-        <li>لا تضع أكثر من ٢٠٪ من المحفظة في سهم واحد مهما بدت درجته عالية.</li>
-      </ul>
-      <div class="note">الأرقام المعروضة بيانات نموذجية للتجربة، وليست أسعاراً حية. حدّثها من منصة الوطني للتداول أو موقع بورصة الكويت قبل أي قرار.</div>
-    </div>
+  <section class="block">
+    <h2>فتح الحساب والتشغيل</h2>
+    <ol class="flow">
+      <li><div><h3>حساب جاري في بنك الكويت الوطني</h3><p>مصدر تمويل المحفظة، وإليه ترجع حصيلة البيع والتوزيعات النقدية.</p></div></li>
+      <li><div><h3>رقم مستثمر لدى المقاصة</h3><p>شرط لأي تداول في بورصة الكويت، ويُستخرج عبر الوسيط أو الشركة الكويتية للمقاصة.</p></div></li>
+      <li><div><h3>طلب «الوطني للتداول»</h3><p>رقمياً بالكامل من تطبيق الوطني، أو بنموذج في أي فرع. للأسواق الإقليمية المدة المتوقعة نحو ١٠ أيام عمل.</p></div></li>
+      <li><div><h3>اختيار نوع المحفظة</h3><p>عادية أو متوافقة مع الشريعة — الاختيار يحدد الأسهم المتاحة أمامك في القائمة أعلاه.</p></div></li>
+      <li><div><h3>التحويل وأول أمر</h3><p>تحويل داخلي إلى حساب التداول، ثم أمر محدد السعر لا أمر سوق في أول صفقة.</p></div></li>
+    </ol>
+    <h2 style="margin-top:8px">قواعد المتابعة</h2>
+    <ul class="rules">
+      <li>حدّث الأسعار بعد الإغلاق: جلسة بورصة الكويت تنتهي ١٢:٣٠ ظهراً بتوقيت الكويت.</li>
+      <li>الأعلى درجة ليس الأعلى ارتفاعاً — الزخم وزنه ٣٠٪ فقط لأن قفزة يوم واحد بلا خبر لا تعني شيئاً.</li>
+      <li>السهم ينزل بمقدار التوزيع يوم الاستحقاق؛ هذا ليس خسارة ولا إشارة بيع.</li>
+      <li>لا تتجاوز ٢٠٪ من المحفظة في سهم واحد، ولا ٤٠٪ في قطاع واحد مهما بدت الدرجات.</li>
+    </ul>
   </section>
 </div>
 
 <footer>
-  لوحة شخصية للمتابعة فقط — لا تقدّم نصيحة استثمارية ولا ترتبط رسمياً ببنك الكويت الوطني. مصادر الخطوات: NBK Wealth · بورصة الكويت.
+  الدرجة = ٤٠٪ عائد التوزيعات + ٣٠٪ رخص التقييم (مكرر ربحية أقل أفضل) + ٣٠٪ الزخم اليومي. أداة مقارنة شخصية، لا تقدّم نصيحة استثمارية ولا ترتبط رسمياً ببنك الكويت الوطني.<br>
+  مرجع خطوات الحساب: <a href="https://www.nbkwealth.com/ar/what-we-offer/asset-management/trading-solutions/online-brokerage/regional-markets">NBK Wealth</a> · مرجع الشركات والأسعار: <a href="https://www.boursakuwait.com.kw/ar/">بورصة الكويت</a>
 </footer>
 </div>
 
 <script>
 const SEED=[
- {c:"NBK",  n:"بنك الكويت الوطني",       s:"البنوك",        p:1010, ch: 0.8, y:3.6, pe:16.2},
- {c:"KFH",  n:"بيت التمويل الكويتي",     s:"البنوك",        p: 745, ch: 1.4, y:3.1, pe:18.4},
- {c:"ZAIN", n:"زين",                      s:"الاتصالات",     p: 512, ch:-0.4, y:7.8, pe:11.9},
- {c:"AGLTY",n:"أجيليتي",                  s:"الخدمات",       p: 298, ch: 2.1, y:2.4, pe:14.0},
- {c:"BOUBYAN",n:"بنك بوبيان",             s:"البنوك",        p: 690, ch: 0.3, y:2.2, pe:23.5},
- {c:"GBK",  n:"بنك الخليج",               s:"البنوك",        p: 342, ch:-1.1, y:5.1, pe:13.3},
- {c:"MABANEE",n:"مباني",                  s:"العقار",        p: 745, ch: 0.9, y:4.0, pe:15.1},
- {c:"HUMANSOFT",n:"هيومن سوفت",           s:"التعليم",       p:3050, ch: 1.7, y:6.9, pe:12.6}
-];
-const KEY="nbk-watchlist-v1";
-let data = load();
+ ["NBK","بنك الكويت الوطني","البنوك","أول",1010,0.8,3.6,16.2],
+ ["KFH","بيت التمويل الكويتي","البنوك","أول",745,1.4,3.1,18.4],
+ ["BOUBYAN","بنك بوبيان","البنوك","أول",690,0.3,2.2,23.5],
+ ["GBK","بنك الخليج","البنوك","أول",342,-1.1,5.1,13.3],
+ ["BURG","بنك برقان","البنوك","أول",214,0.5,4.2,11.8],
+ ["WARBA","بنك وربة","البنوك","أول",188,-0.6,1.8,20.1],
+ ["ABK","البنك الأهلي الكويتي","البنوك","أول",256,0.2,4.6,12.9],
+ ["CBK","البنك التجاري الكويتي","البنوك","أول",620,1.1,5.4,10.7],
+ ["KIB","بنك الكويت الدولي","البنوك","أول",178,-0.3,3.4,15.6],
+ ["ZAIN","زين","الاتصالات","أول",512,-0.4,7.8,11.9],
+ ["OOREDOO","Ooredoo الكويت","الاتصالات","أول",836,0.6,6.1,9.4],
+ ["STC","stc الكويت","الاتصالات","أول",760,0.9,5.9,12.2],
+ ["AGLTY","أجيليتي","الخدمات اللوجستية","أول",298,2.1,2.4,14.0],
+ ["MABANEE","مباني","العقار","أول",745,0.9,4.0,15.1],
+ ["SALHIA","الصالحية العقارية","العقار","أول",430,0.4,5.2,12.4],
+ ["AQAR","عقارات الكويت","العقار","رئيسي",128,-0.8,4.4,13.7],
+ ["UPAC","المتحدة للخدمات العقارية","العقار","رئيسي",290,1.2,3.8,14.8],
+ ["KIPCO","مشاريع الكويت (كيبكو)","الاستثمار","أول",132,-1.4,0.0,26.0],
+ ["NIC","الاستثمارات الوطنية","الاستثمار","أول",210,0.7,6.4,10.2],
+ ["GIH","بيت الاستثمار الخليجي","الاستثمار","رئيسي",96,1.9,3.0,12.1],
+ ["GFH","مجموعة جي إف إتش المالية","الاستثمار","أول",73,-0.9,4.8,8.9],
+ ["ALIMTIAZ","الامتياز الاستثمارية","الاستثمار","رئيسي",84,0.6,4.1,11.4],
+ ["ARZAN","أرزان المالية","الاستثمار","رئيسي",118,2.4,3.5,10.8],
+ ["BEYOUT","بيوت الاستثمار","الاستثمار","رئيسي",240,0.3,5.6,9.8],
+ ["HUMANSOFT","هيومن سوفت","التعليم","أول",3050,1.7,6.9,12.6],
+ ["JAZEERA","طيران الجزيرة","النقل","أول",1120,-1.6,3.2,17.3],
+ ["NIND","مجموعة الصناعات الوطنية","الصناعة","أول",230,0.5,4.9,11.2],
+ ["GCABLE","الخليج للكابلات","الصناعة","أول",690,0.2,6.2,10.4],
+ ["KCEM","الأسمنت الكويتية","الصناعة","رئيسي",188,-0.4,5.8,11.7],
+ ["BPCC","بوبيان للبتروكيماويات","البتروكيماويات","أول",680,1.0,6.6,13.1],
+ ["QURAIN","القرين لصناعة الكيماويات","البتروكيماويات","أول",320,0.8,5.3,12.0],
+ ["NAPESCO","الوطنية للخدمات البترولية","الخدمات النفطية","أول",980,1.3,4.7,13.9],
+ ["INTEGRATED","المتكاملة القابضة","الخدمات النفطية","رئيسي",405,2.0,4.0,12.8],
+ ["SHAMAL","شمال الزور الأولى","المرافق","أول",245,0.1,6.8,14.2]
+].map(([c,n,s,t,p,ch,y,pe])=>({c,n,s,t,p,ch,y,pe}));
 
-function load(){ try{ const r=localStorage.getItem(KEY); return r?JSON.parse(r):structuredClone(SEED);}catch(e){return structuredClone(SEED);} }
+const KEY="kw-board-v2";
+let data = load(), sortK="sc", sortDir=-1, tier="", sector="", q="";
+
+function load(){
+  try{ const r=JSON.parse(localStorage.getItem(KEY));
+       if(Array.isArray(r) && r.length===SEED.length) return r; }catch(e){}
+  return structuredClone(SEED);
+}
 function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){} }
 
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const fmt=(v,d=1)=>Number(v).toFixed(d);
 function score(r){
-  const yieldPart = clamp(r.y/8,0,1)*40;            // عائد التوزيعات
-  const valuePart = clamp((28-r.pe)/20,0,1)*30;     // رخص التقييم
-  const momPart   = clamp((r.ch+2)/4,0,1)*30;       // الزخم اليومي
+  const yieldPart = clamp(r.y/8,0,1)*40;
+  const valuePart = clamp((28-r.pe)/20,0,1)*30;
+  const momPart   = clamp((r.ch+2)/4,0,1)*30;
   return Math.round(yieldPart+valuePart+momPart);
 }
-function read(s){ return s>=70?["buy","جاذبية عالية"] : s>=50?["watch","للمتابعة"] : ["avoid","ضعيف حالياً"]; }
-const fmt=(v,d=1)=>Number(v).toFixed(d);
+function verdict(s){ return s>=68?["b","جاذبية عالية"] : s>=48?["w","للمتابعة"] : ["a","ضعيف حالياً"]; }
+const ARROW_UP='<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 1 L9 8 H1 Z" fill="currentColor"/></svg>';
+const ARROW_DN='<svg viewBox="0 0 10 10" aria-hidden="true"><path d="M5 9 L1 2 H9 Z" fill="currentColor"/></svg>';
+
+function scored(){ return data.map(r=>({...r, sc:score(r)})); }
+function view(){
+  let list = scored();
+  if(tier) list = list.filter(r=>r.t===tier);
+  if(sector) list = list.filter(r=>r.s===sector);
+  if(q){ const t=q.trim().toLowerCase();
+         list = list.filter(r=>r.n.toLowerCase().includes(t)||r.c.toLowerCase().includes(t)); }
+  return list.sort((a,b)=>{
+    const A=a[sortK], B=b[sortK];
+    return (typeof A==="string" ? A.localeCompare(B,"ar") : A-B) * sortDir;
+  });
+}
 
 function render(){
-  const ranked=[...data].map(r=>({...r,sc:score(r)})).sort((a,b)=>b.sc-a.sc);
-  document.getElementById("rows").innerHTML = ranked.map((r,i)=>{
-    const [cls,label]=read(r.sc); const dir=r.ch>=0?"up":"down";
-    const idx=data.findIndex(d=>d.c===r.c);
-    return `<tr>
-      <td class="rank">${i+1}</td>
-      <td class="name"><b>${r.n}</b><small>${r.c} · ${r.s}</small></td>
-      <td><input type="number" step="1"    data-i="${idx}" data-k="p"  value="${r.p}"></td>
-      <td class="${dir}"><input type="number" step="0.1" data-i="${idx}" data-k="ch" value="${r.ch}"></td>
-      <td><input type="number" step="0.1"  data-i="${idx}" data-k="y"  value="${r.y}"></td>
-      <td><input type="number" step="0.1"  data-i="${idx}" data-k="pe" value="${r.pe}"></td>
-      <td><div style="display:flex;align-items:center;gap:8px">
-            <span class="num">${r.sc}</span>
-            <span class="bar"><i style="width:${r.sc}%"></i></span></div></td>
-      <td><span class="pill ${cls}">${label}</span></td>
-    </tr>`;
-  }).join("");
+  const list = view(), best = scored().sort((a,b)=>b.sc-a.sc);
+  const top = best[0], second = best[1];
 
-  const top=ranked[0];
-  const mover=[...data].sort((a,b)=>b.ch-a.ch)[0];
+  document.getElementById("rows").innerHTML = list.length ? list.map((r,i)=>{
+    const [vc,vl]=verdict(r.sc), up=r.ch>=0;
+    return `<tr class="${r.c===top.c?"lead":""}">
+      <td class="rk">${i+1}</td>
+      <td class="co"><b>${r.n}</b><span class="tier ${r.t==="أول"?"p":""}">${r.t}</span><small>${r.c} · ${r.s}</small></td>
+      <td class="mono">${r.p}</td>
+      <td><span class="chg ${up?"u":"d"}">${up?ARROW_UP:ARROW_DN}${fmt(Math.abs(r.ch))}%</span></td>
+      <td class="mono">${fmt(r.y)}%</td>
+      <td class="mono">${fmt(r.pe)}</td>
+      <td><div class="gauge"><span>${r.sc}</span><em><i style="width:${r.sc}%"></i></em></div></td>
+      <td class="verd ${vc}">${vl}</td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="8" class="empty">لا توجد شركة تطابق البحث. جرّب اسماً أو رمزاً آخر، أو أعد الفلاتر إلى «الكل».</td></tr>`;
+
+  document.getElementById("tfoot").textContent =
+    `معروض ${list.length} من ${data.length} شركة · الترتيب حسب ${({n:"الاسم",p:"السعر",ch:"التغير",y:"التوزيعات",pe:"مكرر الربحية",sc:"الدرجة"})[sortK]}`;
+
   document.getElementById("pickName").textContent = top.n;
   document.getElementById("pickWhy").textContent =
-    `توزيعات ${fmt(top.y)}٪ ومكرر ربحية ${fmt(top.pe)}، مع تغير يومي ${fmt(top.ch)}٪ — أعلى درجة في قائمتك ضمن قطاع ${top.s}.`;
-  document.getElementById("topMover").textContent = `${mover.n} ${fmt(mover.ch)}%`;
-  document.getElementById("pickPrice").textContent = `${top.p} فلس`;
-  const chEl=document.getElementById("pickChg");
-  chEl.textContent = `${top.ch>=0?"+":""}${fmt(top.ch)}%`;
-  chEl.className = "num "+(top.ch>=0?"up":"down");
+    `توزيعات ${fmt(top.y)}٪ مقابل مكرر ربحية ${fmt(top.pe)} في قطاع ${top.s}، وتغيّر اليوم ${fmt(top.ch)}٪ — أعلى تركيبة في القائمة.`;
+  document.getElementById("pickAlt").textContent =
+    `يليه ${second.n} بدرجة ${second.sc}، وأعلى ارتفاع اليوم لـ${[...scored()].sort((a,b)=>b.ch-a.ch)[0].n}.`;
+  document.getElementById("pickPrice").textContent = top.p + " فلس";
+  const ce=document.getElementById("pickChg");
+  ce.textContent = (top.ch>=0?"+":"−")+fmt(Math.abs(top.ch))+"%";
+  ce.style.color = top.ch>=0 ? "var(--up)" : "var(--down)";
   document.getElementById("pickYield").textContent = fmt(top.y)+"%";
   document.getElementById("pickPe").textContent = fmt(top.pe);
   document.getElementById("pickScore").textContent = top.sc+"/100";
 
-  document.getElementById("stamp").textContent = "آخر تحديث: " +
-    new Date().toLocaleString("ar-KW",{dateStyle:"medium",timeStyle:"short"});
+  const now=new Date();
+  document.getElementById("stamp").textContent =
+    now.toLocaleDateString("ar-KW",{day:"2-digit",month:"short"})+" · "+
+    now.toLocaleTimeString("ar-KW",{hour:"2-digit",minute:"2-digit"});
+  const kw=new Date(now.getTime()+(now.getTimezoneOffset()+180)*60000);
+  const h=kw.getHours()+kw.getMinutes()/60, d=kw.getDay();
+  const open = d>=0 && d<=4 && h>=9 && h<12.5;
+  document.getElementById("mktDot").className = "dot"+(open?" open":"");
+  document.getElementById("mktState").textContent = open ? "الجلسة مفتوحة" : "الجلسة مغلقة";
 }
 
-document.getElementById("rows").addEventListener("input", e=>{
-  const t=e.target; if(!t.dataset.k) return;
-  const v=parseFloat(t.value); if(Number.isNaN(v)) return;
-  data[+t.dataset.i][t.dataset.k]=v; persist();
+/* ── الفلاتر والترتيب ── */
+const sectors=[...new Set(SEED.map(r=>r.s))].sort((a,b)=>a.localeCompare(b,"ar"));
+document.getElementById("sector").insertAdjacentHTML("beforeend",
+  sectors.map(s=>`<option value="${s}">${s}</option>`).join(""));
+document.getElementById("sector").addEventListener("change", e=>{ sector=e.target.value; render(); });
+document.getElementById("q").addEventListener("input", e=>{ q=e.target.value; render(); });
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{
+  tier=b.dataset.tier;
+  document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+  render();
+}));
+document.querySelectorAll("th.sortable").forEach(th=>th.addEventListener("click",()=>{
+  const k=th.dataset.k;
+  if(sortK===k) sortDir=-sortDir; else { sortK=k; sortDir = k==="n" ? 1 : -1; }
+  document.querySelectorAll("th.sortable").forEach(x=>x.setAttribute("aria-sort","none"));
+  th.setAttribute("aria-sort", sortDir===1?"ascending":"descending");
+  render();
+}));
+
+/* ── تحديث بالّلصق ── */
+document.getElementById("apply").addEventListener("click", ()=>{
+  const st=document.getElementById("status");
+  const lines=document.getElementById("paste").value.split("\n").map(l=>l.trim()).filter(Boolean);
+  if(!lines.length){ st.className="status err"; st.textContent="الصق سطراً واحداً على الأقل بصيغة: الرمز ثم السعر ثم التغير."; return; }
+  let ok=0; const bad=[];
+  for(const line of lines){
+    const [code,p,ch]=line.split(/[\s,;\t]+/);
+    const row=data.find(r=>r.c.toLowerCase()===String(code).toLowerCase());
+    const pv=parseFloat(p), cv=parseFloat(ch);
+    if(!row || Number.isNaN(pv)){ bad.push(code); continue; }
+    row.p=pv; if(!Number.isNaN(cv)) row.ch=cv; ok++;
+  }
+  persist(); render();
+  st.className = "status "+(ok?"ok":"err");
+  st.textContent = ok
+    ? `تم تحديث ${ok} شركة.` + (bad.length?` لم يتعرف على: ${bad.join("، ")}.`:"")
+    : `لم يتعرف على أي رمز: ${bad.join("، ")}. استخدم الرموز كما تظهر تحت اسم الشركة في الجدول.`;
 });
-document.getElementById("save").addEventListener("click", ()=>{ persist(); render(); });
 document.getElementById("reset").addEventListener("click", ()=>{
   data=structuredClone(SEED); persist(); render();
+  const st=document.getElementById("status"); st.className="status"; st.textContent="رجعت البيانات النموذجية.";
 });
+
 render();
 </script>
