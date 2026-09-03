@@ -1,0 +1,259 @@
+<title>لوحة تداول الوطني</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ground:#EEF1F3; --panel:#FFFFFF; --panel-2:#F6F8F9;
+  --ink:#111A20; --ink-2:#4A5A63; --line:#D5DDE1;
+  --accent:#0F5E73; --accent-soft:#DCEAEE;
+  --up:#1B6B4A; --down:#A83530; --hold:#8A6A18;
+  --shadow:0 1px 2px rgba(17,26,32,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0C1418; --panel:#131E24; --panel-2:#182530;
+    --ink:#E8EEF0; --ink-2:#9CAFB8; --line:#25353E;
+    --accent:#5CC2D8; --accent-soft:#12303A;
+    --up:#4FCB8E; --down:#F0817A; --hold:#DCB35A;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0C1418; --panel:#131E24; --panel-2:#182530;
+  --ink:#E8EEF0; --ink-2:#9CAFB8; --line:#25353E;
+  --accent:#5CC2D8; --accent-soft:#12303A;
+  --up:#4FCB8E; --down:#F0817A; --hold:#DCB35A;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box}
+body{
+  direction:rtl; background:var(--ground); color:var(--ink); margin:0;
+  font-family:"IBM Plex Sans Arabic","Segoe UI",system-ui,sans-serif;
+  font-size:15px; line-height:1.65;
+}
+.wrap{max-width:1080px; margin:0 auto; padding:28px 20px 64px; display:flex; flex-direction:column; gap:28px}
+h1,h2,h3{font-family:"Noto Kufi Arabic","IBM Plex Sans Arabic",sans-serif; margin:0; text-wrap:balance; line-height:1.35}
+h1{font-size:28px; font-weight:700; letter-spacing:-.01em}
+h2{font-size:19px; font-weight:700}
+h3{font-size:15px; font-weight:700}
+.eyebrow{font-size:12px; letter-spacing:.14em; color:var(--ink-2); text-transform:uppercase}
+p{margin:0; color:var(--ink-2)}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace; font-variant-numeric:tabular-nums; direction:ltr; unicode-bidi:isolate}
+
+/* رأس الصفحة */
+header{display:flex; flex-wrap:wrap; gap:16px; align-items:flex-end; justify-content:space-between;
+  border-bottom:2px solid var(--ink); padding-bottom:16px}
+header .meta{display:flex; gap:18px; align-items:center; flex-wrap:wrap}
+.stamp{font-size:12px; color:var(--ink-2)}
+button{font:inherit; cursor:pointer}
+.btn{background:var(--accent); color:var(--panel); border:0; border-radius:6px; padding:9px 16px; font-weight:600; font-size:14px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent; color:var(--accent); border:1px solid var(--line)}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+/* التوصية الرئيسية */
+.verdict{background:var(--panel); border:1px solid var(--line); border-inline-start:4px solid var(--accent);
+  border-radius:8px; padding:22px 24px; box-shadow:var(--shadow); display:grid; gap:18px;
+  grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
+@media(max-width:720px){.verdict{grid-template-columns:1fr}}
+.verdict .pick{font-family:"Noto Kufi Arabic",sans-serif; font-size:26px; font-weight:700; margin-top:4px}
+.verdict .why{margin-top:10px; font-size:14px}
+.side-stats{display:flex; flex-direction:column; gap:10px; align-self:center}
+.stat{display:flex; justify-content:space-between; gap:12px; align-items:baseline;
+  border-bottom:1px dashed var(--line); padding-bottom:6px; font-size:13px}
+.stat b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-size:15px}
+
+/* الجدول */
+.panel{background:var(--panel); border:1px solid var(--line); border-radius:8px; box-shadow:var(--shadow)}
+.panel-head{display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;
+  padding:16px 20px; border-bottom:1px solid var(--line)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse; width:100%; min-width:660px; font-size:14px}
+th,td{text-align:right; padding:11px 14px; border-bottom:1px solid var(--line); white-space:nowrap}
+th{font-size:11.5px; letter-spacing:.08em; color:var(--ink-2); font-weight:600; background:var(--panel-2)}
+tbody tr:hover{background:var(--panel-2)}
+td.name{white-space:normal; min-width:150px}
+td.name small{display:block; color:var(--ink-2); font-size:11.5px}
+.up{color:var(--up)} .down{color:var(--down)}
+.pill{display:inline-block; padding:2px 9px; border-radius:99px; font-size:11.5px; font-weight:600;
+  border:1px solid currentColor}
+.pill.buy{color:var(--up)} .pill.watch{color:var(--hold)} .pill.avoid{color:var(--down)}
+.bar{height:6px; background:var(--panel-2); border-radius:3px; overflow:hidden; min-width:70px}
+.bar i{display:block; height:100%; background:var(--accent)}
+input[type=number]{width:78px; font-family:"IBM Plex Mono",monospace; font-size:13px; text-align:left; direction:ltr;
+  background:var(--panel-2); color:var(--ink); border:1px solid var(--line); border-radius:5px; padding:4px 6px}
+input[type=number]:focus{border-color:var(--accent)}
+.rank{color:var(--ink-2); font-family:"IBM Plex Mono",monospace}
+
+/* الخطوات */
+.steps{counter-reset:s; display:grid; gap:2px}
+.step{display:grid; grid-template-columns:auto 1fr; gap:14px; padding:14px 20px; border-bottom:1px solid var(--line)}
+.step:last-child{border-bottom:0}
+.step::before{counter-increment:s; content:counter(s); font-family:"IBM Plex Mono",monospace; font-weight:600;
+  color:var(--accent); font-size:13px; padding-top:2px}
+.step p{font-size:13.5px; margin-top:2px}
+.two{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; align-items:start}
+ul.tight{margin:0; padding-inline-start:18px; color:var(--ink-2); font-size:13.5px; display:grid; gap:6px}
+.note{font-size:12.5px; color:var(--ink-2); background:var(--accent-soft); border-radius:6px; padding:12px 16px}
+footer{font-size:12px; color:var(--ink-2); border-top:1px solid var(--line); padding-top:16px}
+a{color:var(--accent)}
+</style>
+
+<div class="wrap">
+<header>
+  <div>
+    <div class="eyebrow">بورصة الكويت · السوق الأول</div>
+    <h1>لوحة تداول الوطني</h1>
+    <p style="font-size:13.5px;margin-top:6px">متابعة يومية لحسابك في «الوطني للتداول» — أدخل الأسعار، واللوحة ترتّب لك الأنسب والأعلى.</p>
+  </div>
+  <div class="meta">
+    <span class="stamp" id="stamp">—</span>
+    <button class="btn ghost" id="reset">إرجاع البيانات النموذجية</button>
+  </div>
+</header>
+
+<section class="verdict">
+  <div>
+    <div class="eyebrow">أنسب سهم اليوم حسب معاييرك</div>
+    <div class="pick" id="pickName">—</div>
+    <p class="why" id="pickWhy">—</p>
+    <p class="why" style="margin-top:12px"><span class="eyebrow">الأعلى ارتفاعاً اليوم:</span> <span id="topMover" class="num">—</span></p>
+  </div>
+  <div class="side-stats">
+    <div class="stat"><span>سعر السهم</span><b class="num" id="pickPrice">—</b></div>
+    <div class="stat"><span>التغير اليومي</span><b class="num" id="pickChg">—</b></div>
+    <div class="stat"><span>عائد التوزيعات</span><b class="num" id="pickYield">—</b></div>
+    <div class="stat"><span>مكرر الربحية</span><b class="num" id="pickPe">—</b></div>
+    <div class="stat"><span>درجة الجاذبية</span><b class="num" id="pickScore">—</b></div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="panel-head">
+    <div>
+      <h2>قائمة المتابعة</h2>
+      <p style="font-size:13px">عدّل السعر والتغير ونسبة التوزيعات ومكرر الربحية — الترتيب يتحدث فوراً ويُحفظ في متصفحك.</p>
+    </div>
+    <button class="btn" id="save">حفظ التحديث</button>
+  </div>
+  <div class="scroll">
+    <table>
+      <thead><tr>
+        <th>#</th><th>السهم</th><th>السعر (فلس)</th><th>التغير %</th>
+        <th>التوزيعات %</th><th>مكرر الربحية</th><th>الدرجة</th><th>القراءة</th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div style="padding:14px 20px" class="note">
+    <b>كيف تُحسب الدرجة؟</b> ٤٠٪ لعائد التوزيعات + ٣٠٪ لرخص التقييم (مكرر ربحية أقل = أفضل) + ٣٠٪ لزخم السعر اليومي.
+    هذه معادلة ترتيب لمساعدتك على المقارنة، وليست توصية استثمارية.
+  </div>
+</section>
+
+<div class="two">
+  <section class="panel">
+    <div class="panel-head"><h2>فتح حساب تداول عبر الوطني</h2></div>
+    <div class="steps">
+      <div class="step"><div><h3>حساب جاري في بنك الكويت الوطني</h3><p>هو مصدر تمويل حساب التداول والوجهة التي ترجع لها الأرباح والتوزيعات.</p></div></div>
+      <div class="step"><div><h3>رقم مستثمر لدى المقاصة</h3><p>ضروري لأي تداول في بورصة الكويت، ويُستخرج عبر الوسيط أو الشركة الكويتية للمقاصة.</p></div></div>
+      <div class="step"><div><h3>طلب «الوطني للتداول»</h3><p>عبر تطبيق الوطني رقمياً بالكامل، أو بالنموذج في أي فرع. للأسواق الإقليمية المدة المتوقعة نحو ١٠ أيام عمل.</p></div></div>
+      <div class="step"><div><h3>اختيار نوع المحفظة</h3><p>محفظة عادية أو متوافقة مع الشريعة — الاختيار يحدد الأسهم المتاحة أمامك.</p></div></div>
+      <div class="step"><div><h3>تحويل رأس المال</h3><p>تحويل داخلي من حسابك في الوطني إلى حساب التداول، ثم أول أمر شراء.</p></div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-head"><h2>روتين الدخول اليومي</h2></div>
+    <div style="padding:16px 20px; display:grid; gap:14px">
+      <ul class="tight">
+        <li>حدّث أسعار الإغلاق في الجدول (بورصة الكويت تُغلق ١٢:٣٠ ظهراً بتوقيت الكويت).</li>
+        <li>اقرأ أول صفّين في الترتيب: الأعلى درجة هو الأنسب حسب معاييرك، لا الأكثر ارتفاعاً.</li>
+        <li>تجاهل قفزة يوم واحد بلا خبر — الزخم وزنه ٣٠٪ فقط لهذا السبب.</li>
+        <li>راجع مواعيد التوزيعات؛ السهم ينزل بمقدار التوزيع في يوم الاستحقاق وهذا ليس خسارة.</li>
+        <li>لا تضع أكثر من ٢٠٪ من المحفظة في سهم واحد مهما بدت درجته عالية.</li>
+      </ul>
+      <div class="note">الأرقام المعروضة بيانات نموذجية للتجربة، وليست أسعاراً حية. حدّثها من منصة الوطني للتداول أو موقع بورصة الكويت قبل أي قرار.</div>
+    </div>
+  </section>
+</div>
+
+<footer>
+  لوحة شخصية للمتابعة فقط — لا تقدّم نصيحة استثمارية ولا ترتبط رسمياً ببنك الكويت الوطني. مصادر الخطوات: NBK Wealth · بورصة الكويت.
+</footer>
+</div>
+
+<script>
+const SEED=[
+ {c:"NBK",  n:"بنك الكويت الوطني",       s:"البنوك",        p:1010, ch: 0.8, y:3.6, pe:16.2},
+ {c:"KFH",  n:"بيت التمويل الكويتي",     s:"البنوك",        p: 745, ch: 1.4, y:3.1, pe:18.4},
+ {c:"ZAIN", n:"زين",                      s:"الاتصالات",     p: 512, ch:-0.4, y:7.8, pe:11.9},
+ {c:"AGLTY",n:"أجيليتي",                  s:"الخدمات",       p: 298, ch: 2.1, y:2.4, pe:14.0},
+ {c:"BOUBYAN",n:"بنك بوبيان",             s:"البنوك",        p: 690, ch: 0.3, y:2.2, pe:23.5},
+ {c:"GBK",  n:"بنك الخليج",               s:"البنوك",        p: 342, ch:-1.1, y:5.1, pe:13.3},
+ {c:"MABANEE",n:"مباني",                  s:"العقار",        p: 745, ch: 0.9, y:4.0, pe:15.1},
+ {c:"HUMANSOFT",n:"هيومن سوفت",           s:"التعليم",       p:3050, ch: 1.7, y:6.9, pe:12.6}
+];
+const KEY="nbk-watchlist-v1";
+let data = load();
+
+function load(){ try{ const r=localStorage.getItem(KEY); return r?JSON.parse(r):structuredClone(SEED);}catch(e){return structuredClone(SEED);} }
+function persist(){ try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){} }
+
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function score(r){
+  const yieldPart = clamp(r.y/8,0,1)*40;            // عائد التوزيعات
+  const valuePart = clamp((28-r.pe)/20,0,1)*30;     // رخص التقييم
+  const momPart   = clamp((r.ch+2)/4,0,1)*30;       // الزخم اليومي
+  return Math.round(yieldPart+valuePart+momPart);
+}
+function read(s){ return s>=70?["buy","جاذبية عالية"] : s>=50?["watch","للمتابعة"] : ["avoid","ضعيف حالياً"]; }
+const fmt=(v,d=1)=>Number(v).toFixed(d);
+
+function render(){
+  const ranked=[...data].map(r=>({...r,sc:score(r)})).sort((a,b)=>b.sc-a.sc);
+  document.getElementById("rows").innerHTML = ranked.map((r,i)=>{
+    const [cls,label]=read(r.sc); const dir=r.ch>=0?"up":"down";
+    const idx=data.findIndex(d=>d.c===r.c);
+    return `<tr>
+      <td class="rank">${i+1}</td>
+      <td class="name"><b>${r.n}</b><small>${r.c} · ${r.s}</small></td>
+      <td><input type="number" step="1"    data-i="${idx}" data-k="p"  value="${r.p}"></td>
+      <td class="${dir}"><input type="number" step="0.1" data-i="${idx}" data-k="ch" value="${r.ch}"></td>
+      <td><input type="number" step="0.1"  data-i="${idx}" data-k="y"  value="${r.y}"></td>
+      <td><input type="number" step="0.1"  data-i="${idx}" data-k="pe" value="${r.pe}"></td>
+      <td><div style="display:flex;align-items:center;gap:8px">
+            <span class="num">${r.sc}</span>
+            <span class="bar"><i style="width:${r.sc}%"></i></span></div></td>
+      <td><span class="pill ${cls}">${label}</span></td>
+    </tr>`;
+  }).join("");
+
+  const top=ranked[0];
+  const mover=[...data].sort((a,b)=>b.ch-a.ch)[0];
+  document.getElementById("pickName").textContent = top.n;
+  document.getElementById("pickWhy").textContent =
+    `توزيعات ${fmt(top.y)}٪ ومكرر ربحية ${fmt(top.pe)}، مع تغير يومي ${fmt(top.ch)}٪ — أعلى درجة في قائمتك ضمن قطاع ${top.s}.`;
+  document.getElementById("topMover").textContent = `${mover.n} ${fmt(mover.ch)}%`;
+  document.getElementById("pickPrice").textContent = `${top.p} فلس`;
+  const chEl=document.getElementById("pickChg");
+  chEl.textContent = `${top.ch>=0?"+":""}${fmt(top.ch)}%`;
+  chEl.className = "num "+(top.ch>=0?"up":"down");
+  document.getElementById("pickYield").textContent = fmt(top.y)+"%";
+  document.getElementById("pickPe").textContent = fmt(top.pe);
+  document.getElementById("pickScore").textContent = top.sc+"/100";
+
+  document.getElementById("stamp").textContent = "آخر تحديث: " +
+    new Date().toLocaleString("ar-KW",{dateStyle:"medium",timeStyle:"short"});
+}
+
+document.getElementById("rows").addEventListener("input", e=>{
+  const t=e.target; if(!t.dataset.k) return;
+  const v=parseFloat(t.value); if(Number.isNaN(v)) return;
+  data[+t.dataset.i][t.dataset.k]=v; persist();
+});
+document.getElementById("save").addEventListener("click", ()=>{ persist(); render(); });
+document.getElementById("reset").addEventListener("click", ()=>{
+  data=structuredClone(SEED); persist(); render();
+});
+render();
+</script>
