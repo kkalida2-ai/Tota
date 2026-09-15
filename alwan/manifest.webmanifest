@@ -1,0 +1,14 @@
+{
+  "name": "ألوان البيت",
+  "short_name": "ألوان البيت",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F4F0",
+  "theme_color": "#F6F4F0",
+  "icons": [
+    { "src": "icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }
+  ]
+}

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="ألوان دهان الجدران لكل مكان في البيت — ليش تختاره، ووين بالضبط تستخدمه.">
+<meta name="theme-color" content="#F6F4F0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ألوان البيت">
+<title>ألوان البيت</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --plaster:#F6F4F0;
+  --card:#FFFFFF;
+  --ink:#191714;
+  --ink-2:#6B655C;
+  --ink-3:#9C958A;
+  --line:#E4DFD6;
+  --line-2:#D3CCC0;
+  --shadow:0 1px 2px rgba(25,23,20,.05), 0 10px 26px -18px rgba(25,23,20,.35);
+  --radius:14px;
+  --f-display:"Readex Pro","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --plaster:#141310;
+    --card:#1D1B17;
+    --ink:#F2EFE9;
+    --ink-2:#A19A8F;
+    --ink-3:#7B746A;
+    --line:#2B2823;
+    --line-2:#3A362F;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --plaster:#141310;
+  --card:#1D1B17;
+  --ink:#F2EFE9;
+  --ink-2:#A19A8F;
+  --ink-3:#7B746A;
+  --line:#2B2823;
+  --line-2:#3A362F;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -18px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+html{direction:rtl}
+body{
+  margin:0;
+  background:var(--plaster);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:15px;
+  line-height:1.65;
+  -webkit-text-size-adjust:100%;
+  -webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;line-height:1.3;margin:0;text-wrap:balance;letter-spacing:-.01em}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+input{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+
+/* ── الهيكل ── */
+header.app{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:color-mix(in srgb, var(--plaster) 88%, transparent);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.headwrap{max-width:780px;margin:0 auto;padding:12px 16px 0}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-size:19px}
+.brand span{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
+nav.tabs{display:flex;gap:22px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{
+  padding:9px 0 11px;font-size:14.5px;color:var(--ink-3);
+  border-bottom:2px solid transparent;white-space:nowrap;font-family:var(--f-display);
+}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
+.lede{color:var(--ink-2);font-size:14px;margin-bottom:18px;max-width:58ch}
+
+/* ── شبكة الغرف ── */
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.roomtile{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  overflow:hidden;text-align:right;display:flex;flex-direction:column;
+  transition:border-color .15s ease, transform .15s ease;
+}
+.roomtile:hover{border-color:var(--line-2)}
+.roomtile:active{transform:scale(.985)}
+.roomtile .field{height:78px;position:relative}
+.roomtile .field.preview3{display:flex}
+.roomtile .field.preview3 i{flex:1}
+.roomtile .meta{padding:10px 12px 12px}
+.roomtile .meta strong{display:block;font-family:var(--f-display);font-weight:500;font-size:14.5px}
+.roomtile .meta small{color:var(--ink-3);font-size:11.5px}
+
+/* ── صفوف الألوان ── */
+.rows{display:flex;flex-direction:column}
+.row{
+  display:flex;gap:13px;align-items:center;text-align:right;width:100%;
+  padding:11px 0;border-bottom:1px solid var(--line);
+}
+.rows .row:last-child{border-bottom:0}
+.chip{width:58px;height:58px;border-radius:11px;flex:none;position:relative;border:1px solid rgba(0,0,0,.09)}
+.chip .code{position:absolute;bottom:3px;left:5px;font-size:8.5px;font-family:var(--f-mono);opacity:.75}
+.row .txt{min-width:0}
+.row .txt strong{display:block;font-family:var(--f-display);font-weight:500;font-size:15px}
+.row .txt p{color:var(--ink-2);font-size:12.5px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.row .txt em{font-style:normal;color:var(--ink-3);font-size:11px}
+.tick{margin-inline-start:auto;flex:none;font-size:11px;color:var(--ink-3)}
+
+/* ── أدوات التصفية ── */
+.chips{display:flex;gap:7px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chips button{
+  border:1px solid var(--line-2);border-radius:999px;padding:5px 13px;font-size:12.5px;
+  color:var(--ink-2);white-space:nowrap;
+}
+.chips button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--plaster)}
+.search{
+  width:100%;background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:11px 14px;font-size:15px;margin-bottom:12px;
+}
+.search::placeholder{color:var(--ink-3)}
+
+/* ── البطاقات ── */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:16px;margin-bottom:12px}
+.panel h3{font-size:14px;margin-bottom:9px}
+.info{display:flex;flex-direction:column;gap:13px}
+.info div strong{display:block;font-family:var(--f-display);font-weight:500;font-size:13.5px;margin-bottom:2px}
+.info div p{color:var(--ink-2);font-size:13.5px}
+.count{color:var(--ink-3);font-size:12px;margin:18px 0 4px;letter-spacing:.02em}
+
+/* ── معاينة الغرفة ── */
+.preview{position:relative;height:210px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
+.preview .wall{position:absolute;inset:0}
+.preview .daylight{position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.22),transparent 55%,rgba(0,0,0,.13))}
+.preview .floor{position:absolute;inset:auto 0 0 0;height:26%;background:linear-gradient(#B3906A,#8A6A4B)}
+.preview .skirt{position:absolute;inset:auto 0 26% 0;height:5px;background:#F4F0E8;opacity:.9}
+.preview .bulb{position:absolute;inset:0;mix-blend-mode:multiply;pointer-events:none;transition:background .25s ease}
+.preview .dim{position:absolute;inset:0;pointer-events:none;transition:background .25s ease}
+.f{position:absolute;border-radius:9px}
+.lightbar{display:flex;gap:6px;margin-top:10px}
+.lightbar button{
+  flex:1;border:1px solid var(--line-2);border-radius:9px;padding:7px 4px;font-size:12px;color:var(--ink-2);
+}
+.lightbar button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--plaster)}
+
+/* ── شاشة اللون ── */
+.sheet{position:fixed;inset:0;z-index:60;background:var(--plaster);overflow-y:auto;display:none}
+.sheet[data-open="true"]{display:block}
+.sheetbar{
+  position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:12px;
+  padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 10px;
+  background:color-mix(in srgb, var(--plaster) 90%, transparent);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+}
+.sheetbar strong{font-family:var(--f-display);font-weight:500;font-size:15px}
+.sheetbar .x{font-size:20px;line-height:1;color:var(--ink-2);padding:4px 6px}
+.sheetbody{max-width:780px;margin:0 auto;padding:16px 16px 70px}
+.bigname{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:16px 0 4px}
+.bigname h2{font-size:27px}
+.sub{color:var(--ink-3);font-size:12.5px;margin-bottom:16px}
+.pairs{display:flex;gap:12px}
+.pairs div{text-align:center}
+.pairs i{display:block;width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.1)}
+.pairs small{font-size:9px;color:var(--ink-3);font-family:var(--f-mono)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{border:1px solid var(--line-2);border-radius:999px;padding:3px 11px;font-size:12px;color:var(--ink-2)}
+.actions{display:flex;gap:9px;margin-top:4px}
+.btn{
+  flex:1;border-radius:11px;padding:13px;text-align:center;font-family:var(--f-display);font-size:14px;
+  border:1px solid var(--ink);background:var(--ink);color:var(--plaster);
+}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+.btn.on{background:transparent;color:var(--ink);border-color:var(--ink)}
+
+/* ── الأدوات ── */
+.field{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.field:last-child{border-bottom:0}
+.field label{font-size:14px}
+.stepper{display:flex;align-items:center;gap:2px;border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
+.stepper button{width:34px;height:32px;font-size:16px;color:var(--ink-2)}
+.stepper button:hover{background:var(--line)}
+.stepper output{min-width:46px;text-align:center;font-family:var(--f-mono);font-size:13px}
+.num{width:84px;text-align:left;background:var(--plaster);border:1px solid var(--line-2);border-radius:9px;padding:7px 10px;font-family:var(--f-mono);font-size:13px}
+.res{display:flex;justify-content:space-between;padding:7px 0;font-size:14px}
+.res span:last-child{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.res.big{border-top:1px solid var(--line);margin-top:6px;padding-top:12px}
+.res.big span:last-child{font-size:21px;color:var(--ink);font-family:var(--f-display)}
+.note{color:var(--ink-3);font-size:12.5px;line-height:1.6}
+.toolcard{display:block;width:100%;text-align:right}
+.toolcard strong{font-family:var(--f-display);font-weight:500;font-size:15px;display:block}
+.toolcard p{color:var(--ink-2);font-size:13px}
+canvas{max-width:100%;border-radius:var(--radius);display:block;cursor:crosshair}
+.filebtn{display:block;width:100%;border:1px dashed var(--line-2);border-radius:var(--radius);padding:22px;text-align:center;color:var(--ink-2);font-size:14px}
+.guide h3{margin-top:4px}
+.guide .item{padding:11px 0;border-bottom:1px solid var(--line)}
+.guide .item:last-child{border-bottom:0}
+.guide .item strong{display:block;font-family:var(--f-display);font-weight:500;font-size:13.5px}
+.guide .item p{color:var(--ink-2);font-size:13.5px}
+.empty{color:var(--ink-3);font-size:13.5px}
+pre.list{
+  background:var(--plaster);border:1px solid var(--line);border-radius:11px;padding:12px;
+  font-family:var(--f-mono);font-size:11.5px;line-height:1.8;white-space:pre-wrap;direction:rtl;margin:0 0 10px;
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="app">
+  <div class="headwrap">
+    <div class="brand">
+      <h1>ألوان البيت</h1>
+      <span>دليل دهان الجدران</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="rooms" aria-selected="true">الغرف</button>
+      <button role="tab" data-tab="colors" aria-selected="false">الألوان</button>
+      <button role="tab" data-tab="tools" aria-selected="false">أدوات</button>
+      <button role="tab" data-tab="plan" aria-selected="false">خطتي</button>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section id="tab-rooms"></section>
+  <section id="tab-colors" hidden></section>
+  <section id="tab-tools" hidden></section>
+  <section id="tab-plan" hidden></section>
+</main>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+  <div class="sheetbar">
+    <button class="x" id="sheet-close" aria-label="إغلاق">✕</button>
+    <strong id="sheet-title"></strong>
+  </div>
+  <div class="sheetbody" id="sheet-body"></div>
+</div>
+
+<script>
+/* ========== البيانات ========== */
+const DATA = {"rooms": [{"id": "majlis", "title": "المجلس", "goal": "مكان استقبال الضيوف: نريد لوناً يعطي وقاراً واتساعاً، فاتح على الجدران الأربعة مع جدار واحد أغمق خلف الكنب.", "tip": "جرّب اللون على الجدار ليلاً تحت الثريا، لأن الإضاءة الصفراء تسحب اللون نحو الأصفر."}, {"id": "living", "title": "صالة المعيشة", "goal": "مكان الجلسة اليومية للعائلة: لون دافئ مريح للعين لساعات طويلة، ولا يتعب مع إضاءة التلفزيون.", "tip": "إذا كان الجدار خلف التلفزيون أغمق، تقل إجهاد العين من فرق الإضاءة."}, {"id": "dining", "title": "غرفة الطعام", "goal": "الألوان الدافئة والترابية تفتح الشهية وتجعل الطعام يبدو ألذ، وتجمع الناس حول الطاولة.", "tip": "الأزرق الصريح يقلل الشهية — اتركه للمكتب لا لغرفة الطعام."}, {"id": "masterBedroom", "title": "غرفة النوم الرئيسية", "goal": "الهدف نوم عميق: ألوان خافتة منخفضة التشبّع تهدئ الأعصاب، وابتعد عن الأحمر والبرتقالي القوي.", "tip": "السقف بلون أفتح درجة من الجدران يجعل الغرفة تتنفس."}, {"id": "kidsRoom", "title": "غرفة الأطفال", "goal": "لون يحفّز اللعب لكن لا يمنع النوم: باستيل هادئ على الجدران، والألوان القوية في الأثاث والستائر فقط.", "tip": "اترك جداراً واحداً بدهان سبورة أو مغناطيسي، يوفّر عليك تشطيب الجدران الباقية."}, {"id": "kitchen", "title": "المطبخ", "goal": "نظافة ووضوح: ألوان فاتحة تُظهر النظافة، ودهان قابل للمسح لأن البخار والدهن يلتصقان بالجدار.", "tip": "اختر «نصف لامع» على الأقل — المطفي جميل لكنه لا يُمسح."}, {"id": "bathroom", "title": "دورة المياه", "goal": "مساحة صغيرة ورطبة: الفاتح يوسّعها، والدهان يجب أن يكون مقاوماً للرطوبة وإلا تقشّر خلال سنة.", "tip": "لا تستخدم الدهان المطفي هنا إطلاقاً، ولا بد من شفاط أو نافذة."}, {"id": "hallway", "title": "المدخل والممرات", "goal": "أول انطباع عن البيت، وغالباً بلا نوافذ: اللون الفاتح العاكس ضروري وإلا صار الممر نفقاً مظلماً.", "tip": "نفس لون الصالة بدرجة أفتح يجعل البيت يبدو أكبر وأكثر انسجاماً."}, {"id": "office", "title": "المكتب والدراسة", "goal": "تركيز طويل: ألوان باردة هادئة ترفع الانتباه، وتجنّب الأبيض الناصع لأنه يجهد العين مع الشاشة.", "tip": "اجعل الجدار الذي خلف الشاشة متوسط الغمق، لا فاتحاً ناصعاً."}, {"id": "outdoor", "title": "الحوش والسطح", "goal": "يتعرض للشمس والغبار: ألوان ترابية لا يظهر عليها الغبار، ودهان خارجي مقاوم للأشعة وإلا بهت خلال صيفين.", "tip": "الألوان الغامقة تمتص الحرارة وترفع حرارة الجدار — تجنّبها في الواجهة الجنوبية."}], "colors": [{"id": "AL-101", "name": "رمل ناعم", "hex": "EDE4D6", "family": "neutral", "purpose": "أبيض دافئ لا يميل للأصفر ولا للرمادي. يريح العين ويجعل الغرفة تبدو أنظف وأوسع بلا برود.", "usage": "الجدران الأربعة في المجلس والصالة، وأي غرفة تريد أن تبدأ منها بلوحة آمنة لا تمل منها.", "lighting": "ممتاز مع الإضاءة الصفراء؛ تحت الليد الأبيض يميل قليلاً للرمادي.", "finish": "matte", "pairs": ["3E4A45", "C29A6B", "FFFFFF"], "rooms": ["majlis", "living", "hallway", "dining", "masterBedroom"]}, {"id": "AL-102", "name": "أبيض حليبي", "hex": "F7F3EC", "family": "neutral", "purpose": "أفتح من الرمل بدرجة. يعكس أكبر قدر من الضوء، فهو أفضل خيار لمساحة صغيرة أو مظلمة.", "usage": "الأسقف في كل البيت، والممرات الضيقة بلا نوافذ، والحمامات الصغيرة.", "lighting": "يحتاج ضوءاً جيداً وإلا بدا باهتاً وبلا شخصية.", "finish": "eggshell", "pairs": ["D9C7B0", "8FA3A8", "2E3336"], "rooms": ["hallway", "bathroom", "kitchen", "living"]}, {"id": "AL-103", "name": "رمادي دخاني", "hex": "C9C6C0", "family": "neutral", "purpose": "رمادي مغبّر فيه دفء. خلفية محايدة تُبرز الأثاث واللوحات بدل أن تنافسها.", "usage": "جدار التلفزيون في الصالة، وجدران المكتب، وخلفية الأرفف المفتوحة.", "lighting": "ثابت تحت كل الإضاءات — من أكثر الألوان أماناً.", "finish": "eggshell", "pairs": ["3B3F46", "C9A227", "F7F3EC"], "rooms": ["living", "office", "hallway", "dining"]}, {"id": "AL-104", "name": "بيج قهوة بحليب", "hex": "DCC9AE", "family": "warm", "purpose": "دفء هادئ يعطي إحساس الكرم والاستقبال، ولا يظهر عليه الغبار بسرعة.", "usage": "المجلس والمدخل. ممتاز على الجدران التي تلمسها الأيدي كثيراً.", "lighting": "يزداد جمالاً مع الإضاءة الدافئة مساءً.", "finish": "eggshell", "pairs": ["6B4F3A", "2F3E46", "F7F3EC"], "rooms": ["majlis", "hallway", "dining", "living"]}, {"id": "AL-105", "name": "جبس أبيض", "hex": "FFFFFF", "family": "neutral", "purpose": "الأبيض الصريح. يوسّع بشكل أقصى ويُظهر الزوايا المعمارية والجبس بوضوح.", "usage": "الأسقف والكرانيش والأبواب والنوافذ — لا تستخدمه على جدران المكتب فهو مُجهد للعين مع الشاشة.", "lighting": "يعكس الضوء كله، وقد يسبب وهجاً في الغرف الشديدة الإضاءة.", "finish": "semiGloss", "pairs": ["1F2937", "D6C2A8", "8FA3A8"], "rooms": ["kitchen", "bathroom", "hallway", "living"]}, {"id": "AL-201", "name": "طين محروق", "hex": "B4694C", "family": "earthy", "purpose": "لون ترابي قوي يفتح الشهية ويعطي دفئاً فورياً. مستوحى من الطين والفخار.", "usage": "جدار واحد فقط — خلف طاولة الطعام أو خلف الكنب. لا تدهن به الغرفة كلها.", "lighting": "يشتعل مع الإضاءة الدافئة؛ تحت الضوء الأبيض يصبح باهتاً.", "finish": "matte", "pairs": ["EDE4D6", "3E4A45", "C9A227"], "rooms": ["dining", "majlis", "living"]}, {"id": "AL-202", "name": "رمل الصحراء", "hex": "D6BE9A", "family": "earthy", "purpose": "لون محلي مألوف، لا يظهر عليه الغبار، ويعطي إحساس الأصالة والهدوء.", "usage": "الحوش والواجهات الخارجية، والمجلس ذي الطابع التقليدي.", "lighting": "يتحمّل الشمس المباشرة دون أن يبهت بسرعة.", "finish": "satin", "pairs": ["7A5C3E", "2F3E46", "F7F3EC"], "rooms": ["outdoor", "majlis", "hallway"]}, {"id": "AL-203", "name": "قرفة", "hex": "8C5A3C", "family": "earthy", "purpose": "بني محمّر غني. يمنح الغرفة ثقلاً ووقاراً ويجعلها تبدو أدفأ في الشتاء.", "usage": "جدار المدفأة أو الجدار خلف رأس السرير. يحتاج إضاءة جيدة.", "lighting": "يبتلع الضوء — لا تستخدمه في غرفة بنافذة واحدة صغيرة.", "finish": "matte", "pairs": ["EDE4D6", "C9A227", "3E4A45"], "rooms": ["majlis", "masterBedroom", "dining"]}, {"id": "AL-204", "name": "عسل", "hex": "E0B16A", "family": "warm", "purpose": "أصفر ذهبي مكتوم يرفع المزاج ويضيء الغرف المعتمة دون صخب.", "usage": "الممر الداخلي المظلم، أو جدار الدرج، أو ركن القراءة.", "lighting": "يعوّض نقص ضوء الشمس في الغرف الشمالية.", "finish": "eggshell", "pairs": ["2F3E46", "F7F3EC", "8C5A3C"], "rooms": ["hallway", "kidsRoom", "living"]}, {"id": "AL-205", "name": "وردي طيني", "hex": "D9A99C", "family": "warm", "purpose": "وردي مغبّر ناضج، ليس طفولياً. يعطي نعومة ودفئاً ويجمل لون البشرة في المرايا.", "usage": "غرفة النوم، غرفة الملابس، وجدار المرآة في غرفة التزيين.", "lighting": "جميل مع الإضاءة الدافئة الخافتة.", "finish": "matte", "pairs": ["F7F3EC", "6B4F3A", "A7B5A0"], "rooms": ["masterBedroom", "kidsRoom", "bathroom"]}, {"id": "AL-301", "name": "أزرق ضبابي", "hex": "9FB3C8", "family": "cool", "purpose": "أزرق رمادي هادئ يبطئ النَفَس ويخفض التوتر — من أفضل ألوان النوم.", "usage": "جدران غرفة النوم كلها، أو جدار السرير وحده مع باقي الجدران فاتحة.", "lighting": "يميل للرمادي في الضوء الصفراوي، فاستخدم إضاءة محايدة.", "finish": "matte", "pairs": ["F7F3EC", "2F3E46", "D6C2A8"], "rooms": ["masterBedroom", "office", "bathroom", "kidsRoom"]}, {"id": "AL-302", "name": "أخضر مريمية", "hex": "A7B5A0", "family": "cool", "purpose": "أخضر مغبّر يريح العين أكثر من أي لون آخر، ويربط الداخل بالطبيعة.", "usage": "المكتب وغرفة الدراسة، وخزائن المطبخ، وجدار النباتات.", "lighting": "ثابت ولطيف في كل الإضاءات.", "finish": "eggshell", "pairs": ["EDE4D6", "6B4F3A", "2E3B34"], "rooms": ["office", "kitchen", "masterBedroom", "living"]}, {"id": "AL-303", "name": "أزرق بحري", "hex": "2F5D7C", "family": "cool", "purpose": "أزرق عميق يرفع التركيز ويعطي وقاراً رسمياً. يجعل الأبيض حوله يبدو أنصع.", "usage": "جدار المكتب خلف الكرسي (يظهر جيداً في اجتماعات الفيديو)، وجدار واحد في المجلس.", "lighting": "يحتاج إضاءة قوية؛ في الغرفة المظلمة يبدو أسود.", "finish": "eggshell", "pairs": ["F7F3EC", "C9A227", "D6C2A8"], "rooms": ["office", "majlis", "kidsRoom"]}, {"id": "AL-304", "name": "نعناع باهت", "hex": "C7DED4", "family": "pastel", "purpose": "بارد ومنعش، يعطي إحساس النظافة والانتعاش في المساحات الصغيرة.", "usage": "دورة المياه، والمغسلة، وغرفة الغسيل.", "lighting": "منعش في ضوء النهار؛ يبهت تحت الإضاءة الصفراء.", "finish": "semiGloss", "pairs": ["FFFFFF", "2F5D7C", "D6C2A8"], "rooms": ["bathroom", "kitchen", "kidsRoom"]}, {"id": "AL-305", "name": "سماوي فاتح", "hex": "CFE0EC", "family": "pastel", "purpose": "يوسّع الغرفة ويرفع السقف بصرياً، ويهدّئ الأطفال كثيري الحركة.", "usage": "غرفة الأطفال، وسقف الغرفة الصغيرة، ودورة المياه.", "lighting": "يحتاج ضوء نهار وإلا بدا رمادياً.", "finish": "satin", "pairs": ["FFFFFF", "E0B16A", "2F5D7C"], "rooms": ["kidsRoom", "bathroom", "masterBedroom"]}, {"id": "AL-401", "name": "مشمش باهت", "hex": "F3D2B6", "family": "pastel", "purpose": "دافئ ومرح دون أن يكون صاخباً، فلا يمنع الطفل من النوم.", "usage": "غرفة الأطفال الصغار، وركن اللعب، وغرفة الرضيع.", "lighting": "لطيف ليلاً مع الإضاءة الخافتة.", "finish": "satin", "pairs": ["FFFFFF", "A7B5A0", "9FB3C8"], "rooms": ["kidsRoom", "masterBedroom"]}, {"id": "AL-402", "name": "ليمون كريمي", "hex": "F2E3B3", "family": "pastel", "purpose": "يبعث النشاط والبهجة في الصباح ويضيء الغرفة بلا إجهاد.", "usage": "ركن الدراسة في غرفة الطفل، وغرفة الإفطار، والمطبخ الصغير.", "lighting": "قوي جداً في الشمس المباشرة — جرّبه على جدار صغير أولاً.", "finish": "satin", "pairs": ["FFFFFF", "A7B5A0", "6B4F3A"], "rooms": ["kidsRoom", "kitchen", "dining"]}, {"id": "AL-403", "name": "بنفسجي ضبابي", "hex": "C8BFD6", "family": "pastel", "purpose": "هادئ وحالم، يناسب غرف البنات دون أن يكون وردياً مبتذلاً.", "usage": "غرفة الأطفال، وغرفة النوم، وجدار السرير.", "lighting": "يميل للرمادي في الضوء البارد.", "finish": "matte", "pairs": ["F7F3EC", "9FB3C8", "D9A99C"], "rooms": ["kidsRoom", "masterBedroom"]}, {"id": "AL-501", "name": "أخضر زيتوني غامق", "hex": "3E4A45", "family": "deep", "purpose": "يعطي عمقاً وفخامة، ويجعل الذهب والخشب يلمعان أمامه.", "usage": "جدار واحد في المجلس خلف الكنب، أو خزائن المطبخ السفلية، أو مكتبة الكتب.", "lighting": "يحتاج إضاءة موجّهة (سبوتات) وإلا صار الجدار ثقيلاً.", "finish": "eggshell", "pairs": ["EDE4D6", "C9A227", "D6C2A8"], "rooms": ["majlis", "living", "kitchen", "office"]}, {"id": "AL-502", "name": "كحلي ليلي", "hex": "22314A", "family": "deep", "purpose": "يهيّئ للنوم لأنه يقلّل انعكاس الضوء، ويعطي إحساس الغرفة الفندقية.", "usage": "الجدار خلف رأس السرير فقط، أو جدار الشاشة في غرفة السينما.", "lighting": "يمتص الضوء — لا تستخدمه في غرفة صغيرة بلا نافذة.", "finish": "matte", "pairs": ["F7F3EC", "C9A227", "9FB3C8"], "rooms": ["masterBedroom", "living", "office"]}, {"id": "AL-503", "name": "فحمي", "hex": "2E3336", "family": "deep", "purpose": "خلفية درامية تُخفي بصمات الأيدي، وتُبرز أي شيء أبيض أمامها.", "usage": "جدار التلفزيون، وداخل الرفوف، وإطار الباب الحديدي.", "lighting": "لا تستخدمه على أكثر من جدار واحد في نفس الغرفة.", "finish": "eggshell", "pairs": ["FFFFFF", "C9A227", "C9C6C0"], "rooms": ["living", "office", "hallway"]}, {"id": "AL-504", "name": "عنابي", "hex": "6E2F3A", "family": "deep", "purpose": "لون غني يرفع مستوى المكان ويعطي إحساس الدفء والسخاء.", "usage": "جدار غرفة الطعام، أو ركن المجلس الرسمي، أو مدخل البيت.", "lighting": "يحتاج إضاءة دافئة قوية.", "finish": "matte", "pairs": ["EDE4D6", "C9A227", "3E4A45"], "rooms": ["dining", "majlis", "hallway"]}, {"id": "AL-601", "name": "أبيض قشدي", "hex": "F1EBE0", "family": "neutral", "purpose": "أبيض دافئ يُظهر نظافة المطبخ ولا يصفرّ بسرعة مع البخار.", "usage": "جدران المطبخ فوق الرخام، وسقف الحمام.", "lighting": "آمن في كل الإضاءات.", "finish": "semiGloss", "pairs": ["3E4A45", "C9C6C0", "2F5D7C"], "rooms": ["kitchen", "bathroom", "hallway"]}, {"id": "AL-602", "name": "رمادي إسمنتي", "hex": "8A8F93", "family": "neutral", "purpose": "عملي وحديث، لا يظهر عليه أثر الماء أو البقع الخفيفة.", "usage": "غرفة الغسيل، وحمام الضيوف، وجدار الشواية في الحوش.", "lighting": "يبدو أغمق ليلاً بدرجتين.", "finish": "satin", "pairs": ["FFFFFF", "C9A227", "2E3336"], "rooms": ["bathroom", "outdoor", "kitchen"]}, {"id": "AL-603", "name": "أخضر بحري غامق", "hex": "27514C", "family": "deep", "purpose": "يعطي حمام الضيوف طابعاً فندقياً مع الذهبي، ويخفي آثار الرطوبة أكثر من الفاتح.", "usage": "حمام الضيوف الصغير — اجعل السقف فاتحاً كي لا يختنق.", "lighting": "لا بد من إضاءة مرآة قوية.", "finish": "semiGloss", "pairs": ["F1EBE0", "C9A227", "D6C2A8"], "rooms": ["bathroom", "kitchen"]}, {"id": "AL-701", "name": "حجر جيري", "hex": "D8D2C6", "family": "earthy", "purpose": "يعكس حرارة الشمس ويبقي الجدار أبرد، ولا يظهر عليه الغبار.", "usage": "الواجهة الخارجية وجدران الحوش والسور.", "lighting": "مصمم للشمس المباشرة.", "finish": "satin", "pairs": ["7A5C3E", "3E4A45", "FFFFFF"], "rooms": ["outdoor"]}, {"id": "AL-702", "name": "بني جوزي", "hex": "7A5C3E", "family": "earthy", "purpose": "يشبه لون الخشب، يناسب البرجولات والأبواب الخارجية ويداري الأتربة.", "usage": "إطارات الأبواب والشبابيك الخارجية والبرجولا.", "lighting": "يمتص الحرارة — للتفاصيل لا للمساحات الكبيرة المشمسة.", "finish": "satin", "pairs": ["D8D2C6", "A7B5A0", "EDE4D6"], "rooms": ["outdoor", "hallway"]}, {"id": "AL-703", "name": "ذهبي رملي", "hex": "C9A227", "family": "warm", "purpose": "لمسة فخامة صغيرة. يُستخدم كتفصيل لا كلون جدار كامل.", "usage": "الكرانيش، وإطار المرآة، وخط زخرفي في المجلس أو المدخل.", "lighting": "يتألق تحت الإضاءة الموجّهة.", "finish": "semiGloss", "pairs": ["2E3336", "22314A", "EDE4D6"], "rooms": ["majlis", "hallway", "dining"]}, {"id": "AL-704", "name": "زيتي فاتح", "hex": "B7BFA8", "family": "cool", "purpose": "أخضر مغبّر فاتح يربط الحوش بالنباتات ويبقى هادئاً تحت الشمس.", "usage": "جدار الجلسة الخارجية، وسور الحديقة، وغرفة الشغالة أو المخزن.", "lighting": "يتحمّل الشمس جيداً.", "finish": "satin", "pairs": ["F7F3EC", "7A5C3E", "3E4A45"], "rooms": ["outdoor", "kitchen", "office"]}, {"id": "AL-801", "name": "بيج مدخّن", "hex": "C4B5A0", "family": "neutral", "purpose": "وسط بين البيج والرمادي — لا يميل لأي جهة، فيناسب أي أثاث ستغيّره لاحقاً.", "usage": "الممرات وجدران الدرج والمساحات الانتقالية بين الغرف.", "lighting": "ثابت جداً تحت أي إضاءة.", "finish": "satin", "pairs": ["F7F3EC", "2E3336", "8C5A3C"], "rooms": ["hallway", "living", "majlis", "office"]}, {"id": "AL-802", "name": "أخضر سبورة", "hex": "2E3B34", "family": "deep", "purpose": "يمكن استخدام دهان السبورة بهذا اللون ليكتب عليه الأطفال بالطباشير.", "usage": "جدار واحد في غرفة الأطفال أو ركن المطبخ لقائمة المشتريات.", "lighting": "يحتاج إضاءة جانبية.", "finish": "matte", "pairs": ["F2E3B3", "FFFFFF", "E0B16A"], "rooms": ["kidsRoom", "kitchen", "office"]}, {"id": "AL-803", "name": "تراكوتا فاتح", "hex": "E3B79A", "family": "warm", "purpose": "دفء خفيف يجعل المدخل مرحّباً من أول خطوة.", "usage": "المدخل الرئيسي، وجدار الدرج، وغرفة الطعام الصغيرة.", "lighting": "يزداد جمالاً في الغروب.", "finish": "eggshell", "pairs": ["F7F3EC", "3E4A45", "7A5C3E"], "rooms": ["hallway", "dining", "living"]}, {"id": "AL-804", "name": "رمادي أزرق", "hex": "7D8A93", "family": "cool", "purpose": "رصين وهادئ، خلفية ممتازة للصور المعلّقة والأعمال الفنية.", "usage": "جدار المكتب، وجدار الصور في الممر، وغرفة الشباب.", "lighting": "يبدو أزرق نهاراً ورمادياً ليلاً.", "finish": "eggshell", "pairs": ["F7F3EC", "C9A227", "22314A"], "rooms": ["office", "hallway", "masterBedroom", "living"]}, {"id": "AL-805", "name": "أبيض لؤلؤي", "hex": "EFEFE9", "family": "neutral", "purpose": "أبيض بارد قليلاً، يعطي إحساس المستشفى النظيف بالمعنى الجيد — نقاء بلا دفء.", "usage": "المطبخ الحديث، وغرفة الغسيل، وخلفية الخزائن الملونة.", "lighting": "يبقى أبيض في كل الإضاءات ولا يصفرّ.", "finish": "semiGloss", "pairs": ["2E3336", "9FB3C8", "C9A227"], "rooms": ["kitchen", "bathroom", "hallway"]}, {"id": "AL-806", "name": "شاي بالحليب", "hex": "CBB49B", "family": "warm", "purpose": "أغمق من البيج بدرجة، يخفي أثر الأيدي والخدوش الخفيفة في الأماكن كثيرة الحركة.", "usage": "ممر الغرف، والدرج، وجدار مدخل البيت الذي تلمسه الأيدي يومياً.", "lighting": "ثابت ولا يتأثر كثيراً بنوع الإضاءة.", "finish": "satin", "pairs": ["F7F3EC", "6B4F3A", "3E4A45"], "rooms": ["hallway", "majlis", "living", "dining"]}, {"id": "AL-807", "name": "رمادي حجري", "hex": "9EA4A4", "family": "cool", "purpose": "رمادي متوسط بارد، خلفية رصينة تريح العين أمام الشاشة أكثر من الأبيض.", "usage": "جدار المكتب خلف الشاشة، وغرفة الشباب، وجدار المعدات.", "lighting": "يزداد برودة تحت الليد الأبيض.", "finish": "eggshell", "pairs": ["F7F3EC", "C9A227", "22314A"], "rooms": ["office", "living", "outdoor"]}, {"id": "AL-808", "name": "أخضر فستقي", "hex": "CBD9B5", "family": "pastel", "purpose": "منعش وطفولي هادئ، يربط الغرفة بالأخضر دون أن يكون صارخاً.", "usage": "غرفة الأطفال، وركن الألعاب، وغرفة الإفطار.", "lighting": "جميل في ضوء النهار.", "finish": "satin", "pairs": ["FFFFFF", "E0B16A", "7A5C3E"], "rooms": ["kidsRoom", "kitchen", "dining", "outdoor"]}, {"id": "AL-809", "name": "بني قهوة غامق", "hex": "4A3A30", "family": "deep", "purpose": "يعطي وقاراً وثباتاً، ويجعل الغرفة تبدو أهدأ وأكثر خصوصية.", "usage": "جدار المكتبة، وداخل الرفوف، وجدار واحد في المجلس الرسمي.", "lighting": "يحتاج إضاءة دافئة قوية وإلا صار ثقيلاً.", "finish": "matte", "pairs": ["EDE4D6", "C9A227", "D6BE9A"], "rooms": ["majlis", "office", "dining"]}, {"id": "AL-810", "name": "أزرق فيروزي", "hex": "6FA8A0", "family": "cool", "purpose": "منعش ومرتبط بالماء، يعطي الحمام إحساس المنتجع.", "usage": "دورة المياه، وجدار المغسلة، وجدار الجلسة الخارجية.", "lighting": "يبدو أخضر في الضوء الدافئ وأزرق في البارد.", "finish": "semiGloss", "pairs": ["F1EBE0", "D6BE9A", "2E3336"], "rooms": ["bathroom", "kidsRoom", "outdoor"]}, {"id": "AL-811", "name": "خزامى هادئ", "hex": "B9AEC4", "family": "pastel", "purpose": "بنفسجي رمادي يساعد على الاسترخاء قبل النوم، وأنضج من الوردي.", "usage": "غرفة النوم، وغرفة البنات الكبيرات، وركن القراءة.", "lighting": "يميل للرمادي في الإضاءة الباردة.", "finish": "matte", "pairs": ["F7F3EC", "9FB3C8", "C9A227"], "rooms": ["masterBedroom", "kidsRoom"]}, {"id": "AL-812", "name": "خردلي", "hex": "C08A2E", "family": "warm", "purpose": "أصفر ترابي جريء يعطي شخصية قوية للمساحة بلا صخب.", "usage": "جدار واحد في غرفة الطعام أو ركن المكتب، أو باب داخلي مميز.", "lighting": "يشتعل مع الإضاءة الدافئة.", "finish": "eggshell", "pairs": ["2F3E46", "EDE4D6", "3E4A45"], "rooms": ["dining", "office", "hallway"]}, {"id": "AL-813", "name": "رمادي فاتح جداً", "hex": "E4E4E1", "family": "neutral", "purpose": "خلفية محايدة باردة تُظهر الأبيض الناصع في الأثاث والسقف.", "usage": "غرفة النوم البسيطة، والمكتب، والممر الواسع.", "lighting": "يحتاج ضوءاً وإلا بدا باهتاً بلا حياة.", "finish": "eggshell", "pairs": ["FFFFFF", "2E3336", "9FB3C8"], "rooms": ["masterBedroom", "office", "hallway", "living"]}, {"id": "AL-814", "name": "أخضر نخيل غامق", "hex": "34503F", "family": "deep", "purpose": "يربط الجلسة الخارجية بالنخل والنبات، ولا يظهر عليه الغبار كالأسود.", "usage": "جدار الجلسة في الحوش، وباب المدخل الخارجي، وسور الحديقة.", "lighting": "يتحمّل الشمس المباشرة بدهان خارجي.", "finish": "satin", "pairs": ["D8D2C6", "C9A227", "7A5C3E"], "rooms": ["outdoor", "majlis", "office"]}]};
+
+const FAMILY = {neutral:"محايد", warm:"دافئ", cool:"بارد", earthy:"ترابي", deep:"غامق", pastel:"باستيل"};
+const FINISH = {
+  matte:     ["مطفي",      "يخفي عيوب الجدار، لكنه لا يتحمّل المسح."],
+  eggshell:  ["قشر بيض",   "لمعة خفيفة تتحمّل مسحة قماش مبللة."],
+  satin:     ["ساتان",     "يُمسح بسهولة، مناسب للممرات وغرف الأطفال."],
+  semiGloss: ["نصف لامع",  "مقاوم للرطوبة والدهون — للمطبخ والحمام."]
+};
+const LIGHTS = {
+  day:  ["ضوء النهار", "transparent",              "transparent"],
+  warm: ["إضاءة صفراء", "rgba(255,157,61,.30)",     "rgba(0,0,0,.10)"],
+  cool: ["ليد أبيض",   "rgba(191,212,255,.22)",    "rgba(0,0,0,.02)"]
+};
+const GUIDE = [
+  ["قبل ما تشتري", [
+    ["جرّب اللون على الجدار نفسه","اشترِ أصغر عبوة، ادهن مربعاً ٥٠×٥٠ سم، وشاهده ثلاثة أيام: صباحاً وعصراً وليلاً تحت إضاءتك. اللون في الكتالوج غير اللون على جدارك."],
+    ["قاعدة ٦٠ / ٣٠ / ١٠","٦٠٪ لون أساسي على الجدران، ٣٠٪ لون ثانوي في الأثاث والستائر، ١٠٪ لون مميز في الوسائد واللوحات. هذي النسبة تمنع الفوضى."],
+    ["لا تزيد عن ثلاثة ألوان في الغرفة","اللون الرابع يجعل الغرفة تبدو مزدحمة حتى لو كانت واسعة."],
+    ["احسب الكمية قبل الذهاب","شراء علبة ناقصة يعني خلطة جديدة بدرجة مختلفة قليلاً — وسيظهر الفرق على الجدار."]
+  ]],
+  ["اختيار اللون", [
+    ["ابدأ من الأثاث لا من الجدار","تغيير لون الجدار أسهل من تغيير الكنب. اختر لوناً يخدم ما تملكه."],
+    ["الغرفة الصغيرة","لون واحد فاتح على كل الجدران والسقف يذيب الزوايا ويجعلها أوسع. تعدد الألوان يقطّعها."],
+    ["السقف","أفتح درجة من الجدران يرفعه بصرياً. بلون الجدار نفسه يجعل الغرفة تبدو أشبه بصندوق مريح."],
+    ["الجدار المميز","اجعله الجدار الذي تراه عند دخولك، أو الذي خلف قطعة الأثاث الرئيسية — لا الجدار الذي فيه الباب."],
+    ["انتبه للاتجاه","الغرف الشمالية ضوءها بارد فتحتاج ألواناً دافئة، والجنوبية ضوءها دافئ فتتحمّل الألوان الباردة."]
+  ]],
+  ["التنفيذ", [
+    ["المعجون قبل الدهان","أي شق أو نتوء سيظهر مضاعفاً بعد الدهان، خصوصاً مع الألوان الغامقة واللمعة."],
+    ["وجه أساس (برايمر)","ضروري على الجبس الجديد، وعند الدهان الفاتح فوق غامق، وإلا احتجت أربعة أوجه."],
+    ["وجهان دائماً","الوجه الواحد يعطي لوناً غير متجانس يظهر في ضوء النهار الجانبي."],
+    ["انتظر بين الوجهين","أربع ساعات على الأقل. الاستعجال يسحب الوجه الأول ويترك آثار الرولة."],
+    ["اشترِ كل الكمية دفعة واحدة","وبنفس رقم التشغيلة (Batch) المكتوب على العلبة."]
+  ]]
+];
+
+/* ========== تخزين محلي ========== */
+const store = {
+  plan:{}, favs:[],
+  load(){
+    try{
+      this.plan = JSON.parse(localStorage.getItem("alwan.plan") || "{}") || {};
+      this.favs = JSON.parse(localStorage.getItem("alwan.favs") || "[]") || [];
+    }catch(e){ this.plan = {}; this.favs = []; }
+  },
+  save(){
+    try{
+      localStorage.setItem("alwan.plan", JSON.stringify(this.plan));
+      localStorage.setItem("alwan.favs", JSON.stringify(this.favs));
+    }catch(e){}
+  }
+};
+store.load();
+
+/* ========== أدوات ========== */
+const byId = id => DATA.colors.find(c => c.id === id);
+const roomById = id => DATA.rooms.find(r => r.id === id);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+function luminance(hex){
+  const v = parseInt(hex,16);
+  const ch = n => { const c = n/255; return c <= .03928 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4); };
+  return .2126*ch((v>>16)&255) + .7152*ch((v>>8)&255) + .0722*ch(v&255);
+}
+const inkOn = hex => luminance(hex) > .55 ? "rgba(0,0,0,.72)" : "rgba(255,255,255,.9)";
+
+function toLab(r,g,b){
+  const f0 = n => { const c = n/255; return c <= .04045 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4); };
+  const R=f0(r), G=f0(g), B=f0(b);
+  const x=(.4124*R+.3576*G+.1805*B)/.95047, y=.2126*R+.7152*G+.0722*B, z=(.0193*R+.1192*G+.9505*B)/1.08883;
+  const f = t => t > .008856 ? Math.cbrt(t) : 7.787*t + 16/116;
+  const fx=f(x), fy=f(y), fz=f(z);
+  return [116*fy-16, 500*(fx-fy), 200*(fy-fz)];
+}
+const labOfHex = hex => { const v=parseInt(hex,16); return toLab((v>>16)&255,(v>>8)&255,v&255); };
+const dE = (a,b) => Math.hypot(a[0]-b[0], a[1]-b[1], a[2]-b[2]);
+
+/* ========== مكوّنات مشتركة ========== */
+function chipHTML(c){
+  return `<i class="chip" style="background:#${c.hex}"><span class="code" style="color:${inkOn(c.hex)}">${c.id}</span></i>`;
+}
+function rowHTML(c, extra){
+  return `<button class="row" data-color="${c.id}">
+    ${chipHTML(c)}
+    <span class="txt">
+      <strong>${esc(c.name)}</strong>
+      <p>${esc(c.purpose)}</p>
+      <em>${FAMILY[c.family]} · ${FINISH[c.finish][0]}</em>
+    </span>
+    ${extra ? `<span class="tick">${extra}</span>` : ""}
+  </button>`;
+}
+function previewHTML(c, roomId, light){
+  const pair = "#" + (c.pairs[0] || "FFFFFF");
+  let furniture = "";
+  if (roomId === "masterBedroom" || roomId === "kidsRoom") {
+    furniture = `<div class="f" style="background:${pair};width:52%;height:30%;right:24%;bottom:32%"></div>
+                 <div class="f" style="background:#F3EFE7;width:58%;height:16%;right:21%;bottom:20%"></div>`;
+  } else if (roomId === "kitchen" || roomId === "bathroom") {
+    furniture = `<div class="f" style="background:#EFEFEA;width:66%;height:11%;right:17%;bottom:22%"></div>
+                 <div class="f" style="background:${pair};width:30%;height:22%;right:12%;bottom:48%"></div>`;
+  } else if (roomId === "office") {
+    furniture = `<div class="f" style="background:#2E3336;width:30%;height:19%;right:35%;bottom:32%;border-radius:4px"></div>
+                 <div class="f" style="background:#7A5C3E;width:50%;height:4%;right:25%;bottom:27%;border-radius:2px"></div>`;
+  } else if (roomId === "outdoor") {
+    furniture = `<div class="f" style="background:#5C7A4E;width:22%;aspect-ratio:1;border-radius:50%;right:12%;bottom:24%"></div>
+                 <div class="f" style="background:${pair};width:34%;height:15%;left:14%;bottom:24%"></div>`;
+  } else {
+    furniture = `<div class="f" style="background:${pair};width:60%;height:20%;right:20%;bottom:22%"></div>
+                 <div class="f" style="background:#F7F3EC;width:16%;height:22%;left:14%;bottom:55%;border-radius:3px"></div>`;
+  }
+  const L = LIGHTS[light];
+  return `<div class="preview">
+    <div class="wall" style="background:#${c.hex}"></div>
+    <div class="daylight"></div>
+    <div class="floor"></div><div class="skirt"></div>
+    ${furniture}
+    <div class="bulb" style="background:${L[1]}"></div>
+    <div class="dim" style="background:${L[2]}"></div>
+  </div>
+  <div class="lightbar">
+    ${Object.keys(LIGHTS).map(k => `<button data-light="${k}" aria-pressed="${k===light}">${LIGHTS[k][0]}</button>`).join("")}
+  </div>`;
+}
+
+/* ========== تبويب الغرف ========== */
+function renderRooms(){
+  const el = document.getElementById("tab-rooms");
+  el.innerHTML = `<p class="lede">اختر مكاناً في البيت وسترى الألوان المناسبة له — ليش تناسبه، ووين بالضبط تستخدمه.</p>
+  <div class="rooms">${DATA.rooms.map(r => {
+    const chosen = byId(store.plan[r.id]);
+    const pool = DATA.colors.filter(c => c.rooms.includes(r.id));
+    const n = pool.length;
+    // بلا اختيار: نعرض ثلاثة من ألوان الغرفة كشريط معاينة
+    const ranked = [...pool].sort((a,b) => luminance(a.hex) - luminance(b.hex));
+    const trio = [ranked[0], ranked[Math.floor(n/2)], ranked[n-1]].filter(Boolean);
+    return `<button class="roomtile" data-room="${r.id}">
+      ${chosen
+        ? `<span class="field" style="background:#${chosen.hex}"></span>`
+        : `<span class="field preview3">${trio.map(c => `<i style="background:#${c.hex}"></i>`).join("")}</span>`}
+      <span class="meta"><strong>${esc(r.title)}</strong>
+      <small>${chosen ? "اخترت: " + esc(chosen.name) : n + " لون مقترح"}</small></span>
+    </button>`;
+  }).join("")}</div>`;
+}
+
+let roomFilter = null;
+function renderRoom(roomId){
+  const r = roomById(roomId);
+  const el = document.getElementById("tab-rooms");
+  const list = DATA.colors.filter(c => c.rooms.includes(roomId) && (!roomFilter || c.family === roomFilter));
+  const fams = [...new Set(DATA.colors.filter(c => c.rooms.includes(roomId)).map(c => c.family))];
+  const chosen = byId(store.plan[roomId]);
+  el.innerHTML = `
+    <button class="btn ghost" data-back="1" style="width:auto;padding:7px 14px;font-size:13px;margin-bottom:16px">‹ كل الغرف</button>
+    <h2 style="font-size:23px;margin-bottom:12px">${esc(r.title)}</h2>
+    <div class="panel"><div class="info">
+      <div><strong>حق شنو هذي الغرفة؟</strong><p>${esc(r.goal)}</p></div>
+      <div><strong>نصيحة</strong><p>${esc(r.tip)}</p></div>
+    </div></div>
+    ${chosen ? `<p class="count">لونك المعتمد</p><div class="rows">${rowHTML(chosen)}</div>` : ""}
+    <div class="chips" style="margin-top:18px">
+      <button data-fam="" aria-pressed="${!roomFilter}">الكل</button>
+      ${fams.map(f => `<button data-fam="${f}" aria-pressed="${roomFilter===f}">${FAMILY[f]}</button>`).join("")}
+    </div>
+    <p class="count">${list.length} لون يناسب ${esc(r.title)}</p>
+    <div class="rows">${list.map(c => rowHTML(c, store.plan[roomId]===c.id ? "معتمد" : "")).join("")}</div>`;
+  el.dataset.room = roomId;
+}
+
+/* ========== تبويب الألوان ========== */
+let q = "", colorFilter = null;
+function renderColors(){
+  const el = document.getElementById("tab-colors");
+  const needle = q.trim();
+  const list = DATA.colors.filter(c => {
+    const okF = !colorFilter || c.family === colorFilter;
+    const okQ = !needle || [c.name, c.id, c.usage, c.purpose, FAMILY[c.family]].some(t => t.includes(needle));
+    return okF && okQ;
+  });
+  el.innerHTML = `
+    <input class="search" id="q" type="search" placeholder="ابحث باسم اللون أو المكان" value="${esc(q)}">
+    <div class="chips">
+      <button data-cfam="" aria-pressed="${!colorFilter}">الكل</button>
+      ${Object.keys(FAMILY).map(f => `<button data-cfam="${f}" aria-pressed="${colorFilter===f}">${FAMILY[f]}</button>`).join("")}
+    </div>
+    <p class="count">${list.length} لون</p>
+    <div class="rows">${list.map(c => rowHTML(c)).join("") || '<p class="empty">ما فيه لون بهذا الوصف. جرّب كلمة أخرى مثل «مطبخ» أو «هادئ».</p>'}</div>`;
+}
+
+/* ========== تبويب خطتي ========== */
+function shoppingList(){
+  const lines = ["قائمة ألوان البيت:"];
+  DATA.rooms.forEach(r => {
+    const c = byId(store.plan[r.id]);
+    if (c) lines.push(`• ${r.title}: ${c.name} — ${c.id} — #${c.hex} — ${FINISH[c.finish][0]}`);
+  });
+  return lines.join("\n");
+}
+function renderPlan(){
+  const el = document.getElementById("tab-plan");
+  const planned = DATA.rooms.map(r => [r, byId(store.plan[r.id])]).filter(x => x[1]);
+  const favs = store.favs.map(byId).filter(Boolean);
+  el.innerHTML = `
+    <p class="count">خطة البيت</p>
+    ${planned.length ? `<div class="rows">${planned.map(([r,c]) => `<button class="row" data-color="${c.id}" data-inroom="${r.id}">
+        ${chipHTML(c)}
+        <span class="txt"><strong>${esc(r.title)}</strong><p>${esc(c.name)} · ${FINISH[c.finish][0]}</p></span>
+      </button>`).join("")}</div>`
+      : `<p class="empty">لم تعتمد أي لون بعد. افتح أي لون واضغط «اعتمده لهذه الغرفة».</p>`}
+
+    <p class="count">المفضلة</p>
+    ${favs.length ? `<div class="rows">${favs.map(c => rowHTML(c)).join("")}</div>`
+      : `<p class="empty">اضغط ♡ في صفحة أي لون ليظهر هنا.</p>`}
+
+    ${planned.length ? `<p class="count">قائمة الشراء</p>
+      <div class="panel">
+        <pre class="list">${esc(shoppingList())}</pre>
+        <button class="btn ghost" id="copy">نسخ القائمة</button>
+      </div>` : ""}`;
+}
+
+/* ========== تبويب الأدوات ========== */
+let tool = null;
+function renderTools(){
+  const el = document.getElementById("tab-tools");
+  if (tool === "calc")  return renderCalc(el);
+  if (tool === "photo") return renderPhoto(el);
+  if (tool === "guide") return renderGuide(el);
+  el.innerHTML = `
+    <p class="lede">ثلاث أدوات تختصر عليك الطريق من اختيار اللون إلى آخر وجه على الجدار.</p>
+    ${[["photo","لون من صورة","صوّر جداراً أو قماشاً، اضغط على الصورة، واعرف أقرب لون عندنا إليه."],
+       ["calc","حاسبة كمية الدهان","أدخل أبعاد الغرفة واعرف كم جالوناً تشتري وبكم."],
+       ["guide","دليل الدهان","الأخطاء الشائعة وترتيب الخطوات من الاختيار حتى الوجه الأخير."]]
+      .map(([k,t,s]) => `<div class="panel"><button class="toolcard" data-tool="${k}">
+        <strong>${t}</strong><p>${s}</p></button></div>`).join("")}`;
+}
+function backBtn(){ return `<button class="btn ghost" data-tool="" style="width:auto;padding:7px 14px;font-size:13px;margin-bottom:16px">‹ الأدوات</button>`; }
+
+const calc = {l:5, w:4, h:3, doors:1, windows:1, coats:2, ceiling:false, price:0};
+function renderCalc(el){
+  const walls = 2*(calc.l+calc.w)*calc.h + (calc.ceiling ? calc.l*calc.w : 0);
+  const area = Math.max(walls - (calc.doors*1.9 + calc.windows*1.5), 0);
+  const liters = area*calc.coats/10, gallons = liters/3.785, buy = Math.ceil(gallons);
+  const step = (key,label,min,max,st) => `<div class="field"><label>${label}</label>
+    <span class="stepper"><button data-dec="${key}" data-step="${st}" aria-label="نقص">−</button>
+    <output>${calc[key]}</output>
+    <button data-inc="${key}" data-step="${st}" data-max="${max}" data-min="${min}" aria-label="زد">+</button></span></div>`;
+  el.innerHTML = `${backBtn()}
+    <h2 style="font-size:22px;margin-bottom:14px">حاسبة كمية الدهان</h2>
+    <div class="panel"><h3>أبعاد الغرفة (متر)</h3>
+      ${step("l","الطول",1,20,.5)}${step("w","العرض",1,20,.5)}${step("h","الارتفاع",2,6,.5)}
+      <div class="field"><label>أدهن السقف أيضاً</label>
+        <button class="btn ghost" id="ceil" style="flex:none;padding:6px 16px;font-size:13px">${calc.ceiling ? "نعم" : "لا"}</button></div>
+    </div>
+    <div class="panel"><h3>ما لا يُدهن</h3>
+      ${step("doors","عدد الأبواب",0,10,1)}${step("windows","عدد النوافذ",0,10,1)}${step("coats","عدد الأوجه",1,4,1)}
+    </div>
+    <div class="panel"><h3>النتيجة</h3>
+      <div class="res"><span>المساحة المطلوب دهنها</span><span>${area.toFixed(1)} م²</span></div>
+      <div class="res"><span>كمية الدهان</span><span>${liters.toFixed(1)} لتر</span></div>
+      <div class="res"><span>بالجالون</span><span>${gallons.toFixed(1)}</span></div>
+      <div class="res big"><span>اشترِ</span><span>${buy} جالون</span></div>
+    </div>
+    <div class="panel"><h3>التكلفة (اختياري)</h3>
+      <div class="field"><label>سعر الجالون</label>
+        <input class="num" id="price" type="number" inputmode="decimal" value="${calc.price || ""}" placeholder="0"></div>
+      ${calc.price > 0 ? `<div class="res big"><span>التكلفة التقريبية</span><span>${Math.round(buy*calc.price)}</span></div>` : ""}
+    </div>
+    <p class="note">الحساب مبني على تغطية ١٠ م² لكل لتر في الوجه الواحد، وهو المتوسط المكتوب على أغلب العلب. الجدار الخشن أو غير المعجون يشرب أكثر، فزد ١٥٪ احتياطاً.</p>`;
+}
+
+function renderGuide(el){
+  el.innerHTML = `${backBtn()}
+    <h2 style="font-size:22px;margin-bottom:14px">دليل الدهان</h2>
+    ${GUIDE.map(([title, items]) => `<div class="panel guide"><h3>${title}</h3>
+      ${items.map(([t,b]) => `<div class="item"><strong>${t}</strong><p>${b}</p></div>`).join("")}</div>`).join("")}
+    <div class="panel guide"><h3>الدهان المناسب لكل مكان</h3>
+      ${Object.keys(FINISH).map(k => `<div class="item"><strong>${FINISH[k][0]}</strong><p>${FINISH[k][1]}</p></div>`).join("")}
+    </div>`;
+}
+
+let picked = null;
+function renderPhoto(el){
+  el.innerHTML = `${backBtn()}
+    <h2 style="font-size:22px;margin-bottom:6px">لون من صورة</h2>
+    <p class="note" style="margin-bottom:14px">صوّر جدارك أو قطعة قماش، ثم اضغط على المكان الذي تريد لونه.</p>
+    <label class="filebtn" for="photo">اختر صورة أو التقطها بالكاميرا
+      <input id="photo" type="file" accept="image/*" hidden></label>
+    <div id="canvaswrap" style="margin-top:14px"></div>
+    <div id="matches"></div>`;
+}
+function showMatches(r,g,b){
+  const hex = [r,g,b].map(n => n.toString(16).padStart(2,"0")).join("").toUpperCase();
+  const lab = toLab(r,g,b);
+  const near = DATA.colors.map(c => [c, dE(lab, labOfHex(c.hex))]).sort((a,b) => a[1]-b[1]).slice(0,4);
+  document.getElementById("matches").innerHTML = `
+    <div class="panel" style="margin-top:14px;display:flex;gap:13px;align-items:center">
+      <i class="chip" style="background:#${hex}"></i>
+      <span class="txt"><strong>اللون الملتقط</strong><p class="mono">#${hex}</p></span>
+    </div>
+    <p class="count">أقرب الألوان عندنا</p>
+    <div class="rows">${near.map(([c,d]) => rowHTML(c, d < 3 ? "مطابق" : d < 8 ? "قريب جداً" : "قريب")).join("")}</div>`;
+}
+
+/* ========== شاشة اللون ========== */
+let sheetState = {id:null, room:null, light:"day"};
+function openColor(id, roomId){
+  sheetState = {id, room: roomId || byId(id).rooms[0], light:"day"};
+  drawSheet();
+  document.getElementById("sheet").dataset.open = "true";
+  document.body.style.overflow = "hidden";
+}
+function closeSheet(){
+  document.getElementById("sheet").dataset.open = "false";
+  document.body.style.overflow = "";
+  renderAll();
+}
+function drawSheet(){
+  const c = byId(sheetState.id), r = roomById(sheetState.room);
+  const fav = store.favs.includes(c.id);
+  const chosen = store.plan[sheetState.room] === c.id;
+  document.getElementById("sheet-title").textContent = c.name;
+  document.getElementById("sheet-body").innerHTML = `
+    ${previewHTML(c, sheetState.room, sheetState.light)}
+    <div class="bigname"><h2>${esc(c.name)}</h2><span class="mono" style="color:var(--ink-3);font-size:12px">#${c.hex}</span></div>
+    <p class="sub">${c.id} · ${FAMILY[c.family]}</p>
+    <div class="panel"><div class="info">
+      <div><strong>حق شنو؟</strong><p>${esc(c.purpose)}</p></div>
+      <div><strong>وين استخدمه؟</strong><p>${esc(c.usage)}</p></div>
+      <div><strong>مع الإضاءة</strong><p>${esc(c.lighting)}</p></div>
+      <div><strong>نوع الدهان المقترح: ${FINISH[c.finish][0]}</strong><p>${FINISH[c.finish][1]}</p></div>
+    </div></div>
+    <div class="panel"><h3>ينسجم مع</h3>
+      <div class="pairs">${c.pairs.map(h => `<div><i style="background:#${h}"></i><small>${h}</small></div>`).join("")}</div>
+      <p class="note" style="margin-top:9px">استخدم هذه في الأثاث والستائر والتفاصيل، لا على الجدار نفسه.</p>
+    </div>
+    <div class="panel"><h3>يناسب هذه الأماكن</h3>
+      <div class="tags">${c.rooms.map(x => `<span>${esc(roomById(x).title)}</span>`).join("")}</div>
+    </div>
+    <div class="actions">
+      <button class="btn ${chosen ? "on" : ""}" id="adopt">${chosen ? `لون ${esc(r.title)} — إلغاء` : `اعتمده لـ ${esc(r.title)}`}</button>
+      <button class="btn ghost" id="fav" style="flex:none;padding:13px 20px">${fav ? "♥" : "♡"}</button>
+    </div>`;
+}
+
+/* ========== التنقل والأحداث ========== */
+let tab = "rooms";
+function renderAll(){
+  ["rooms","colors","tools","plan"].forEach(t => {
+    document.getElementById("tab-" + t).hidden = t !== tab;
+  });
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
+  const el = document.getElementById("tab-rooms");
+  if (tab === "rooms") el.dataset.room ? renderRoom(el.dataset.room) : renderRooms();
+  if (tab === "colors") renderColors();
+  if (tab === "tools") renderTools();
+  if (tab === "plan") renderPlan();
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab],[data-room],[data-color],[data-back],[data-fam],[data-cfam],[data-tool],[data-light],[data-inc],[data-dec],#ceil,#copy,#adopt,#fav,#sheet-close");
+  if (!t) return;
+
+  if (t.dataset.tab){ tab = t.dataset.tab; if (tab === "rooms") delete document.getElementById("tab-rooms").dataset.room; renderAll(); window.scrollTo(0,0); return; }
+  if (t.dataset.back !== undefined && t.hasAttribute("data-back")){ delete document.getElementById("tab-rooms").dataset.room; roomFilter = null; renderAll(); return; }
+  if (t.dataset.color){ openColor(t.dataset.color, t.dataset.inroom || document.getElementById("tab-rooms").dataset.room); return; }
+  if (t.dataset.room){ roomFilter = null; renderRoom(t.dataset.room); window.scrollTo(0,0); return; }
+  if (t.hasAttribute("data-fam")){ roomFilter = t.dataset.fam || null; renderRoom(document.getElementById("tab-rooms").dataset.room); return; }
+  if (t.hasAttribute("data-cfam")){ colorFilter = t.dataset.cfam || null; renderColors(); return; }
+  if (t.hasAttribute("data-tool")){ tool = t.dataset.tool || null; renderTools(); window.scrollTo(0,0); return; }
+  if (t.dataset.light){ sheetState.light = t.dataset.light; drawSheet(); return; }
+  if (t.id === "sheet-close"){ closeSheet(); return; }
+  if (t.id === "adopt"){
+    if (store.plan[sheetState.room] === sheetState.id) delete store.plan[sheetState.room];
+    else store.plan[sheetState.room] = sheetState.id;
+    store.save(); drawSheet(); return;
+  }
+  if (t.id === "fav"){
+    const i = store.favs.indexOf(sheetState.id);
+    if (i >= 0) store.favs.splice(i,1); else store.favs.push(sheetState.id);
+    store.save(); drawSheet(); return;
+  }
+  if (t.id === "ceil"){ calc.ceiling = !calc.ceiling; renderTools(); return; }
+  if (t.id === "copy"){
+    navigator.clipboard?.writeText(shoppingList()).then(() => { t.textContent = "تم النسخ ✓"; setTimeout(() => t.textContent = "نسخ القائمة", 1800); });
+    return;
+  }
+  if (t.dataset.inc || t.dataset.dec){
+    const key = t.dataset.inc || t.dataset.dec, st = parseFloat(t.dataset.step);
+    const lim = t.dataset.inc ? {min:parseFloat(t.dataset.min), max:parseFloat(t.dataset.max)} : null;
+    calc[key] = t.dataset.inc ? Math.min(calc[key] + st, lim.max) : Math.max(calc[key] - st, key === "coats" ? 1 : 0);
+    calc[key] = Math.round(calc[key]*10)/10;
+    renderTools();
+  }
+});
+
+document.addEventListener("input", e => {
+  if (e.target.id === "q"){ q = e.target.value; const pos = e.target.selectionStart; renderColors();
+    const n = document.getElementById("q"); n.focus(); try{ n.setSelectionRange(pos,pos); }catch(err){} }
+  if (e.target.id === "price"){ calc.price = parseFloat(e.target.value) || 0; const v = e.target.value; renderTools();
+    const n = document.getElementById("price"); if(n){ n.focus(); n.value = v; } }
+});
+
+document.addEventListener("change", e => {
+  if (e.target.id !== "photo" || !e.target.files?.[0]) return;
+  const img = new Image();
+  img.onload = () => {
+    const wrap = document.getElementById("canvaswrap");
+    const cv = document.createElement("canvas");
+    const maxW = Math.min(wrap.clientWidth || 340, 700);
+    const scale = Math.min(1, maxW / img.naturalWidth);
+    cv.width = Math.round(img.naturalWidth*scale);
+    cv.height = Math.round(img.naturalHeight*scale);
+    const ctx = cv.getContext("2d", {willReadFrequently:true});
+    ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    wrap.innerHTML = "";
+    wrap.appendChild(cv);
+    cv.addEventListener("click", ev => {
+      const b = cv.getBoundingClientRect();
+      const x = Math.round((ev.clientX - b.left) * cv.width / b.width);
+      const y = Math.round((ev.clientY - b.top) * cv.height / b.height);
+      const rad = 3, x0 = Math.max(0, x-rad), y0 = Math.max(0, y-rad);
+      const w = Math.min(cv.width - x0, rad*2+1), h = Math.min(cv.height - y0, rad*2+1);
+      const d = ctx.getImageData(x0, y0, w, h).data;
+      let R=0, G=0, B=0;
+      for (let i = 0; i < d.length; i += 4){ R += d[i]; G += d[i+1]; B += d[i+2]; }
+      const n = d.length/4;
+      showMatches(Math.round(R/n), Math.round(G/n), Math.round(B/n));
+    });
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(e.target.files[0]);
+});
+
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && document.getElementById("sheet").dataset.open === "true") closeSheet();
+});
+
+renderAll();
+</script>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>
