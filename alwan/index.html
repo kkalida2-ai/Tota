@@ -87,7 +87,7 @@ header.app{
 }
 .headwrap{max-width:780px;margin:0 auto;padding:12px 16px 0}
 .brand{display:flex;align-items:baseline;gap:10px}
-.brand h1{font-size:19px}
+.brand h1{font-size:20px;letter-spacing:-.02em}
 .brand span{font-size:11.5px;color:var(--ink-3);letter-spacing:.06em}
 nav.tabs{display:flex;gap:22px;margin-top:10px;overflow-x:auto;scrollbar-width:none}
 nav.tabs::-webkit-scrollbar{display:none}
@@ -97,10 +97,10 @@ nav.tabs button{
 }
 nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
 main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
-.lede{color:var(--ink-2);font-size:14px;margin-bottom:18px;max-width:58ch}
+.lede{color:var(--ink-2);font-size:14.5px;margin-bottom:20px;max-width:56ch;line-height:1.7}
 
 /* ── شبكة الغرف ── */
-.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:12px}
+.rooms{display:grid;grid-template-columns:repeat(auto-fill,minmax(158px,1fr));gap:13px}
 .roomtile{
   background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
   overflow:hidden;text-align:right;display:flex;flex-direction:column;
@@ -108,12 +108,13 @@ main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
 }
 .roomtile:hover{border-color:var(--line-2)}
 .roomtile:active{transform:scale(.985)}
-.roomtile .field{height:78px;position:relative}
-.roomtile .field.preview3{display:flex}
-.roomtile .field.preview3 i{flex:1}
-.roomtile .meta{padding:10px 12px 12px}
-.roomtile .meta strong{display:block;font-family:var(--f-display);font-weight:500;font-size:14.5px}
-.roomtile .meta small{color:var(--ink-3);font-size:11.5px}
+.roomtile .scene{height:112px}
+.roomtile .meta{padding:11px 13px 13px;display:flex;flex-direction:column;gap:3px}
+.roomtile .meta strong{font-family:var(--f-display);font-weight:500;font-size:16px;letter-spacing:-.015em}
+.roomtile .meta small{color:var(--ink-2);font-size:12px;display:flex;align-items:center;gap:6px}
+.roomtile .meta small i{width:9px;height:9px;border-radius:50%;flex:none;border:1px solid rgba(0,0,0,.12)}
+.roomtile .swatches{display:flex;gap:3px;margin-top:5px}
+.roomtile .swatches i{height:5px;flex:1;border-radius:2px}
 
 /* ── صفوف الألوان ── */
 .rows{display:flex;flex-direction:column}
@@ -122,11 +123,11 @@ main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
   padding:11px 0;border-bottom:1px solid var(--line);
 }
 .rows .row:last-child{border-bottom:0}
-.chip{width:58px;height:58px;border-radius:11px;flex:none;position:relative;border:1px solid rgba(0,0,0,.09)}
-.chip .code{position:absolute;bottom:3px;left:5px;font-size:8.5px;font-family:var(--f-mono);opacity:.75}
+.chip{width:66px;height:66px;border-radius:12px;flex:none;position:relative;border:1px solid rgba(0,0,0,.09)}
+.chip .code{position:absolute;bottom:4px;left:6px;font-size:9px;font-family:var(--f-mono);opacity:.8;letter-spacing:-.02em}
 .row .txt{min-width:0}
-.row .txt strong{display:block;font-family:var(--f-display);font-weight:500;font-size:15px}
-.row .txt p{color:var(--ink-2);font-size:12.5px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.row .txt strong{display:block;font-family:var(--f-display);font-weight:500;font-size:16px;letter-spacing:-.015em}
+.row .txt p{color:var(--ink-2);font-size:13px;line-height:1.5;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .row .txt em{font-style:normal;color:var(--ink-3);font-size:11px}
 .tick{margin-inline-start:auto;flex:none;font-size:11px;color:var(--ink-3)}
 
@@ -153,13 +154,14 @@ main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
 .count{color:var(--ink-3);font-size:12px;margin:18px 0 4px;letter-spacing:.02em}
 
 /* ── معاينة الغرفة ── */
-.preview{position:relative;height:210px;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line)}
-.preview .wall{position:absolute;inset:0}
-.preview .daylight{position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.22),transparent 55%,rgba(0,0,0,.13))}
-.preview .floor{position:absolute;inset:auto 0 0 0;height:26%;background:linear-gradient(#B3906A,#8A6A4B)}
-.preview .skirt{position:absolute;inset:auto 0 26% 0;height:5px;background:#F4F0E8;opacity:.9}
-.preview .bulb{position:absolute;inset:0;mix-blend-mode:multiply;pointer-events:none;transition:background .25s ease}
-.preview .dim{position:absolute;inset:0;pointer-events:none;transition:background .25s ease}
+.scene{position:relative;overflow:hidden}
+.scene .wall{position:absolute;inset:0}
+.scene .daylight{position:absolute;inset:0;background:linear-gradient(145deg,rgba(255,255,255,.24),transparent 52%,rgba(0,0,0,.16))}
+.scene .floor{position:absolute;inset:auto 0 0 0;height:26%;background:linear-gradient(#B3906A,#8A6A4B)}
+.scene .skirt{position:absolute;inset:auto 0 26% 0;height:4px;background:#F4F0E8;opacity:.9}
+.scene .bulb{position:absolute;inset:0;mix-blend-mode:multiply;pointer-events:none;transition:background .25s ease}
+.scene .dim{position:absolute;inset:0;pointer-events:none;transition:background .25s ease}
+.preview{height:210px;border-radius:var(--radius);border:1px solid var(--line)}
 .f{position:absolute;border-radius:9px}
 .lightbar{display:flex;gap:6px;margin-top:10px}
 .lightbar button{
@@ -197,9 +199,9 @@ main{max-width:780px;margin:0 auto;padding:18px 16px 60px}
 .btn.on{background:transparent;color:var(--ink);border-color:var(--ink)}
 
 /* ── الأدوات ── */
-.field{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
-.field:last-child{border-bottom:0}
-.field label{font-size:14px}
+.frow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid var(--line)}
+.frow:last-child{border-bottom:0}
+.frow label{font-size:14px}
 .stepper{display:flex;align-items:center;gap:2px;border:1px solid var(--line-2);border-radius:9px;overflow:hidden}
 .stepper button{width:34px;height:32px;font-size:16px;color:var(--ink-2)}
 .stepper button:hover{background:var(--line)}
@@ -353,35 +355,41 @@ function rowHTML(c, extra){
     ${extra ? `<span class="tick">${extra}</span>` : ""}
   </button>`;
 }
-function previewHTML(c, roomId, light){
-  const pair = "#" + (c.pairs[0] || "FFFFFF");
-  let furniture = "";
-  if (roomId === "masterBedroom" || roomId === "kidsRoom") {
-    furniture = `<div class="f" style="background:${pair};width:52%;height:30%;right:24%;bottom:32%"></div>
-                 <div class="f" style="background:#F3EFE7;width:58%;height:16%;right:21%;bottom:20%"></div>`;
-  } else if (roomId === "kitchen" || roomId === "bathroom") {
-    furniture = `<div class="f" style="background:#EFEFEA;width:66%;height:11%;right:17%;bottom:22%"></div>
-                 <div class="f" style="background:${pair};width:30%;height:22%;right:12%;bottom:48%"></div>`;
-  } else if (roomId === "office") {
-    furniture = `<div class="f" style="background:#2E3336;width:30%;height:19%;right:35%;bottom:32%;border-radius:4px"></div>
-                 <div class="f" style="background:#7A5C3E;width:50%;height:4%;right:25%;bottom:27%;border-radius:2px"></div>`;
-  } else if (roomId === "outdoor") {
-    furniture = `<div class="f" style="background:#5C7A4E;width:22%;aspect-ratio:1;border-radius:50%;right:12%;bottom:24%"></div>
-                 <div class="f" style="background:${pair};width:34%;height:15%;left:14%;bottom:24%"></div>`;
-  } else {
-    furniture = `<div class="f" style="background:${pair};width:60%;height:20%;right:20%;bottom:22%"></div>
-                 <div class="f" style="background:#F7F3EC;width:16%;height:22%;left:14%;bottom:55%;border-radius:3px"></div>`;
-  }
-  const L = LIGHTS[light];
-  return `<div class="preview">
+function furnitureHTML(roomId, pair){
+  if (roomId === "masterBedroom" || roomId === "kidsRoom")
+    return `<div class="f" style="background:${pair};width:52%;height:30%;right:24%;bottom:26%"></div>
+            <div class="f" style="background:#F3EFE7;width:58%;height:15%;right:21%;bottom:19%"></div>`;
+  if (roomId === "kitchen" || roomId === "bathroom")
+    return `<div class="f" style="background:#EFEFEA;width:66%;height:10%;right:17%;bottom:22%"></div>
+            <div class="f" style="background:${pair};width:30%;height:22%;right:12%;bottom:46%"></div>`;
+  if (roomId === "office")
+    return `<div class="f" style="background:#2E3336;width:30%;height:19%;right:35%;bottom:30%;border-radius:4px"></div>
+            <div class="f" style="background:#7A5C3E;width:50%;height:4%;right:25%;bottom:25%;border-radius:2px"></div>`;
+  if (roomId === "outdoor")
+    return `<div class="f" style="background:#5C7A4E;width:22%;aspect-ratio:1;border-radius:50%;right:12%;bottom:22%"></div>
+            <div class="f" style="background:${pair};width:34%;height:14%;left:14%;bottom:22%"></div>`;
+  if (roomId === "dining")
+    return `<div class="f" style="background:${pair};width:56%;height:7%;right:22%;bottom:23%"></div>
+            <div class="f" style="background:#F7F3EC;width:14%;height:20%;left:16%;bottom:52%;border-radius:3px"></div>`;
+  return `<div class="f" style="background:${pair};width:60%;height:19%;right:20%;bottom:21%"></div>
+          <div class="f" style="background:#F7F3EC;width:16%;height:21%;left:14%;bottom:52%;border-radius:3px"></div>`;
+}
+
+function sceneHTML(c, roomId, light, extraClass){
+  const L = LIGHTS[light || "day"];
+  return `<div class="scene ${extraClass || ""}">
     <div class="wall" style="background:#${c.hex}"></div>
     <div class="daylight"></div>
     <div class="floor"></div><div class="skirt"></div>
-    ${furniture}
+    ${furnitureHTML(roomId, "#" + (c.pairs[0] || "FFFFFF"))}
     <div class="bulb" style="background:${L[1]}"></div>
     <div class="dim" style="background:${L[2]}"></div>
-  </div>
-  <div class="lightbar">
+  </div>`;
+}
+
+function previewHTML(c, roomId, light){
+  return sceneHTML(c, roomId, light, "preview") +
+  `<div class="lightbar">
     ${Object.keys(LIGHTS).map(k => `<button data-light="${k}" aria-pressed="${k===light}">${LIGHTS[k][0]}</button>`).join("")}
   </div>`;
 }
@@ -391,18 +399,20 @@ function renderRooms(){
   const el = document.getElementById("tab-rooms");
   el.innerHTML = `<p class="lede">اختر مكاناً في البيت وسترى الألوان المناسبة له — ليش تناسبه، ووين بالضبط تستخدمه.</p>
   <div class="rooms">${DATA.rooms.map(r => {
-    const chosen = byId(store.plan[r.id]);
     const pool = DATA.colors.filter(c => c.rooms.includes(r.id));
-    const n = pool.length;
-    // بلا اختيار: نعرض ثلاثة من ألوان الغرفة كشريط معاينة
+    const chosen = byId(store.plan[r.id]);
+    // بلا اختيار: نعرض الغرفة بلونها الأبرز، وتحتها مدى ألوانها من الغامق للفاتح
     const ranked = [...pool].sort((a,b) => luminance(a.hex) - luminance(b.hex));
-    const trio = [ranked[0], ranked[Math.floor(n/2)], ranked[n-1]].filter(Boolean);
+    const hero = chosen || ranked[Math.floor(ranked.length/2)];
+    const band = [ranked[0], ranked[Math.floor(ranked.length/4)], ranked[Math.floor(ranked.length/2)],
+                  ranked[Math.floor(ranked.length*3/4)], ranked[ranked.length-1]].filter(Boolean);
     return `<button class="roomtile" data-room="${r.id}">
-      ${chosen
-        ? `<span class="field" style="background:#${chosen.hex}"></span>`
-        : `<span class="field preview3">${trio.map(c => `<i style="background:#${c.hex}"></i>`).join("")}</span>`}
-      <span class="meta"><strong>${esc(r.title)}</strong>
-      <small>${chosen ? "اخترت: " + esc(chosen.name) : n + " لون مقترح"}</small></span>
+      ${sceneHTML(hero, r.id, "day")}
+      <span class="meta">
+        <strong>${esc(r.title)}</strong>
+        <small><i style="background:#${hero.hex}"></i>${chosen ? "اخترت " + esc(hero.name) : esc(hero.name)}</small>
+        <span class="swatches">${band.map(c => `<i style="background:#${c.hex}"></i>`).join("")}</span>
+      </span>
     </button>`;
   }).join("")}</div>`;
 }
@@ -505,7 +515,7 @@ function renderCalc(el){
   const walls = 2*(calc.l+calc.w)*calc.h + (calc.ceiling ? calc.l*calc.w : 0);
   const area = Math.max(walls - (calc.doors*1.9 + calc.windows*1.5), 0);
   const liters = area*calc.coats/10, gallons = liters/3.785, buy = Math.ceil(gallons);
-  const step = (key,label,min,max,st) => `<div class="field"><label>${label}</label>
+  const step = (key,label,min,max,st) => `<div class="frow"><label>${label}</label>
     <span class="stepper"><button data-dec="${key}" data-step="${st}" aria-label="نقص">−</button>
     <output>${calc[key]}</output>
     <button data-inc="${key}" data-step="${st}" data-max="${max}" data-min="${min}" aria-label="زد">+</button></span></div>`;
@@ -513,7 +523,7 @@ function renderCalc(el){
     <h2 style="font-size:22px;margin-bottom:14px">حاسبة كمية الدهان</h2>
     <div class="panel"><h3>أبعاد الغرفة (متر)</h3>
       ${step("l","الطول",1,20,.5)}${step("w","العرض",1,20,.5)}${step("h","الارتفاع",2,6,.5)}
-      <div class="field"><label>أدهن السقف أيضاً</label>
+      <div class="frow"><label>أدهن السقف أيضاً</label>
         <button class="btn ghost" id="ceil" style="flex:none;padding:6px 16px;font-size:13px">${calc.ceiling ? "نعم" : "لا"}</button></div>
     </div>
     <div class="panel"><h3>ما لا يُدهن</h3>
@@ -526,7 +536,7 @@ function renderCalc(el){
       <div class="res big"><span>اشترِ</span><span>${buy} جالون</span></div>
     </div>
     <div class="panel"><h3>التكلفة (اختياري)</h3>
-      <div class="field"><label>سعر الجالون</label>
+      <div class="frow"><label>سعر الجالون</label>
         <input class="num" id="price" type="number" inputmode="decimal" value="${calc.price || ""}" placeholder="0"></div>
       ${calc.price > 0 ? `<div class="res big"><span>التكلفة التقريبية</span><span>${Math.round(buy*calc.price)}</span></div>` : ""}
     </div>
