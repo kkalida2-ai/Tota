@@ -283,6 +283,88 @@ enum ColorCatalog {
             lighting: "يبدو أزرق نهاراً ورمادياً ليلاً.",
             finish: .eggshell, pairs: ["F7F3EC", "C9A227", "22314A"],
             rooms: [.office, .hallway, .masterBedroom, .living]
+        ),
+
+        // ─────────── إضافات ───────────
+        PaintColor(
+            id: "AL-805", name: "أبيض لؤلؤي", hex: "EFEFE9", family: .neutral,
+            purpose: "أبيض بارد قليلاً، يعطي إحساس المستشفى النظيف بالمعنى الجيد — نقاء بلا دفء.",
+            usage: "المطبخ الحديث، وغرفة الغسيل، وخلفية الخزائن الملونة.",
+            lighting: "يبقى أبيض في كل الإضاءات ولا يصفرّ.",
+            finish: .semiGloss, pairs: ["2E3336", "9FB3C8", "C9A227"],
+            rooms: [.kitchen, .bathroom, .hallway]
+        ),
+        PaintColor(
+            id: "AL-806", name: "شاي بالحليب", hex: "CBB49B", family: .warm,
+            purpose: "أغمق من البيج بدرجة، يخفي أثر الأيدي والخدوش الخفيفة في الأماكن كثيرة الحركة.",
+            usage: "ممر الغرف، والدرج، وجدار مدخل البيت الذي تلمسه الأيدي يومياً.",
+            lighting: "ثابت ولا يتأثر كثيراً بنوع الإضاءة.",
+            finish: .satin, pairs: ["F7F3EC", "6B4F3A", "3E4A45"],
+            rooms: [.hallway, .majlis, .living, .dining]
+        ),
+        PaintColor(
+            id: "AL-807", name: "رمادي حجري", hex: "9EA4A4", family: .cool,
+            purpose: "رمادي متوسط بارد، خلفية رصينة تريح العين أمام الشاشة أكثر من الأبيض.",
+            usage: "جدار المكتب خلف الشاشة، وغرفة الشباب، وجدار المعدات.",
+            lighting: "يزداد برودة تحت الليد الأبيض.",
+            finish: .eggshell, pairs: ["F7F3EC", "C9A227", "22314A"],
+            rooms: [.office, .living, .outdoor]
+        ),
+        PaintColor(
+            id: "AL-808", name: "أخضر فستقي", hex: "CBD9B5", family: .pastel,
+            purpose: "منعش وطفولي هادئ، يربط الغرفة بالأخضر دون أن يكون صارخاً.",
+            usage: "غرفة الأطفال، وركن الألعاب، وغرفة الإفطار.",
+            lighting: "جميل في ضوء النهار.",
+            finish: .satin, pairs: ["FFFFFF", "E0B16A", "7A5C3E"],
+            rooms: [.kidsRoom, .kitchen, .dining, .outdoor]
+        ),
+        PaintColor(
+            id: "AL-809", name: "بني قهوة غامق", hex: "4A3A30", family: .deep,
+            purpose: "يعطي وقاراً وثباتاً، ويجعل الغرفة تبدو أهدأ وأكثر خصوصية.",
+            usage: "جدار المكتبة، وداخل الرفوف، وجدار واحد في المجلس الرسمي.",
+            lighting: "يحتاج إضاءة دافئة قوية وإلا صار ثقيلاً.",
+            finish: .matte, pairs: ["EDE4D6", "C9A227", "D6BE9A"],
+            rooms: [.majlis, .office, .dining]
+        ),
+        PaintColor(
+            id: "AL-810", name: "أزرق فيروزي", hex: "6FA8A0", family: .cool,
+            purpose: "منعش ومرتبط بالماء، يعطي الحمام إحساس المنتجع.",
+            usage: "دورة المياه، وجدار المغسلة، وجدار الجلسة الخارجية.",
+            lighting: "يبدو أخضر في الضوء الدافئ وأزرق في البارد.",
+            finish: .semiGloss, pairs: ["F1EBE0", "D6BE9A", "2E3336"],
+            rooms: [.bathroom, .kidsRoom, .outdoor]
+        ),
+        PaintColor(
+            id: "AL-811", name: "خزامى هادئ", hex: "B9AEC4", family: .pastel,
+            purpose: "بنفسجي رمادي يساعد على الاسترخاء قبل النوم، وأنضج من الوردي.",
+            usage: "غرفة النوم، وغرفة البنات الكبيرات، وركن القراءة.",
+            lighting: "يميل للرمادي في الإضاءة الباردة.",
+            finish: .matte, pairs: ["F7F3EC", "9FB3C8", "C9A227"],
+            rooms: [.masterBedroom, .kidsRoom]
+        ),
+        PaintColor(
+            id: "AL-812", name: "خردلي", hex: "C08A2E", family: .warm,
+            purpose: "أصفر ترابي جريء يعطي شخصية قوية للمساحة بلا صخب.",
+            usage: "جدار واحد في غرفة الطعام أو ركن المكتب، أو باب داخلي مميز.",
+            lighting: "يشتعل مع الإضاءة الدافئة.",
+            finish: .eggshell, pairs: ["2F3E46", "EDE4D6", "3E4A45"],
+            rooms: [.dining, .office, .hallway]
+        ),
+        PaintColor(
+            id: "AL-813", name: "رمادي فاتح جداً", hex: "E4E4E1", family: .neutral,
+            purpose: "خلفية محايدة باردة تُظهر الأبيض الناصع في الأثاث والسقف.",
+            usage: "غرفة النوم البسيطة، والمكتب، والممر الواسع.",
+            lighting: "يحتاج ضوءاً وإلا بدا باهتاً بلا حياة.",
+            finish: .eggshell, pairs: ["FFFFFF", "2E3336", "9FB3C8"],
+            rooms: [.masterBedroom, .office, .hallway, .living]
+        ),
+        PaintColor(
+            id: "AL-814", name: "أخضر نخيل غامق", hex: "34503F", family: .deep,
+            purpose: "يربط الجلسة الخارجية بالنخل والنبات، ولا يظهر عليه الغبار كالأسود.",
+            usage: "جدار الجلسة في الحوش، وباب المدخل الخارجي، وسور الحديقة.",
+            lighting: "يتحمّل الشمس المباشرة بدهان خارجي.",
+            finish: .satin, pairs: ["D8D2C6", "C9A227", "7A5C3E"],
+            rooms: [.outdoor, .majlis, .office]
         )
     ]
 

@@ -1,9 +1,49 @@
 import SwiftUI
 
+/// نوع الإضاءة في المعاينة — نفس اللون يتغير كثيراً بين النهار والمساء.
+enum PreviewLighting: String, CaseIterable, Identifiable {
+    case day, warm, cool
+
+    var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .day:  "ضوء النهار"
+        case .warm: "إضاءة صفراء"
+        case .cool: "ليد أبيض"
+        }
+    }
+
+    var tint: Color {
+        switch self {
+        case .day:  .clear
+        case .warm: Color(hex: "FF9D3D")
+        case .cool: Color(hex: "BFD4FF")
+        }
+    }
+
+    var tintOpacity: Double {
+        switch self {
+        case .day:  0
+        case .warm: 0.22
+        case .cool: 0.14
+        }
+    }
+
+    var dimming: Double {
+        switch self {
+        case .day:  0
+        case .warm: 0.12
+        case .cool: 0.02
+        }
+    }
+}
+
 /// معاينة مبسّطة لغرفة مدهونة باللون المختار، حتى يتخيّل المستخدم النتيجة قبل الشراء.
 struct RoomPreview: View {
     let color: PaintColor
     var room: Room = .living
+    var lighting: PreviewLighting = .day
     var height: CGFloat = 240
 
     private var accent: Color { Color(hex: color.pairs.first ?? "FFFFFF") }
@@ -47,6 +87,15 @@ struct RoomPreview: View {
 
                 // أثاث بسيط حسب نوع الغرفة
                 furniture(width: w, height: h, floorTop: floorTop)
+
+                // طبقة الإضاءة فوق المشهد كله
+                Rectangle()
+                    .fill(lighting.tint.opacity(lighting.tintOpacity))
+                    .blendMode(.multiply)
+                    .allowsHitTesting(false)
+                Rectangle()
+                    .fill(.black.opacity(lighting.dimming))
+                    .allowsHitTesting(false)
             }
             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(

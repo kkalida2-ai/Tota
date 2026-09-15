@@ -5,14 +5,26 @@ struct ColorDetailView: View {
     var room: Room?
 
     @Environment(FavoritesStore.self) private var store
+    @State private var lighting: PreviewLighting = .day
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
 
                 // اللون بحجم كبير + معاينة الغرفة
-                RoomPreview(color: color, room: room ?? color.rooms.first ?? .living, height: 250)
-                    .padding(.horizontal)
+                VStack(spacing: 10) {
+                    RoomPreview(
+                        color: color,
+                        room: room ?? color.rooms.first ?? .living,
+                        lighting: lighting,
+                        height: 250
+                    )
+                    Picker("الإضاءة", selection: $lighting) {
+                        ForEach(PreviewLighting.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                }
+                .padding(.horizontal)
 
                 VStack(alignment: .leading, spacing: 6) {
                     HStack(alignment: .firstTextBaseline) {

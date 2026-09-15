@@ -9,6 +9,9 @@ struct RootView: View {
             Tab("الألوان", systemImage: "paintpalette.fill") {
                 SearchView()
             }
+            Tab("أدوات", systemImage: "wrench.and.screwdriver.fill") {
+                ToolsView()
+            }
             Tab("خطتي", systemImage: "checkmark.seal.fill") {
                 PlanView()
             }
