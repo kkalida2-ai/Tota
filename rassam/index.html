@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="مساعد ألوان للرسّامة: يستخرج ألوان اللوحة من صورتها، ويكشف اللون الناشز وسببه، ويعطي وصفة خلط لأي لون.">
+<meta name="theme-color" content="#EFE9DD">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="مرسم الألوان">
+<title>مرسم الألوان</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<style>
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --canvas:#EFE9DD;
+  --card:#F9F6EF;
+  --ink:#1E1B16;
+  --ink-2:#6A6152;
+  --ink-3:#98907E;
+  --line:#DDD4C2;
+  --line-2:#C9BDA5;
+  --good:#3E7C5B;
+  --warn:#B4763A;
+  --bad:#A8412F;
+  --radius:13px;
+  --f-calli:"Aref Ruqaa",Georgia,serif;
+  --f-body:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --canvas:#151310;
+    --card:#1F1C17;
+    --ink:#F0EADD;
+    --ink-2:#A79D8A;
+    --ink-3:#7A7263;
+    --line:#2D2922;
+    --line-2:#3E382E;
+    --good:#6FBE92;
+    --warn:#D9A15F;
+    --bad:#E0765F;
+  }
+}
+:root[data-theme="dark"]{
+  --canvas:#151310;
+  --card:#1F1C17;
+  --ink:#F0EADD;
+  --ink-2:#A79D8A;
+  --ink-3:#7A7263;
+  --line:#2D2922;
+  --line-2:#3E382E;
+  --good:#6FBE92;
+  --warn:#D9A15F;
+  --bad:#E0765F;
+}
+
+*{box-sizing:border-box}
+html{direction:rtl}
+body{
+  margin:0;background:var(--canvas);color:var(--ink);
+  font-family:var(--f-body);font-size:15px;line-height:1.65;
+  -webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent;
+}
+h1,h2,h3{margin:0;line-height:1.35;text-wrap:balance}
+h1,h2{font-family:var(--f-calli);font-weight:700}
+h3{font-family:var(--f-body);font-weight:600;font-size:14px}
+p{margin:0}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ink);outline-offset:2px;border-radius:6px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+
+header.app{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:40;
+  background:color-mix(in srgb,var(--canvas) 90%,transparent);
+  backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+}
+.headwrap{max-width:760px;margin:0 auto;padding:12px 16px 0}
+.brand{display:flex;align-items:baseline;gap:9px}
+.brand h1{font-size:23px}
+.brand span{font-size:11.5px;color:var(--ink-3)}
+nav.tabs{display:flex;gap:20px;margin-top:8px;overflow-x:auto;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{padding:9px 0 11px;font-size:14.5px;color:var(--ink-3);border-bottom:2px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--ink)}
+main{max-width:760px;margin:0 auto;padding:18px 16px 64px}
+.lede{color:var(--ink-2);font-size:14.5px;line-height:1.7;max-width:56ch;margin-bottom:18px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:15px;margin-bottom:13px}
+.panel h3{margin-bottom:9px}
+.note{color:var(--ink-3);font-size:12.5px;line-height:1.65}
+.eyebrow{font-size:11.5px;color:var(--ink-3);letter-spacing:.07em;margin:22px 0 8px}
+
+/* ── رفع الصورة ── */
+.drop{
+  display:block;width:100%;border:1.5px dashed var(--line-2);border-radius:var(--radius);
+  padding:30px 20px;text-align:center;color:var(--ink-2);font-size:14.5px;background:var(--card);
+}
+.drop b{display:block;font-size:16px;color:var(--ink);margin-bottom:4px;font-family:var(--f-calli);font-weight:700}
+.stage{position:relative;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.stage canvas{display:block;width:100%;cursor:crosshair}
+.dot{position:absolute;width:26px;height:26px;border-radius:50%;border:2.5px solid #fff;
+  box-shadow:0 0 0 1.5px rgba(0,0,0,.45), 0 2px 6px rgba(0,0,0,.4);transform:translate(50%,-50%);pointer-events:none}
+
+/* ── لوحة الألوان المستخرجة ── */
+.palette{display:flex;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);height:74px}
+.palette button{flex:var(--w,1);position:relative;transition:flex .3s ease}
+.palette button span{
+  position:absolute;bottom:5px;right:0;left:0;text-align:center;font-family:var(--f-mono);
+  font-size:8.5px;letter-spacing:-.03em;
+}
+.swatchrow{display:flex;gap:9px;flex-wrap:wrap}
+.sw{width:54px;text-align:center}
+.sw i{display:block;height:54px;border-radius:10px;border:1px solid rgba(0,0,0,.12)}
+.sw small{display:block;font-size:9px;color:var(--ink-3);font-family:var(--f-mono);margin-top:3px}
+.sw em{display:block;font-style:normal;font-size:10.5px;color:var(--ink-2);line-height:1.35;margin-top:1px}
+
+/* ── الحكم ── */
+.verdict{display:flex;align-items:center;gap:13px;padding:14px 15px;border-radius:var(--radius);border:1px solid var(--line);background:var(--card);margin-bottom:13px}
+.score{width:56px;height:56px;border-radius:50%;flex:none;display:grid;place-items:center;
+  font-family:var(--f-mono);font-size:19px;font-weight:500;border:2.5px solid currentColor}
+.verdict .txt strong{display:block;font-family:var(--f-calli);font-weight:700;font-size:17px}
+.verdict .txt p{color:var(--ink-2);font-size:13px}
+.finding{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.finding:last-child{border-bottom:0;padding-bottom:0}
+.finding .mark{width:44px;flex:none}
+.finding .mark i{display:block;height:44px;border-radius:9px;border:1px solid rgba(0,0,0,.12)}
+.finding .mark small{display:block;text-align:center;font-size:8.5px;font-family:var(--f-mono);color:var(--ink-3);margin-top:3px}
+.finding .body strong{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
+.finding .body p{color:var(--ink-2);font-size:13.5px}
+.tag{display:inline-block;font-size:11px;padding:1px 9px;border-radius:999px;border:1px solid currentColor;margin-inline-start:6px}
+.fix{display:flex;align-items:center;gap:9px;margin-top:8px;padding:8px 10px;border-radius:9px;background:var(--canvas);border:1px solid var(--line)}
+.fix i{width:26px;height:26px;border-radius:7px;flex:none;border:1px solid rgba(0,0,0,.12)}
+.fix p{font-size:12.5px;color:var(--ink-2)}
+
+/* ── أدوات ── */
+.wheel{display:grid;grid-template-columns:repeat(auto-fill,minmax(46px,1fr));gap:7px}
+.wheel button{aspect-ratio:1;border-radius:9px;border:1px solid rgba(0,0,0,.12)}
+.wheel button[aria-pressed="true"]{outline:2.5px solid var(--ink);outline-offset:2px}
+.sliders label{display:block;font-size:12.5px;color:var(--ink-2);margin-bottom:2px}
+.sliders input[type=range]{width:100%;accent-color:var(--ink);margin-bottom:10px}
+.mixout{display:flex;gap:12px;align-items:center;margin-bottom:12px}
+.mixout .cmp{display:flex;border-radius:11px;overflow:hidden;border:1px solid var(--line);flex:none}
+.mixout .cmp i{width:52px;height:52px;display:block}
+.recipe{display:flex;flex-direction:column;gap:7px}
+.recipe .part{display:flex;align-items:center;gap:9px}
+.recipe .part i{width:22px;height:22px;border-radius:6px;flex:none;border:1px solid rgba(0,0,0,.14)}
+.recipe .part b{font-weight:600;font-size:13.5px;min-width:0;flex:1}
+.recipe .part .bar{height:7px;border-radius:99px;background:var(--line);width:96px;flex:none;overflow:hidden}
+.recipe .part .bar span{display:block;height:100%;background:var(--ink)}
+.recipe .part .pct{font-family:var(--f-mono);font-size:12px;color:var(--ink-2);width:40px;text-align:left}
+.schemes{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;margin-bottom:12px}
+.schemes::-webkit-scrollbar{display:none}
+.schemes button{border:1px solid var(--line-2);border-radius:999px;padding:5px 13px;font-size:12.5px;color:var(--ink-2);white-space:nowrap}
+.schemes button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--canvas)}
+.tech .item{padding:12px 0;border-bottom:1px solid var(--line)}
+.tech .item:last-child{border-bottom:0}
+.tech .item strong{display:block;font-size:14px;font-weight:600;margin-bottom:2px}
+.tech .item p{color:var(--ink-2);font-size:13.5px}
+.btn{display:block;width:100%;border-radius:11px;padding:12px;text-align:center;font-size:14px;
+  border:1px solid var(--ink);background:var(--ink);color:var(--canvas)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+
+<header class="app">
+  <div class="headwrap">
+    <div class="brand">
+      <h1>مرسم الألوان</h1>
+      <span>للمعلّمة الرسّامة</span>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="art" aria-selected="true">لوحتي</button>
+      <button role="tab" data-tab="mix" aria-selected="false">اللون والخلط</button>
+      <button role="tab" data-tab="tech" aria-selected="false">تقنيات</button>
+    </nav>
+  </div>
+</header>
+<main>
+  <section id="tab-art"></section>
+  <section id="tab-mix" hidden></section>
+  <section id="tab-tech" hidden></section>
+</main>
+
+<script>
+/* ═══════ حساب الألوان ═══════ */
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+const hex2rgb = h => { const v = parseInt(h.replace("#",""),16); return [(v>>16)&255,(v>>8)&255,v&255]; };
+const rgb2hex = ([r,g,b]) => "#" + [r,g,b].map(n => clamp(Math.round(n),0,255).toString(16).padStart(2,"0")).join("").toUpperCase();
+const lin = c => { c/=255; return c <= .04045 ? c/12.92 : Math.pow((c+.055)/1.055, 2.4); };
+const unlin = c => 255 * (c <= .0031308 ? 12.92*c : 1.055*Math.pow(c, 1/2.4) - .055);
+
+function rgb2lab([r,g,b]){
+  const R=lin(r), G=lin(g), B=lin(b);
+  const x=(.4124*R+.3576*G+.1805*B)/.95047, y=.2126*R+.7152*G+.0722*B, z=(.0193*R+.1192*G+.9505*B)/1.08883;
+  const f = t => t > .008856 ? Math.cbrt(t) : 7.787*t + 16/116;
+  const fx=f(x), fy=f(y), fz=f(z);
+  return [116*fy-16, 500*(fx-fy), 200*(fy-fz)];
+}
+function lab2rgb([L,a,bb]){
+  const fy=(L+16)/116, fx=fy+a/500, fz=fy-bb/200;
+  const inv = t => t*t*t > .008856 ? t*t*t : (t - 16/116)/7.787;
+  const x=inv(fx)*.95047, y=inv(fy), z=inv(fz)*1.08883;
+  const R= 3.2406*x -1.5372*y -0.4986*z, G= -0.9689*x +1.8758*y +0.0415*z, B= 0.0557*x -0.2040*y +1.0570*z;
+  return [unlin(clamp(R,0,1)), unlin(clamp(G,0,1)), unlin(clamp(B,0,1))].map(Math.round);
+}
+const lab2lch = ([L,a,b]) => [L, Math.hypot(a,b), (Math.atan2(b,a)*180/Math.PI + 360) % 360];
+const lch2lab = ([L,C,H]) => [L, C*Math.cos(H*Math.PI/180), C*Math.sin(H*Math.PI/180)];
+const lchOf = rgb => lab2lch(rgb2lab(rgb));
+const rgbOfLch = lch => lab2rgb(lch2lab(lch));
+const dE = (a,b) => Math.hypot(a[0]-b[0], a[1]-b[1], a[2]-b[2]);
+const hueDist = (a,b) => { let d = Math.abs(a-b) % 360; return d > 180 ? 360-d : d; };
+
+/* اسم اللون بالعربي من موقعه في دائرة الألوان */
+function colorName(rgb){
+  const [L,C,H] = lchOf(rgb);
+  if (C < 7) return L > 82 ? "أبيض مائل" : L > 55 ? "رمادي فاتح" : L > 28 ? "رمادي" : "أسود مائل";
+  const fam =
+    H < 15  ? "قرمزي"   : H < 40  ? "أحمر"    : H < 58  ? "برتقالي" : H < 78  ? "أصفر ذهبي" :
+    H < 100 ? "أصفر"    : H < 130 ? "أخضر مصفر" : H < 165 ? "أخضر"  : H < 195 ? "أخضر مزرق" :
+    H < 225 ? "فيروزي"  : H < 260 ? "سماوي"   : H < 290 ? "أزرق"    : H < 320 ? "بنفسجي" :
+    H < 345 ? "أرجواني" : "وردي";
+  const light = L > 78 ? "فاتح جداً " : L > 60 ? "فاتح " : L < 25 ? "غامق جداً " : L < 42 ? "غامق " : "";
+  const sat   = C < 20 ? "مغبّر " : C > 65 ? "صريح " : "";
+  return (light + sat + fam).trim();
+}
+const isWarm = H => (H < 110 || H > 320);
+
+/* ═══════ استخراج ألوان اللوحة (k-means في فضاء Lab) ═══════ */
+function extractPalette(ctx, w, h, k = 6){
+  const data = ctx.getImageData(0, 0, w, h).data;
+  const pts = [];
+  const stride = Math.max(1, Math.floor(Math.sqrt(w*h / 9000)));
+  for (let y = 0; y < h; y += stride)
+    for (let x = 0; x < w; x += stride){
+      const i = (y*w + x)*4;
+      if (data[i+3] < 200) continue;
+      pts.push(rgb2lab([data[i], data[i+1], data[i+2]]));
+    }
+  if (!pts.length) return [];
+
+  // بذور متباعدة (k-means++ مبسّط) حتى لا تتكرر الألوان
+  let cents = [pts[Math.floor(pts.length/2)]];
+  while (cents.length < k){
+    let best = null, bestD = -1;
+    for (let i = 0; i < pts.length; i += 3){
+      const d = Math.min(...cents.map(c => dE(c, pts[i])));
+      if (d > bestD){ bestD = d; best = pts[i]; }
+    }
+    cents.push(best);
+  }
+  let groups = [];
+  for (let it = 0; it < 12; it++){
+    groups = cents.map(() => []);
+    for (const p of pts){
+      let bi = 0, bd = Infinity;
+      cents.forEach((c, i) => { const d = dE(c, p); if (d < bd){ bd = d; bi = i; } });
+      groups[bi].push(p);
+    }
+    cents = cents.map((c, i) => {
+      const g = groups[i];
+      if (!g.length) return c;
+      return [0,1,2].map(j => g.reduce((s,p) => s + p[j], 0) / g.length);
+    });
+  }
+  return cents.map((c, i) => {
+      const rgb = lab2rgb(c);
+      return { rgb, hex: rgb2hex(rgb), lab: c, lch: lab2lch(c), share: groups[i].length / pts.length };
+    })
+    .filter(c => c.share > .012)
+    .sort((a,b) => b.share - a.share);
+}
+
+/* ═══════ تحليل الانسجام ═══════ */
+function analyze(palette){
+  const chromatic = palette.filter(c => c.lch[1] > 9);
+  const findings = [];
+  let score = 100;
+
+  if (chromatic.length < 2){
+    return { score: 88, dominant: palette[0]?.lch[2] ?? 0, findings: [{
+      kind:"good", color: palette[0], title:"لوحة أحادية",
+      text:"كل الألوان من عائلة واحدة أو محايدة، وهذا انسجام مضمون. خطرها الوحيد أن تبدو مسطّحة — عالجيها بفرق واضح بين الفاتح والغامق لا بلون جديد."
+    }]};
+  }
+
+  // اللون السائد: متوسط دائري موزون بالمساحة ونقاء اللون
+  let sx = 0, sy = 0;
+  chromatic.forEach(c => {
+    const w = c.share * Math.min(c.lch[1], 60);
+    sx += Math.cos(c.lch[2]*Math.PI/180)*w;
+    sy += Math.sin(c.lch[2]*Math.PI/180)*w;
+  });
+  const dominant = (Math.atan2(sy, sx)*180/Math.PI + 360) % 360;
+
+  chromatic.forEach(c => {
+    const d = hueDist(c.lch[2], dominant);
+    const weight = c.share, strong = c.lch[1] > 45;
+    let rel, kind, text;
+
+    if (d <= 34){ rel = "متجانس"; kind = "good";
+      text = "من عائلة اللون السائد نفسه، فيذوب في اللوحة ويشدّها لبعضها."; }
+    else if (d >= 148){ rel = "مكمّل"; kind = "good";
+      text = "مقابل اللون السائد في دائرة الألوان — هذا أقوى تضاد ممكن، وهو صحيح ما دام مساحته صغيرة."; }
+    else if (d >= 100){ rel = "ثلاثي"; kind = "good";
+      text = "علاقة ثلاثية متوازنة مع اللون السائد؛ حيوية دون تنافر."; }
+    else if (d >= 60){ rel = "مكمّل منقسم"; kind = "ok";
+      text = "علاقة مقبولة لكنها متوترة. اخفضي نقاءه قليلاً ليجلس بهدوء بجانب اللون السائد."; }
+    else { rel = "متنافر"; kind = "bad";
+      text = `يبعد ${Math.round(d)}° عن اللون السائد — قريب بحيث يبدو محاولة فاشلة لمطابقته، وبعيد بحيث لا يُقرأ كتضاد مقصود. هذي المسافة تحديداً هي التي تجعل العين تشعر أن شيئاً غلط.`; }
+
+    if (kind === "bad") score -= (strong ? 26 : 16) * Math.min(1, weight*4 + .45);
+    if (kind === "ok")  score -= 7 * Math.min(1, weight*4 + .4);
+
+    findings.push({ kind, color: c, rel, title: colorName(c.rgb), text,
+      share: c.share, fix: kind === "bad" || kind === "ok" ? fixFor(c, dominant) : null });
+  });
+
+  // مدى الإضاءة
+  const Ls = palette.map(c => c.lch[0]);
+  const range = Math.max(...Ls) - Math.min(...Ls);
+  if (range < 34){
+    score -= 14;
+    findings.push({ kind:"bad", title:"اللوحة بلا مدى إضاءة", text:
+      `الفرق بين أفتح لون وأغمق لون ${Math.round(range)} درجة فقط من ١٠٠. المشكلة هنا ليست في اللون بل في القيمة: اللوحة ستبدو ضبابية من بعيد مهما كانت ألوانها جميلة. أضيفي غامقاً حقيقياً وفاتحاً حقيقياً.` });
+  } else if (range > 78){
+    findings.push({ kind:"good", title:"مدى إضاءة ممتاز", text:
+      `الفرق بين أفتح وأغمق ${Math.round(range)} درجة — اللوحة ستُقرأ بوضوح حتى من بعيد أو بالأبيض والأسود.` });
+  }
+
+  // الحرارة
+  const warm = chromatic.filter(c => isWarm(c.lch[2])).reduce((s,c) => s + c.share, 0);
+  const cool = chromatic.reduce((s,c) => s + c.share, 0) - warm;
+  if (warm > 0 && cool > 0 && Math.min(warm, cool)/(warm+cool) > .12){
+    findings.push({ kind:"good", title:"توازن حراري", text:
+      "فيها دافئ وبارد معاً، وهذا ما يعطي اللوحة عمقاً: الدافئ يتقدّم نحو الناظر والبارد يتراجع للخلف." });
+  } else {
+    const all = warm > cool ? "دافئة" : "باردة";
+    const opp = warm > cool ? "باردة" : "دافئة";
+    score -= 8;
+    findings.push({ kind:"ok", title:`كل الألوان ${all}`, text:
+      `لوحة ${all} بالكامل تبدو مسطّحة لأن لا شيء يتراجع للخلف. لمسة ${opp} صغيرة في الظل أو في الخلفية تفتح العمق فوراً.` });
+  }
+
+  // صخب الألوان
+  const loud = chromatic.filter(c => c.lch[1] > 62);
+  if (loud.length >= 3){
+    score -= 10;
+    findings.push({ kind:"ok", title:"كل الألوان صارخة", text:
+      `${loud.length} ألوان بنقاء عالٍ تتنافس على الانتباه، فلا يفوز أحد. اختاري لوناً واحداً بطلاً واكسري نقاء البقية بلمسة من مكمّلها.` });
+  }
+
+  return { score: Math.round(clamp(score, 20, 100)), dominant, findings };
+}
+
+/* اقتراح تصحيح للون الناشز */
+function fixFor(c, dominant){
+  const [L, C, H] = c.lch;
+  // خيار ١: انقليه لأقرب علاقة صحيحة (متجانس أو مكمّل)
+  const targets = [dominant, (dominant+180)%360, (dominant+30)%360, (dominant-30+360)%360];
+  let best = targets[0], bd = 999;
+  targets.forEach(t => { const d = hueDist(H, t); if (d < bd){ bd = d; best = t; } });
+  const moved = rgbOfLch([L, C, best]);
+  // خيار ٢: اكسري نقاءه فقط
+  const muted = rgbOfLch([L, C*0.45, H]);
+  return {
+    moved: { rgb: moved, hex: rgb2hex(moved),
+      text: `حرّكيه ${Math.round(bd)}° نحو ${colorName(rgbOfLch([L, Math.max(C,40), best]))} — يصير على علاقة واضحة بباقي اللوحة بدل أن يبدو غلطة.` },
+    muted: { rgb: muted, hex: rgb2hex(muted),
+      text: "أو أبقي اللون واكسري حدّته بلمسة من مكمّله — يهدأ ويجلس في مكانه دون أن تفقديه." }
+  };
+}
+
+/* الألوان التي تليق: اقتراحات مبنية على اللون السائد */
+function suggestions(palette, dominant){
+  // نبني الاقتراحات على متوسط اللوحة الملوّن، لا على أكبر مساحة (قد تكون ظلاً غامقاً)
+  const chrom = palette.filter(c => c.lch[1] > 9);
+  const base = chrom.length ? chrom : palette;
+  const wsum = base.reduce((s,c) => s + c.share, 0) || 1;
+  const L = clamp(base.reduce((s,c) => s + c.lch[0]*c.share, 0)/wsum, 38, 70);
+  const C = clamp(base.reduce((s,c) => s + c.lch[1]*c.share, 0)/wsum, 22, 58);
+  const mk = (lch, role, why) => { const rgb = rgbOfLch(lch); return { rgb, hex: rgb2hex(rgb), role, why, name: colorName(rgb) }; };
+  return [
+    mk([clamp(L+8,30,85), C*0.85, (dominant+32)%360], "مساحة كبيرة",
+       "من عائلة اللون السائد، يوسّع اللوحة دون أن يضيف صوتاً جديداً."),
+    mk([clamp(L-6,20,80), C*1.05, (dominant+180)%360], "لمسة صغيرة",
+       "مكمّل اللون السائد. لا تتجاوزي به عُشر مساحة اللوحة وإلا انقسمت اللوحة إلى نصفين متنازعين."),
+    mk([clamp(L-28,12,45), C*0.5, (dominant+205)%360], "الظلال",
+       "الظل ليس أسود: ظل بارد مكسور يعطي عمقاً حقيقياً، والأسود الجاهز يقتل اللوحة."),
+    mk([clamp(L+26,60,94), C*0.22, (dominant+12)%360], "الإضاءة",
+       "أفتح لون في اللوحة، مصبوغ بلمسة من اللون السائد حتى لا يبدو أبيض العلبة دخيلاً.")
+  ];
+}
+
+/* ═══════ وصفة الخلط ═══════ */
+const PIGMENTS = [
+  { n:"أبيض تيتانيوم",       hex:"#F6F4EE" },
+  { n:"أصفر ليمون",          hex:"#EDDC3C" },
+  { n:"أصفر كادميوم",        hex:"#F5A623" },
+  { n:"أحمر كادميوم",        hex:"#D93A2B" },
+  { n:"قرمزي (ماجنتا)",      hex:"#B5245C" },
+  { n:"أزرق ألترامارين",     hex:"#28387E" },
+  { n:"أزرق سماوي (سيان)",   hex:"#1690C4" },
+  { n:"أخضر فثالو",          hex:"#0B7A5C" },
+  { n:"بني محروق",           hex:"#8A4423" },
+  { n:"أسود عاجي",           hex:"#22201C" }
+].map(p => ({ ...p, refl: hex2rgb(p.hex).map(v => clamp(lin(v), .012, .985)) }));
+
+/* خلط الدهان طرحي: نضرب انعكاس كل صبغة مرفوعاً لنسبته (تقريب كوبيلكا-مونك المبسّط) */
+function mixPigments(parts){
+  const refl = [0,1,2].map(j => parts.reduce((prod, p) => prod * Math.pow(PIGMENTS[p.i].refl[j], p.w), 1));
+  return refl.map(v => Math.round(unlin(clamp(v, 0, 1))));
+}
+
+function findRecipe(targetRgb){
+  const target = rgb2lab(targetRgb);
+  let best = null;
+  const test = parts => {
+    const rgb = mixPigments(parts);
+    const d = dE(rgb2lab(rgb), target);
+    if (!best || d < best.delta) best = { parts: parts.map(p => ({...p})), rgb, hex: rgb2hex(rgb), delta: d };
+  };
+  const n = PIGMENTS.length;
+  for (let i = 0; i < n; i++){
+    test([{i:i, w:1}]);
+    for (let j = i+1; j < n; j++){
+      for (let a = 1; a <= 19; a++) test([{i:i, w:a/20}, {i:j, w:1-a/20}]);
+      for (let k = j+1; k < n; k++)
+        for (let a = 1; a <= 8; a++)
+          for (let b = 1; b <= 9-a; b++)
+            test([{i:i, w:a/10}, {i:j, w:b/10}, {i:k, w:(10-a-b)/10}]);
+    }
+  }
+  best.parts.sort((x,y) => y.w - x.w);
+  best.quality = best.delta < 4 ? "مطابق" : best.delta < 9 ? "قريب جداً" : best.delta < 16 ? "قريب" : "تقريبي";
+  return best;
+}
+</script>
+
+<script>
+/* ═══════ حالة التطبيق ═══════ */
+let tab = "art";
+let art = null;            // { img, ctx, w, h, palette, report }
+let picked = null;         // اللون الملتقط من اللوحة
+let target = { L:58, C:45, H:25 };
+let scheme = "complement";
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const pct = v => Math.round(v*100) + "٪";
+
+/* ═══════ ١. تبويب اللوحة ═══════ */
+function renderArt(){
+  const el = $("tab-art");
+  if (!art){
+    el.innerHTML = `
+      <p class="lede">صوّري لوحتك أو ارفعي صورتها، وسأستخرج ألوانها الحقيقية، وأقول لك أيّها منسجم وأيّها ناشز — ولماذا، وكيف تصلحينه.</p>
+      <label class="drop" for="file">
+        <b>اختاري صورة اللوحة</b>
+        صوّريها بإضاءة نهار غير مباشرة، وبدون ظل يدك عليها.
+        <input id="file" type="file" accept="image/*" hidden>
+      </label>
+      <div class="panel" style="margin-top:14px">
+        <h3>ما الذي سأفحصه؟</h3>
+        <p class="note">علاقة كل لون باللون السائد في اللوحة · مدى الإضاءة بين أفتح وأغمق · التوازن بين الدافئ والبارد · تنافس الألوان الصارخة. ثم أقترح الألوان التي تليق، ووصفة خلط لكل واحد منها.</p>
+      </div>
+      <p class="note" style="margin-top:14px">الحكم هنا أداة تقول لك أين تنظرين، لا قاضياً على الفن. كثير من أعظم اللوحات تكسر هذه القواعد عن قصد.</p>`;
+    return;
+  }
+
+  const { palette, report } = art;
+  const tone = report.score >= 80 ? "var(--good)" : report.score >= 60 ? "var(--warn)" : "var(--bad)";
+  const head = report.score >= 80 ? "ألوان اللوحة منسجمة"
+             : report.score >= 60 ? "منسجمة مع ملاحظات"
+             : "فيها تنافر واضح";
+  const bad = report.findings.filter(f => f.kind === "bad");
+
+  el.innerHTML = `
+    <div class="stage" id="stage"></div>
+    <p class="note" style="margin:8px 0 18px">اضغطي على أي نقطة في اللوحة لتعرفي اسم لونها ووصفة خلطه.</p>
+
+    <p class="eyebrow">ألوان اللوحة ومساحة كل واحد</p>
+    <div class="palette">${palette.map(c =>
+      `<button data-hex="${c.hex}" style="--w:${Math.max(c.share,.05)};background:${c.hex}">
+        <span style="color:${c.lch[0] > 60 ? "rgba(0,0,0,.6)" : "rgba(255,255,255,.85)"}">${pct(c.share)}</span>
+      </button>`).join("")}</div>
+
+    <p class="eyebrow">الحكم</p>
+    <div class="verdict">
+      <span class="score" style="color:${tone}">${report.score}</span>
+      <span class="txt"><strong>${head}</strong>
+        <p>${bad.length ? `الخلل الأساسي: ${esc(bad[0].title)}` : "لا يوجد لون ناشز واضح."}</p></span>
+    </div>
+
+    <div class="panel">${report.findings.map(findingHTML).join("")}</div>
+
+    <p class="eyebrow">ألوان تليق على لوحتك</p>
+    <div class="panel">${suggestions(palette, report.dominant).map(s => `
+      <div class="finding">
+        <span class="mark"><i style="background:${s.hex}"></i><small>${s.hex.slice(1)}</small></span>
+        <span class="body">
+          <strong>${esc(s.name)}<span class="tag" style="color:var(--ink-3)">${s.role}</span></strong>
+          <p>${esc(s.why)}</p>
+          <span class="fix"><button class="btn ghost" data-mix="${s.hex}" style="padding:6px 12px;width:auto;font-size:12.5px">وصفة خلطه</button></span>
+        </span>
+      </div>`).join("")}</div>
+
+    <button class="btn ghost" id="again" style="margin-top:6px">صورة أخرى</button>
+    <p class="note" style="margin-top:14px">الحكم أداة تقول لك أين تنظرين، لا قاضياً على الفن — والكسر المتعمّد للقاعدة قرار فني لا خطأ.</p>`;
+
+  const stage = $("stage");
+  stage.appendChild(art.canvas);
+  palette.forEach(c => {
+    if (!c.spot) return;
+    const d = document.createElement("span");
+    d.className = "dot";
+    d.style.background = c.hex;
+    d.style.right = (c.spot.x/art.w*100) + "%";
+    d.style.top = (c.spot.y/art.h*100) + "%";
+    stage.appendChild(d);
+  });
+}
+
+function findingHTML(f){
+  const tone = f.kind === "good" ? "var(--good)" : f.kind === "ok" ? "var(--warn)" : "var(--bad)";
+  const word = f.kind === "good" ? "صح" : f.kind === "ok" ? "انتبهي" : "غلط";
+  return `<div class="finding">
+    ${f.color ? `<span class="mark"><i style="background:${f.color.hex}"></i><small>${pct(f.color.share)}</small></span>` : ""}
+    <span class="body">
+      <strong>${esc(f.title)}<span class="tag" style="color:${tone}">${word}${f.rel ? " · " + f.rel : ""}</span></strong>
+      <p>${esc(f.text)}</p>
+      ${f.fix ? `
+        <span class="fix"><i style="background:${f.fix.moved.hex}"></i><p>${esc(f.fix.moved.text)}</p></span>
+        <span class="fix"><i style="background:${f.fix.muted.hex}"></i><p>${esc(f.fix.muted.text)}</p></span>` : ""}
+    </span>
+  </div>`;
+}
+
+function loadImage(file){
+  const img = new Image();
+  img.onload = () => {
+    const cv = document.createElement("canvas");
+    const scale = Math.min(1, 900/Math.max(img.naturalWidth, img.naturalHeight));
+    cv.width = Math.round(img.naturalWidth*scale);
+    cv.height = Math.round(img.naturalHeight*scale);
+    const ctx = cv.getContext("2d", { willReadFrequently:true });
+    ctx.drawImage(img, 0, 0, cv.width, cv.height);
+    const palette = extractPalette(ctx, cv.width, cv.height);
+    locateSpots(ctx, cv.width, cv.height, palette);
+    art = { canvas: cv, ctx, w: cv.width, h: cv.height, palette, report: analyze(palette) };
+    cv.addEventListener("click", ev => {
+      const b = cv.getBoundingClientRect();
+      const x = Math.round((ev.clientX-b.left)*cv.width/b.width);
+      const y = Math.round((ev.clientY-b.top)*cv.height/b.height);
+      const d = ctx.getImageData(Math.max(0,x-2), Math.max(0,y-2), 5, 5).data;
+      let R=0,G=0,B=0; const n = d.length/4;
+      for (let i = 0; i < d.length; i += 4){ R+=d[i]; G+=d[i+1]; B+=d[i+2]; }
+      openMix(rgb2hex([R/n, G/n, B/n]));
+    });
+    renderArt();
+    window.scrollTo(0,0);
+    URL.revokeObjectURL(img.src);
+  };
+  img.src = URL.createObjectURL(file);
+}
+
+/* أين يقع كل لون في اللوحة — لنضع نقطة فوقه */
+function locateSpots(ctx, w, h, palette){
+  const data = ctx.getImageData(0,0,w,h).data;
+  const acc = palette.map(() => ({x:0, y:0, n:0}));
+  const stride = Math.max(2, Math.floor(Math.sqrt(w*h/4000)));
+  for (let y = 0; y < h; y += stride)
+    for (let x = 0; x < w; x += stride){
+      const i = (y*w+x)*4;
+      const lab = rgb2lab([data[i], data[i+1], data[i+2]]);
+      let bi = 0, bd = Infinity;
+      palette.forEach((c, k) => { const d = dE(c.lab, lab); if (d < bd){ bd = d; bi = k; } });
+      acc[bi].x += x; acc[bi].y += y; acc[bi].n++;
+    }
+  palette.forEach((c, i) => { if (acc[i].n) c.spot = { x: acc[i].x/acc[i].n, y: acc[i].y/acc[i].n }; });
+}
+
+/* ═══════ ٢. تبويب اللون والخلط ═══════ */
+const SCHEMES = {
+  analogous:  ["متجانس",       [-30, 30],        "ألوان متجاورة في دائرة الألوان. أهدأ انسجام وأسهله، ويصلح للخلفيات والأجواء."],
+  complement: ["مكمّل",        [180],            "اللون ومقابله. أقوى تضاد — استخدمي أحدهما بمساحة كبيرة والآخر كلمسة."],
+  split:      ["مكمّل منقسم",  [150, 210],       "قوة المكمّل بلا حدّته. أأمن خيار حين تريدين تضاداً دون صراخ."],
+  triad:      ["ثلاثي",        [120, 240],       "ثلاثة ألوان متباعدة بالتساوي. حيوي ومتوازن، ويحتاج لوناً سائداً واضحاً."],
+  mono:       ["أحادي",        [0],              "لون واحد بدرجات. أنيق ومضمون، وخطره أن يبدو مسطّحاً بلا فرق إضاءة."]
+};
+
+function mixCardHTML(){
+  const rgb = rgbOfLch([target.L, target.C, target.H]);
+  const hex = rgb2hex(rgb);
+  const rec = findRecipe(rgb);
+  return `<div class="mixout">
+      <span class="cmp"><i style="background:${hex}"></i><i style="background:${rec.hex}"></i></span>
+      <span>
+        <strong style="font-family:var(--f-calli);font-size:19px">${esc(colorName(rgb))}</strong>
+        <p class="note"><span class="mono">${hex}</span> · الخلطة تعطي <span class="mono">${rec.hex}</span> — نتيجة ${rec.quality}</p>
+      </span>
+    </div>
+    <div class="recipe">${rec.parts.map(p => `
+      <span class="part">
+        <i style="background:${PIGMENTS[p.i].hex}"></i>
+        <b>${esc(PIGMENTS[p.i].n)}</b>
+        <span class="bar"><span style="width:${Math.round(p.w*100)}%"></span></span>
+        <span class="pct">${Math.round(p.w*100)}٪</span>
+      </span>`).join("")}</div>
+    <p class="note" style="margin-top:10px">ابدئي باللون الأكبر نسبةً، ثم أضيفي الباقي قطرةً قطرة. الأبيض يُضاف أخيراً دائماً: إضافته سهلة وسحبها مستحيل.</p>`;
+}
+
+function mateCardHTML(){
+  const rgb = rgbOfLch([target.L, target.C, target.H]);
+  const hex = rgb2hex(rgb);
+  const [sName, angles, sWhy] = SCHEMES[scheme];
+  const mates = (scheme === "mono"
+      ? [[target.L-26, target.C*.85, target.H], [target.L+24, target.C*.5, target.H]]
+      : angles.map(a => [target.L, target.C, (target.H + a + 360) % 360]))
+    .map(l => { const r = rgbOfLch([clamp(l[0],12,94), clamp(l[1],0,90), l[2]]); return { rgb:r, hex:rgb2hex(r) }; });
+  return `<div class="swatchrow">
+      <span class="sw"><i style="background:${hex}"></i><em>اللون</em><small>${hex.slice(1)}</small></span>
+      ${mates.map(m => `<span class="sw"><i style="background:${m.hex}"></i><em>${esc(colorName(m.rgb))}</em><small>${m.hex.slice(1)}</small></span>`).join("")}
+    </div>
+    <p class="note" style="margin-top:11px">${esc(sWhy)}</p>`;
+}
+
+function renderMix(){
+  $("tab-mix").innerHTML = `
+    <p class="lede">لون ترينه ولا تعرفين كيف تستخرجينه؟ اضبطيه هنا أو التقطيه من لوحتك، وسأعطيك وصفة خلطه بالألوان التي في علبتك.</p>
+    <div class="panel" id="mixcard">${mixCardHTML()}</div>
+    <div class="panel sliders">
+      <h3>اضبطي اللون</h3>
+      <label for="sH" id="lH">درجة اللون — ${Math.round(target.H)}°</label>
+      <input id="sH" type="range" min="0" max="359" value="${Math.round(target.H)}">
+      <label for="sC" id="lC">النقاء — ${Math.round(target.C)}</label>
+      <input id="sC" type="range" min="0" max="90" value="${Math.round(target.C)}">
+      <label for="sL" id="lL">الإضاءة — ${Math.round(target.L)}</label>
+      <input id="sL" type="range" min="10" max="95" value="${Math.round(target.L)}">
+      ${art ? `<p class="note" style="margin-top:4px">أو اضغطي على أي نقطة في لوحتك من تبويب «لوحتي».</p>` : ""}
+    </div>
+    <p class="eyebrow">ألوان تليق معه</p>
+    <div class="schemes" id="schemes">${Object.keys(SCHEMES).map(k =>
+      `<button data-scheme="${k}" aria-pressed="${k===scheme}">${SCHEMES[k][0]}</button>`).join("")}</div>
+    <div class="panel" id="matecard">${mateCardHTML()}</div>`;
+}
+
+/* تحديث النتائج فقط — لا نعيد بناء المزلاج أثناء سحبه */
+let mixQueued = false;
+function updateMix(){
+  if (mixQueued) return;
+  mixQueued = true;
+  requestAnimationFrame(() => {
+    mixQueued = false;
+    if (!$("mixcard")) return;
+    $("mixcard").innerHTML = mixCardHTML();
+    $("matecard").innerHTML = mateCardHTML();
+    $("lH").textContent = `درجة اللون — ${Math.round(target.H)}°`;
+    $("lC").textContent = `النقاء — ${Math.round(target.C)}`;
+    $("lL").textContent = `الإضاءة — ${Math.round(target.L)}`;
+    document.querySelectorAll("#schemes button").forEach(b =>
+      b.setAttribute("aria-pressed", b.dataset.scheme === scheme));
+  });
+}
+
+function openMix(hex){
+  const l = lchOf(hex2rgb(hex));
+  target = { L:l[0], C:l[1], H:l[2] };
+  tab = "mix"; renderAll(); window.scrollTo(0,0);
+}
+
+/* ═══════ ٣. تقنيات ═══════ */
+const TECH = [
+  ["قبل اللون: القيمة", [
+    ["القيمة قبل اللون دائماً","اللوحة تنجح أو تفشل بفرق الفاتح والغامق، لا بجمال الألوان. صوّري لوحتك بالأبيض والأسود: إذا ضاعت الأشكال فالمشكلة في القيمة، ولن يصلحها أي لون."],
+    ["ثلاث قيم تكفي","اقسمي اللوحة إلى فاتح ومتوسط وغامق، واجعلي لكل واحدة مساحتها الواضحة. الأخطاء غالباً من كثرة القيم المتوسطة المتشابهة."],
+    ["الغامق الحقيقي","معظم المبتدئين لا يجرؤون على الغامق الكافي. أغمق نقطة في لوحتك يجب أن تكون غامقة فعلاً، وإلا بدت اللوحة باهتة."]
+  ]],
+  ["الخلط بلا وحل", [
+    ["لماذا يصير اللون طينياً؟","لأنك خلطت ثلاثة ألوان أساسية معاً بنسب متقاربة. أي خلطة تحوي الأحمر والأصفر والأزرق بنِسب متقاربة تنتج رمادياً بنياً. اخلطي لونين فقط، والثالث قطرات."],
+    ["اكسري اللون بمكمّله لا بالأسود","الأسود يقتل حياة اللون. لتهدئة الأحمر أضيفي ذرة أخضر، وللأزرق ذرة برتقالي. النتيجة رمادي حيّ فيه لون، لا رمادي ميت."],
+    ["الأبيض يُضاف أخيراً","الأبيض يفتح اللون لكنه يبرّده ويقلّل نقاءه. اضبطي درجة اللون أولاً وهو غامق، ثم افتحيه."],
+    ["اخلطي كمية أكبر مما تحتاجين","إعادة خلط الدرجة نفسها مرة ثانية شبه مستحيلة، وستظهر الفروق على الجدار واللوحة."]
+  ]],
+  ["الضوء والظل", [
+    ["ضوء دافئ ⇦ ظل بارد","إذا كان الضوء أصفر دافئاً فالظل يميل للأزرق، والعكس صحيح. هذه القاعدة وحدها ترفع مستوى أي لوحة."],
+    ["الظل ليس أسود","الظل هو لون الجسم نفسه أغمق وأبرد وأقل نقاءً. جرّبي الأزرق الألترامارين مع بني محروق بدل الأسود."],
+    ["الانعكاس في الظل","الجزء المظلم يستقبل ضوءاً منعكساً من محيطه، فلا تجعليه مسطّحاً — لكن لا ترفعيه حتى ينافس الجزء المضيء."]
+  ]],
+  ["بناء اللوحة", [
+    ["بطل واحد فقط","لون واحد أو منطقة واحدة تستحق الانتباه. إن نافسها لون آخر بنفس القوة انقسمت اللوحة وضاع الناظر."],
+    ["قاعدة المساحات","لون سائد بمساحة كبيرة، ثانوي بمساحة أقل، ولمسة صغيرة من المكمّل. اللمسة الصغيرة هي التي تُحيي اللوحة — وتكبيرها يقتلها."],
+    ["كرّري اللون في ثلاثة مواضع","أي لون يظهر مرة واحدة يبدو دخيلاً. كرّريه بكميات مختلفة في أماكن متباعدة ليصير جزءاً من اللوحة."],
+    ["حواف حادة وحواف ذائبة","اجعلي الحواف حادة عند مركز الاهتمام فقط، وذوّبي البقية. الحواف كلها حادة تجعل اللوحة تصرخ."]
+  ]],
+  ["نصائح للتصوير والعرض", [
+    ["صوّري في ضوء نهار غير مباشر","ضوء الشمس المباشر يحرق الفاتح، والإضاءة الصفراء تزيّف كل الألوان. الظل المفتوح قرب نافذة هو الأفضل."],
+    ["انظري للوحتك في المرآة","المرآة تقلب اللوحة فترين أخطاء التكوين التي اعتادت عليها عينك فوراً."],
+    ["ابتعدي ثلاثة أمتار","أغلب أخطاء اللون لا تُرى من مسافة الذراع. ابتعدي كل ربع ساعة ونصف عينيك."]
+  ]]
+];
+function renderTech(){
+  $("tab-tech").innerHTML = `
+    <p class="lede">خلاصة عملية في اللون والقيمة — مرتّبة بالترتيب الذي تحتاجينه أثناء الرسم، لا بترتيب الكتب.</p>
+    ${TECH.map(([t, items]) => `<div class="panel tech"><h3>${t}</h3>
+      ${items.map(([a,b]) => `<div class="item"><strong>${a}</strong><p>${b}</p></div>`).join("")}</div>`).join("")}`;
+}
+
+/* ═══════ التنقل ═══════ */
+function renderAll(){
+  ["art","mix","tech"].forEach(t => $("tab-" + t).hidden = t !== tab);
+  document.querySelectorAll("nav.tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === tab));
+  if (tab === "art") renderArt();
+  if (tab === "mix") renderMix();
+  if (tab === "tech") renderTech();
+}
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab],[data-hex],[data-mix],[data-scheme],#again");
+  if (!t) return;
+  if (t.dataset.tab){ tab = t.dataset.tab; renderAll(); window.scrollTo(0,0); return; }
+  if (t.dataset.hex){ openMix(t.dataset.hex); return; }
+  if (t.dataset.mix){ openMix(t.dataset.mix); return; }
+  if (t.dataset.scheme){ scheme = t.dataset.scheme; updateMix(); return; }
+  if (t.id === "again"){ art = null; renderArt(); }
+});
+
+document.addEventListener("change", e => {
+  if (e.target.id === "file" && e.target.files?.[0]) loadImage(e.target.files[0]);
+});
+
+document.addEventListener("input", e => {
+  const map = { sH:"H", sC:"C", sL:"L" };
+  if (map[e.target.id]){ target[map[e.target.id]] = +e.target.value; updateMix(); }
+});
+
+renderAll();
+</script>
+
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+  "name": "مرسم الألوان",
+  "short_name": "مرسم الألوان",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#EFE9DD",
+  "theme_color": "#EFE9DD",
+  "icons": [{ "src": "icon.png", "sizes": "1024x1024", "type": "image/png", "purpose": "any" }]
+}
