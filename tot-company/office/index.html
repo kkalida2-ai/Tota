@@ -92,6 +92,16 @@ textarea:focus,input:focus,button:focus-visible{outline:2px solid var(--brick);o
   </nav>
 
   <section id="tab-team" style="display:flex;flex-direction:column;gap:22px">
+    <div class="line" style="border-color:var(--brick)">
+      <h2>رسمة جديدة؟ جهّزي النشر</h2>
+      <p>ارفعي صورة الرسمة، والفريق يجهز لج الكابشن والستوري والتيك توك، كله جاهز للنسخ.</p>
+      <label class="btn ghost" for="drawImg" style="text-align:center">📷 اختاري صورة الرسمة</label>
+      <input type="file" id="drawImg" accept="image/*" hidden>
+      <img id="drawPrev" alt="" hidden style="max-height:220px;object-fit:contain;border-radius:12px;align-self:center">
+      <textarea id="drawNote" rows="2" placeholder="اختياري: جملة بكلامج، شنو حسيتي وإنتي ترسمين؟"></textarea>
+      <div class="row" style="justify-content:flex-end"><button class="btn" id="runPost" type="button">جهزي لي النشر</button><button class="btn ghost" id="copyPost" type="button" hidden>انسخي</button></div>
+      <div class="out" id="postOut"></div>
+    </div>
     <div class="line">
       <h2>خط الإنتاج</h2>
       <p>اكتبي فكرة الفيديو، والفريق يشتغل عليها بالترتيب: هوك ← سكربت ← كابشن ← مراجعة المديرة.</p>
@@ -257,7 +267,7 @@ let current=null, ctl=null;
 function openPanel(m){
   current=m; $("#pTitle").textContent=m.name; $("#pRole").textContent=m.role;
   $("#pOut").textContent=""; $("#pTask").value=""; $("#pCopy").hidden=true; $("#pLimit").textContent="";
-  $("#pImgWrap").hidden=!m.img; $("#pImg").value="";
+  $("#pImgWrap").hidden=false; $("#pImg").value="";
   const q=$("#pQuick"); q.textContent="";
   m.quick.forEach(t=>{const b=document.createElement("button");b.type="button";b.textContent=t;b.addEventListener("click",()=>{$("#pTask").value=t;$("#pTask").focus()});q.append(b)});
   $("#panel").hidden=false; $("#pTask").focus();
@@ -273,7 +283,7 @@ $("#pRun").addEventListener("click",async()=>{
   btn.disabled=true; out.textContent="تفكر…"; busy[m.id]=true; renderGrid();
   ctl=new AbortController();
   const opts={signal:ctl.signal,onText:({text})=>{out.textContent=text}};
-  const files=$("#pImg").files; if(m.img&&files&&files.length) opts.images=files;
+  const files=$("#pImg").files; if(files&&files.length) opts.images=files;
   try{
     const r=await ask(m,task,opts); out.textContent=r.text; $("#pCopy").hidden=false; save(m.name,task,r.text);
   }catch(e){
@@ -287,6 +297,38 @@ $("#pCopy").addEventListener("click",()=>copy($("#pOut")));
 function copy(el){
   navigator.clipboard.writeText(el.textContent).then(()=>toast("انسخ")).catch(()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("محدد، انسخيه")});
 }
+
+// New drawing -> publish pack
+$("#drawImg").addEventListener("change",()=>{
+  const f=$("#drawImg").files[0], im=$("#drawPrev");
+  if(!f){im.hidden=true;return}
+  if(im.src) URL.revokeObjectURL(im.src);
+  im.src=URL.createObjectURL(f); im.hidden=false;
+});
+$("#runPost").addEventListener("click",async()=>{
+  const out=$("#postOut"), f=$("#drawImg").files[0];
+  if(!f){out.textContent="اختاري صورة الرسمة أول.";return}
+  if(!sample){out.textContent="الموظفين ما يقدرون يشتغلون في هالعرض. افتحي الصفحة في Claude واسمحي لها تستخدم Claude.";return}
+  const btn=$("#runPost"); btn.disabled=true; $("#copyPost").hidden=true; out.textContent="كاتبة الكابشن تشوف الرسمة…";
+  const m=TEAM.find(t=>t.id==="caption"); busy.caption=true; renderGrid();
+  const note=$("#drawNote").value.trim();
+  const task=`هذي صورة رسمة خالده الجديدة. شوفي الرسمة بدقة: شنو فيها، الألوان، الأدوات الظاهرة، والإحساس العام.
+${note?`جملة خالده بكلامها (استخدميها حرفياً كسطر أول في الكابشن، لا تغيرينها): "${note}"`:"خالده ما كتبت جملة. اكتبي سطر أول بسيط يوصف الرسمة، بدون شعر ومبالغة، وقولي في الآخر إنها تقدر تبدله بجملتها."}
+
+سلّمي حزمة نشر جاهزة للنسخ، بهالترتيب وبعناوين واضحة:
+إنستقرام: الكتابة على الفيديو (٣–٦ كلمات)، الكابشن كامل (سطر أول، سطرين وصف، سؤال)، ٥ هاشتاقات، أول كومنت تثبته.
+الستوري: ٥ ستوريات بالترتيب، لكل واحد: الوقت، شنو تصور، الكتابة عليه، والستكر (تصويت أو سؤال) إذا فيه.
+تيك توك: الكتابة على الفيديو من أول ثانية، كابشن سطر واحد مع سؤال، ٣ هاشتاقات، ووقت النشر.
+فكرة واحدة لسلسلة تطلع من هالرسمة.
+لا تكتبين وصف للرسمة لخالده؛ اكتبي المحتوى بس.`;
+  try{
+    const r=await sample(`${m.sys}\n\n${BRAND}\n\n${RULES}\n\n${voiceText()}\n\n---\nالمهمة:\n${task}`,{modelTier:"default",cache:false,images:[f],onText:({text})=>{out.textContent=text}});
+    out.textContent=r.text; $("#copyPost").hidden=false; save("حزمة نشر",note||"رسمة جديدة",r.text);
+  }catch(e){
+    out.textContent=e&&e.code==="rate_limited"?"وايد طلبات ورا بعض. انتظري شوي وجربي.":e&&e.code==="not_granted"?"ما في إذن تستخدم الصفحة Claude.":"صار خطأ. جربي مرة ثانية.";
+  }finally{btn.disabled=false; busy.caption=false; renderGrid()}
+});
+$("#copyPost").addEventListener("click",()=>copy($("#postOut")));
 
 // Production line
 const LINE=[["hooks","هوك"],["script","سكربت"],["caption","كابشن"],["director","مراجعة"]];
