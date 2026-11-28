@@ -1,0 +1,213 @@
+<title>دليل TOT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+/* Layout: one scrolling handbook, sticky chip nav, each section a sheet of paper on the desk. Palette from Khalida's armchair drawing. */
+:root{
+  --desk:#efe6d6; --sheet:#fbf7ef; --ink:#1f2a44; --ink-2:#4d5670; --ink-3:#8a8fa0;
+  --blue:#2d5fb0; --yellow:#f3c52f; --plum:#8e3b5a; --edge:#e2d6c0; --ok:#2f8a5b;
+  --display:"Reem Kufi","IBM Plex Sans Arabic",system-ui,sans-serif;
+  --body:"IBM Plex Sans Arabic",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --desk:#141822; --sheet:#1d2230; --ink:#eef0f6; --ink-2:#b9bfd0; --ink-3:#7e869c;
+  --blue:#7ea6ec; --yellow:#f3c52f; --plum:#e08aab; --edge:#2c3346; --ok:#5fcf93; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --desk:#141822; --sheet:#1d2230; --ink:#eef0f6; --ink-2:#b9bfd0; --ink-3:#7e869c;
+  --blue:#7ea6ec; --yellow:#f3c52f; --plum:#e08aab; --edge:#2c3346; --ok:#5fcf93; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--desk);color:var(--ink);font:400 15.5px/1.75 var(--body);direction:rtl;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--desk)}
+.wrap{max-width:760px;margin:0 auto;padding-block:20px 64px;display:flex;flex-direction:column;gap:18px}
+header h1{font:700 clamp(38px,9vw,56px)/1.05 var(--display);margin:0;color:var(--blue)}
+header p{margin:6px 0 0;color:var(--ink-2)}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--desk);padding-block:8px;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+nav a{flex:none;font:600 14px var(--body);color:var(--ink);text-decoration:none;padding:7px 14px;border-radius:999px;background:var(--sheet);border:1px solid var(--edge)}
+nav a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+section{background:var(--sheet);border:1px solid var(--edge);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px;scroll-margin-top:64px}
+h2{font:700 24px/1.3 var(--display);margin:0;display:flex;align-items:center;gap:10px}
+h2 .n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--yellow);color:#1f2a44;font-size:18px}
+h3{font:600 16px var(--body);margin:0;color:var(--blue)}
+p{margin:0}
+.muted{color:var(--ink-2);font-size:14px}
+.bio{border:1px dashed var(--edge);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.bio pre{margin:0;white-space:pre-wrap;font:500 15.5px/1.7 var(--body);color:var(--ink)}
+.bio .tag{font-size:12px;font-weight:600;color:var(--plum)}
+.btn{align-self:flex-start;font:600 14px var(--body);border:0;border-radius:10px;padding:8px 14px;cursor:pointer;background:var(--blue);color:#fff}
+.hls{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.hl{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px}
+.hl img{width:96px;height:96px;border-radius:50%;border:2px solid var(--edge)}
+.hl b{font:700 16px var(--display)}
+.hl span{font-size:13px;color:var(--ink-2)}
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:440px}
+th,td{text-align:right;padding:10px 8px;border-bottom:1px solid var(--edge);vertical-align:top}
+th{font-weight:600;color:var(--ink-3);font-size:13px}
+td:first-child{font-weight:600;white-space:nowrap}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 10px;border-radius:999px;background:var(--yellow);color:#1f2a44}
+.pill.b{background:var(--blue);color:#fff}
+.pill.p{background:var(--plum);color:#fff}
+.pill.g{background:var(--edge);color:var(--ink)}
+ul.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+ul.check label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}
+ul.check input{width:20px;height:20px;margin-top:3px;accent-color:var(--blue);flex:none}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow div{background:var(--desk);border-radius:12px;padding:8px 12px;font-weight:600;font-size:14px}
+.flow i{font-style:normal;color:var(--ink-3)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.card{border:1px solid var(--edge);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.card ol{margin:0;padding-inline-start:20px;font-size:14px}
+.formula{background:var(--desk);border-radius:14px;padding:14px;font-size:15px}
+.formula div{display:flex;gap:10px}
+.formula b{color:var(--blue);min-width:72px}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--sheet);padding:9px 18px;border-radius:999px;font-weight:600;z-index:20}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>دليل TOT</h1>
+    <p>كل شي تحتاجينه لحسابج، بالترتيب.</p>
+  </header>
+
+  <nav aria-label="الأقسام">
+    <a href="#bio">البايو</a><a href="#highlights">الهايلايت</a><a href="#week">الأسبوع</a><a href="#shoot">يوم التصوير</a><a href="#edit">المونتاج</a><a href="#posts">بوستات الصور</a><a href="#stories">الستوري</a>
+  </nav>
+
+  <section id="bio">
+    <h2><span class="n">١</span>البايو</h2>
+    <p class="muted">القاعدة من الحسابات اللي أرسلتيها: كلمة البحث في خانة الاسم · التصنيف «Artist» · سطر موقف أو وعد · وسوم بنقاط · وطريقة تواصل.</p>
+    <h3>خانة الاسم (هذي اللي ينبحث فيها)</h3>
+    <div class="bio"><pre id="nameTxt">Khalida • Kuwaiti Artist | فنانة كويتية</pre><button class="btn" data-copy="nameTxt" type="button">انسخي</button></div>
+    <h3>البايو: اختاري وحدة</h3>
+    <div class="bio"><span class="tag">موقف · مثل Stephanie</span><pre id="b1">Art for quiet, colourful moments ✦
+Kuwaiti artist · 📍 Kuwait
+Painting · Journaling · Arabic lettering</pre><button class="btn" data-copy="b1" type="button">انسخي</button></div>
+    <div class="bio"><span class="tag">وسوم · مثل Suhita</span><pre id="b2">📍 Kuwait • Visual Artist • Art Educator
+Paint • Journal • Lettering
+🎁 اكتبي «ارسم» وتوصلج هدية</pre><button class="btn" data-copy="b2" type="button">انسخي</button></div>
+    <div class="bio"><span class="tag">وعد · مثل ماجد</span><pre id="b3">ارسمي يومج بالألوان 🎨
+فن • جورنال • خط عربي
+مساحة هادية لكل من يحب الرسم 🤍
+👇 هديتج المجانية</pre><button class="btn" data-copy="b3" type="button">انسخي</button></div>
+    <h3>الإعدادات</h3>
+    <div class="card"><ol>
+      <li>Edit profile ← <b>Category</b> ← <b>Artist</b>، وشغّلي Display category</li>
+      <li>Contact options ← حطي <b>الإيميل</b> (يطلع زر Email مثل Suhita)</li>
+      <li>الرابط: صفحة الهدية</li>
+    </ol></div>
+  </section>
+
+  <section id="highlights">
+    <h2><span class="n">٢</span>الهايلايت</h2>
+    <p class="muted">الأغلفة <b>تفاصيل من رسمتج نفسها</b>، مثل ما يسوون الفنانين الكبار. اختاري ٤ من الـ ٦.</p>
+    <div class="hls">
+      <div class="hl"><img src="hl/gift.png" alt="المخدة الصفرا"><b>✦ هدية</b><span>التمرين المجاني</span></div>
+      <div class="hl"><img src="hl/art.png" alt="اللوحة المعلقة"><b>أعمالي</b><span>أحلى ١٠ رسمات</span></div>
+      <div class="hl"><img src="hl/studio.png" alt="الكرسي"><b>المرسم</b><span>رحلتج لين تفتحينه</span></div>
+      <div class="hl"><img src="hl/lamp.png" alt="اللمبة"><b>ورا الكواليس</b><span>طاولتج ويومج</span></div>
+      <div class="hl"><img src="hl/tools.png" alt="الماركرات"><b>الأدوات</b><span>الألوان والكتب</span></div>
+      <div class="hl"><img src="hl/plant.png" alt="الزرع"><b>أسئلتكم</b><span>ردودج على المتابعين</span></div>
+    </div>
+    <p class="muted">تحطين الغلاف: افتحي الهايلايت ← Edit Highlight ← Edit Cover ← اختاري الصورة.</p>
+  </section>
+
+  <section id="week">
+    <h2><span class="n">٣</span>أسبوعج</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>اليوم</th><th>تنشرين</th><th>تجهزين</th></tr></thead>
+      <tbody>
+        <tr><td>السبت</td><td><span class="pill g">ستوري</span></td><td><b>يوم التصوير:</b> ترسمين وتصورين ٣ فيديوهات + صور الكاروسيل. ترفعينهم على مجلد TOT</td></tr>
+        <tr><td>الأحد</td><td><span class="pill">ريل رسم</span></td><td>أنا أمنتج الثلاثة وأكتب الكابشنات</td></tr>
+        <tr><td>الإثنين</td><td><span class="pill g">ستوري</span> تصويت</td><td>تردين على الكومنتات</td></tr>
+        <tr><td>الثلاثاء</td><td><span class="pill">ريل رسم</span></td><td>—</td></tr>
+        <tr><td>الأربعاء</td><td><span class="pill b">كاروسيل</span></td><td>—</td></tr>
+        <tr><td>الخميس</td><td><span class="pill p">ريل أدوات</span></td><td>كتاب، ماركر يديد، دفتر</td></tr>
+        <tr><td>الجمعة</td><td>راحة</td><td>ستوري خفيف إذا تبين</td></tr>
+      </tbody>
+    </table></div>
+    <p class="muted">النشر: بين ٨:٣٠ و١٠:٣٠ بالليل. وتيك توك: نفس الريل بعد ساعة.</p>
+  </section>
+
+  <section id="shoot">
+    <h2><span class="n">٤</span>يوم التصوير</h2>
+    <ul class="check" id="checks">
+      <li><label><input type="checkbox" id="c1"><span>الطاولة: الخلفية الثابتة + ٣–٤ أغراض بس</span></label></li>
+      <li><label><input type="checkbox" id="c2"><span>الضوء: جنب الشباك، ولمبات الغرفة طافية</span></label></li>
+      <li><label><input type="checkbox" id="c3"><span>الجوال على ستاند فوق الطاولة، والعدسة ممسوحة</span></label></li>
+      <li><label><input type="checkbox" id="c4"><span>الكاميرا 4K · عدسة 1x · ضغطة مطولة لين AE/AF LOCK</span></label></li>
+      <li><label><input type="checkbox" id="c5"><span>لقطة الطاولة كاملة من فوق</span></label></li>
+      <li><label><input type="checkbox" id="c6"><span>البداية: إيدج تمسك الماركر، والماركر واضح</span></label></li>
+      <li><label><input type="checkbox" id="c7"><span>قريب جداً على الرسم والألوان</span></label></li>
+      <li><label><input type="checkbox" id="c8"><span>النتيجة: الرسمة خالصة، ثابتة ٥ ثواني</span></label></li>
+      <li><label><input type="checkbox" id="c9"><span>صور ثابتة للكاروسيل (الرسمة + ٣ تفاصيل + الأدوات)</span></label></li>
+      <li><label><input type="checkbox" id="c10"><span>رفعتها كلها على مجلد TOT في الـ Drive</span></label></li>
+    </ul>
+    <button class="btn" id="resetChecks" type="button">ابدي أسبوع يديد</button>
+  </section>
+
+  <section id="edit">
+    <h2><span class="n">٥</span>المونتاج</h2>
+    <h3>الطريقة السريعة: أنا أمنتج</h3>
+    <div class="flow"><div>تصورين</div><i>←</i><div>مجلد TOT</div><i>←</i><div>تكتبين لي «نزلت»</div><i>←</i><div>أرجع لج الفيديو + الكابشن</div><i>←</i><div>تحطين أغنية ترند وتنشرين</div></div>
+    <h3>إذا تبين تسوينه بنفسج (من إنستقرام)</h3>
+    <div class="card"><ol>
+      <li>البداية بأحلى لقطة (النتيجة)، مو بالترتيب</li>
+      <li>قصي كل لقطة ١.٥–٣ ثواني</li>
+      <li>جملة وحدة فوق في النص، أول ٣ ثواني</li>
+      <li>أغنية جنبها سهم ↗، وصوتها ٣٠٪</li>
+      <li>الغلاف: النتيجة النهائية</li>
+    </ol></div>
+  </section>
+
+  <section id="posts">
+    <h2><span class="n">٦</span>بوستات الصور والكاروسيل</h2>
+    <p class="muted">كل الصور عمودية 4:5. والصورة الأولى هي اللي توقف السكرول.</p>
+    <div class="cards">
+      <div class="card"><span class="pill">الرسمة بالتفصيل</span><ol><li>الرسمة كاملة</li><li>٣ صور قريبة على أحلى تفاصيل</li><li>الرسمة على الطاولة مع الماركرات</li></ol></div>
+      <div class="card"><span class="pill b">تعليمي</span><ol><li>عنوان: «٥ أشياء…»</li><li>صورة لكل نقطة + جملة</li><li>آخر صورة: «احفظيه 🤍»</li></ol></div>
+      <div class="card"><span class="pill p">المراحل</span><ol><li>أول خط بالرصاص</li><li>نص التلوين</li><li>النتيجة</li><li>إيدج ماسكة الرسمة</li></ol></div>
+    </div>
+    <h3>شكل الكابشن</h3>
+    <div class="formula">
+      <div><b>سطر ١</b><span>جملة بكلامج عن الرسمة أو شعورج</span></div>
+      <div><b>سطر ٢–٣</b><span>شنو رسمتي، وبشنو (اسم الماركر)</span></div>
+      <div><b>سؤال</b><span>شي يخليهم يكتبون كومنت</span></div>
+      <div><b>دعوة</b><span>احفظيه، أو اكتبي «ارسم»</span></div>
+      <div><b>هاشتاق</b><span>٣–٥ بس</span></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <h2><span class="n">٧</span>الستوري كل يوم</h2>
+    <div class="tbl"><table>
+      <thead><tr><th>الوقت</th><th>شنو تحطين</th></tr></thead>
+      <tbody>
+        <tr><td>الصبح</td><td>طاولتج أو القهوة جنب الألوان</td></tr>
+        <tr><td>الظهر</td><td>تصويت: «أي لون؟» بين خيارين</td></tr>
+        <tr><td>العصر</td><td>ورا الكواليس: رسمة ما خلصت</td></tr>
+        <tr><td>يوم البوست</td><td>شاركي البوست + «شوفوه 🤍»</td></tr>
+        <tr><td>آخر الليل</td><td>ستكر سؤال: «شنو أرسم الجاية؟»</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s);
+function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,1800)}
+document.querySelectorAll("[data-copy]").forEach(b=>b.addEventListener("click",()=>{
+  const el=document.getElementById(b.dataset.copy);
+  navigator.clipboard.writeText(el.textContent).then(()=>toast("انسخ")).catch(()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("محدد، انسخيه")});
+}));
+const KEY="tot-checks";
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return {}}}
+function store(v){try{localStorage.setItem(KEY,JSON.stringify(v))}catch(e){}}
+const st=load();
+document.querySelectorAll("#checks input").forEach(i=>{i.checked=!!st[i.id];i.addEventListener("change",()=>{st[i.id]=i.checked;store(st)})});
+$("#resetChecks").addEventListener("click",()=>{document.querySelectorAll("#checks input").forEach(i=>{i.checked=false;st[i.id]=false});store(st);toast("أسبوع يديد 🤍")});
+</script>
